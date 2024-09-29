@@ -1,5 +1,12 @@
 extends ../../layouts/defaut.pug
 block main  
+    -if(messages.error)
+        .messages.info
+            span(
+                class="alert alert-danger" 
+                show-alert 
+                data-time= "5000"
+            ) #{messages.error} <button type="button" class="btn-close" aria-label="Close" button-close-alert></button>
     h1(class="mb-4") Thêm mới sản phẩm 
     form(
         action=""

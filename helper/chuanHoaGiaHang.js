@@ -1,4 +1,7 @@
 module.exports = (s) => {
+    if (s == null) {
+        return ''; // Hoặc xử lý theo yêu cầu của bạn khi `s` là null hoặc undefined
+    }
 
     let string = s.toString();
 

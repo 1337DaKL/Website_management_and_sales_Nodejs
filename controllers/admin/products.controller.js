@@ -120,6 +120,7 @@ module.exports.createNewProduct = async (req , res) => {
     {
         req.flash("error" , "Sản phẩm bạn tạo bắt buộc phải có tên sản phẩm !!")
         res.redirect("back");
+        return;
     }
     if(req.body.discount != "")
     {
