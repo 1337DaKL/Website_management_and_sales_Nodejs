@@ -1,0 +1,19 @@
+mixin search(keyword)
+    form(id="form-search")
+        .input-group
+            .col-9
+                .input-group
+                    input.form-control(
+                        type="text"
+                        placeholder="Nhập từ khóa"
+                        name="keyword"
+                        value=keyword 
+                    )
+                    button.btn.btn-outline-secondary(type="button" id="button-clear")
+                        i.fa.fa-times 
+            .col-3
+                .input-group-append
+                    button(
+                        class="btn btn-success"
+                        type="submit"
+                    ) Tim

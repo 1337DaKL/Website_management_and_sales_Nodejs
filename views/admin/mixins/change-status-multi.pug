@@ -1,0 +1,23 @@
+mixin change-status-multi()
+    form.form-change-multi(
+        action=`${frefixAdmin}/products/change-multi?_method=PATCH`, 
+        method="POST"
+        form-change-multi
+    )
+        .d-flex.align-items-start
+            .form-group.mr-2
+                select.form-control(name="type" select-option)
+                    option(disabled selected) --Chọn hành động--
+                    option(value="active") Hoạt động 
+                    option(value="inactive") Dừng hoạt động 
+                    option(value="delete") Xóa
+                    option(value="change-position") Đổi vị trí  
+            .form-group.mr-2
+                input.form-control.d-none(
+                    type="text"
+                    name="ids"
+                    value=""
+                    placeholder="San pham ap dung"
+                    input-submit
+                )
+            button.btn.btn-primary(type="submit") Áp dụng

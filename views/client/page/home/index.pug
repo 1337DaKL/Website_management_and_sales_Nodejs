@@ -1,0 +1,45 @@
+extends ../../layouts/defaut.pug
+
+block main
+    // Banner hoặc giới thiệu
+    .jumbotron.jumbotron-fluid.text-center.bg-light
+        .container
+            h1.display-4 Chào Mừng Đến Với Cửa Hàng Của Chúng Tôi
+            p.lead Nơi mua sắm sản phẩm chất lượng với giá tốt nhất.
+
+    // Phần giới thiệu
+    .container.mt-5#about
+        h2.text-center Về Chúng Tôi
+        p.mt-4
+            | 1337_DaKL là một cửa hàng trực tuyến cung cấp các sản phẩm đa dạng, chất lượng với giá cả phải chăng. Chúng tôi tự hào mang đến cho khách hàng những trải nghiệm mua sắm tuyệt vời, dịch vụ giao hàng nhanh chóng và chất lượng sản phẩm tốt nhất.
+
+    //- // Phần sản phẩm
+    //- .container.mt-5#products
+    //-     h2.text-center Sản Phẩm Của Chúng Tôi
+    //-     .row.mt-4
+    //-         each product in products
+    //-             .col-md-4
+    //-                 .card.mb-4
+    //-                     img.card-img-top(src=product.image, alt=product.title)
+    //-                     .card-body
+    //-                         h5.card-title #{product.title}
+    //-                         p.card-text Giá: #{product.price} VND
+    //-                         p.card-text #{product.description}
+    //-                         a.btn.btn-success(href=product.link) Mua Ngay
+
+    // Phần liên hệ
+    .container.mt-5#contact
+        h2.text-center Liên Hệ Chúng Tôi
+        .row.justify-content-center
+            .col-md-8
+                form(action="/contact", method="post")
+                    .form-group
+                        label(for="name") Họ Tên
+                        input.form-control(type="text", id="name", name="name", placeholder="Nhập tên của bạn")
+                    .form-group
+                        label(for="email") Email
+                        input.form-control(type="email", id="email", name="email", placeholder="Nhập email của bạn")
+                    .form-group
+                        label(for="message") Tin nhắn
+                        textarea.form-control(id="message", name="message", rows="5", placeholder="Nhập tin nhắn")
+                    button.btn.btn-success(type="submit") Gửi Tin Nhắn

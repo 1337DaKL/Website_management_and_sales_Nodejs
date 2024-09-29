@@ -1,0 +1,105 @@
+extends ../../layouts/defaut.pug
+block main  
+    h1(class="mb-4") Thêm mới sản phẩm 
+    form(
+        action=""
+        id="form-create"
+        method="POST"
+        enctype="multipart/form-data"
+    )
+        div(class="form-group")
+            label(for="title") Tiêu đề
+            input(
+                type="text"
+                class="form-control"
+                id="title"
+                name="title"
+                placeholder="Nhập tên sản phẩm"
+                required
+            )
+        div(class="form-group")
+            label(for="description") Mô tả
+            textarea(
+                class="form-control"
+                id="description"
+                name="description"
+                rows="5"
+            ) 
+        div(class="form-group")
+            label(for="price") Giá
+            input(
+                id="price"
+                name="price"
+                type="number"
+                class="form-control"
+                min="0"
+                placeholder="Nhập giá của sản phẩm đơn vị nghìn đông"
+            )
+        div(class="form-group")
+            label(for="discount") Giảm giá
+            input(
+                id="discount"
+                name="discount"
+                type="number"
+                class="form-control"
+                min="0"
+                placeholder="Đơn vị phần trăm"
+            )
+        div(class="form-group" upload-image)
+            label(for="thumbnail") Tải ảnh 
+            input(
+                id="thumbnail"
+                name="thumbnail"
+                type="file"
+                class="form-control-file"
+                accept=".jpg, .png"
+                input-image
+            )
+            button(type="button" id="clearUpload" clear-upload) X
+            br
+            <img id="blah" src="#" alt="Ảnh bạn đã tải lên" img-image weith = "200px" height = "200px"/>
+        div(class="form-group") 
+            label(for="stock") Số lượng
+            input(
+                id="stock"
+                name="stock"
+                min="0"
+                type="number"
+                placeholder="Đơn vị cái"
+                class="form-control"
+            )
+        div(class="form-group")
+            label(for="position") Vị trí
+            input(
+                id="position"
+                name="position"
+                type="number"
+                class="form-control"
+                min="1"
+                placeholder="Không nhập thì vị trí tự động tăng"
+            )
+        div(class="form-group form-check form-check-inline")
+            label(for="statusActive" class="form-check-label" style="margin-right: 10px") Hoạt động
+            input(
+                type="radio"
+                class="form-check-input"
+                id="statusActive"
+                name="status"
+                value="active"
+                checked
+            )
+        div(class="form-group form-check form-check-inline")
+            label(for="statusInactive" class="form-check-label" style="margin-right: 10px") Dừng hoạt động    
+            input(
+                type="radio"
+                class="form-check-input"
+                id="statusInactive"
+                name="status"
+                value="inactive"
+            )
+        div(class="form-group")
+            button(
+                type="submit"
+                class="btn btn-primary"
+            ) Tạo mới 
+    script(src="/admin/js/create.js") 

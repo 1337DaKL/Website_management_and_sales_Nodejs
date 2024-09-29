@@ -1,0 +1,40 @@
+extends ../../layouts/defaut.pug
+include ../../mixins/filter-status.pug
+include ../../mixins/search.pug
+include ../../mixins/products.pug
+include ../../mixins/pagination.pug
+include ../../mixins/change-status-multi.pug
+block main
+    h1 Trang san pham admin
+    <br/>
+        .card.mb-3 
+            .card-header Bo loc va tim kiem
+            .card-body
+                .row 
+                    //-Filter-Search
+                    .col-4
+                        +filter-status(filtersStatus)  
+                    //-End Filter-Search
+
+                    //-Search
+                    .col-6
+                        +search(keyword)
+                    //-End Search
+                    .col-2
+                        a(
+                            href=`${frefixAdmin}/products/create`
+                            class="btn btn-outline-success"
+                        ) +Thêm mới sản phẩm
+                .row
+                    +change-status-multi()           
+    //- product s    
+    table(
+        class="table table-hover table-sm"
+        change-status-multi
+    )
+        +print-products(products)
+    //-end products
+
+    //-Paginatiion
+    +pagination(pagination)
+    //- End Paginatiion

@@ -1,0 +1,45 @@
+mixin product-dustbin(products)
+    if products.length > 0 
+        .row.mt-4
+            .col-md-12
+                table.table.table-striped.table-bordered
+                    thead.thead-dark
+                        tr
+                            th
+                                input(type="checkbox" name="checkall")
+                            th.text-center(w-10) STT
+                            th.text-center(w-20) Tên sản phẩm
+                            th.text-center(w-20) Hình ảnh
+                            th.text-center(w-20) Ngày xóa
+                            th.text-center(w-20) Hành động
+                    tbody
+                        each item , index in products
+                            tr
+                                td  
+                                    input(type="checkbox" name="id" id=item.id)
+                                td.text-center #{index + 1}
+                                td.text-center #{item.title}
+                                td.text-center
+                                    img(src=item.thumbnail, alt=item.title, width='50')
+                                td.text-center #{item.dateDeleted};
+                                td.text-center
+                                    button(
+                                        class="btn btn-primary mr-2"
+                                        id-product = item.id
+                                        restore-product
+                                    ) Khôi phục
+                                    button(
+                                        class="btn btn-danger"
+                                        id-delete = item.id 
+                                        delete-product
+                                    ) Xóa vĩnh viễn 
+    else
+        .container.mt-5
+            .row.justify-content-center
+                .col-md-6
+                    .alert.alert-warning.text-center
+                        i.bi.bi-exclamation-triangle-fill 
+                        | Thùng rác rỗng
+
+    form(action=""  method="POST" id="form-restore" path=`${frefixAdmin}/dustbin/restore`)
+    form(action=""  method="POST" id="form-delete" path=`${frefixAdmin}/dustbin/delete`)

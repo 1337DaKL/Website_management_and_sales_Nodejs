@@ -1,0 +1,36 @@
+mixin search-and-apply(keyword)
+    .row.justify-content-center
+        .col-md-8
+            // Thanh tìm kiếm
+            form(search-dustbin)
+                .input-group.mb-4
+                    input.form-control(
+                        type="text" 
+                        placeholder="Tìm kiếm sản phẩm..." 
+                        name="query"  
+                        value=keyword 
+                        )
+                    button.btn.btn-outline-secondary(type="button" id="button-clear")
+                        i.fa.fa-times 
+                    .input-group-append
+                        button.btn.btn-primary(type="submit")
+                            i.bi.bi-search
+                            | Tìm kiếm
+
+            // Chọn và nút áp dụng
+            form(action=`${frefixAdmin}/dustbin/change-multi?_method=PATCH` method="post" form-option)
+                .input-group
+                    select.form-control(name="type" select-option)
+                        option(disabled selected) --Chọn hành động--
+                        option(value="restore") Khôi phục
+                        option(value="delete") Xóa vĩnh viễn
+                    .input-group-append
+                        button.btn.btn-success(type="submit") Áp dụng
+                        .form-group.mr-2
+                input.form-control.d-none(
+                    type="text"
+                    name="ids"
+                    value=""
+                    placeholder="San pham ap dung"
+                    input-submit
+                )

@@ -1,0 +1,14 @@
+extends ../../layouts/defaut.pug
+include ../../mixins/search-and-apply.pug
+include ../../mixins/product-dustbin.pug
+include ../../mixins/pagination.pug
+block main 
+    h1 Thùng rác
+    .container.mt-4
+        +search-and-apply(keyword)
+
+        +product-dustbin(products)
+    +pagination(pagination)
+    script(src="/admin/js/dustbin.js") 
+
+

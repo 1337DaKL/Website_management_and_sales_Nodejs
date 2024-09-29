@@ -1,0 +1,21 @@
+header.header
+    .container-fluid.bg-success.text-white.py-2
+        .row.align-items-center
+            // Logo hoặc tên ADMIN
+            .col-3
+                .inner-logo.text-left
+                    a(href="/admin/" class="text-white font-weight-bold")
+                        i.bi.bi-shield-lock 
+                        | ADMIN
+
+            // Phần giữa
+            .col-8
+                // Có thể thêm nội dung hoặc giữ trống để căn giữa
+                h5.text-center Quản lý hệ thống
+
+            // Nút Quay về
+            .col-1.text-right
+                .inner-menu
+                    a(href="/" class="btn btn-light btn-sm text-success")
+                        i.bi.bi-arrow-left-circle 
+                        | Quay về

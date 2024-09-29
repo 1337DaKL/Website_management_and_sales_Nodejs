@@ -1,0 +1,40 @@
+# Bỏ qua các file tạm thời của hệ điều hành
+*.log
+*.tmp
+
+# Bỏ qua các thư mục của IDE
+.vscode/
+.idea/
+
+# Bỏ qua các file môi trường ảo của Python
+venv/
+
+# Bỏ qua các file tạo tự động
+node_modules/
+dist/
+
+
+#Bo qua env 
+.env/
+
+/node_modules
+/.pnp
+
+.pnp.js
+
+/coverage
+
+/build
+
+
+.DS_Store
+
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

@@ -1,0 +1,92 @@
+.header{
+    background: green;
+    padding: 10px 0;
+    position: sticky;
+    top:0;
+    z-index: 999;
+}
+
+.header .inner-logo a {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+}
+
+
+
+.body .sider{
+    width: 150px;
+    background: rgb(79, 198, 79);
+    color: #fff;
+    height: calc(100vh - 56px);
+    position: fixed;
+    top: 56px;
+    left: 0;
+}
+
+.body .main{
+    margin: 15px;
+    position: relative;
+    left: 150px;
+    width: calc(100% -180px);
+}
+
+
+
+.sider .inner-menu ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sider .inner-menu ul li a{
+    color: #fff;
+    display: block;
+    padding: 6px 10px;
+    border-bottom: 1px solid #515151;
+}
+
+.main{
+    width: 90%; /* Chiếm 90% chiều rộng của màn hình */
+    padding: 10px;
+    margin: 0 auto;
+    background-color: #f0f0f0;
+}
+
+/* alert */
+[show-alert] {
+    position: fixed;
+    top: 70px;
+    right: -70%; /* Đẩy phần lớn alert ra khỏi màn hình, chỉ để lại một phần nhỏ */
+    z-index: 9999;
+    background-color: #4CAF50; /* Màu nền xanh lá */
+    color: white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    opacity: 0.9; /* Làm mờ alert một chút */
+    white-space: nowrap; /* Đảm bảo nội dung không bị xuống dòng */
+    transition: right 0.5s ease;
+    max-width: 90%; /* Giới hạn chiều rộng tối đa của alert */
+    overflow: hidden;
+}
+
+[show-alert].alert-hidden {
+    animation-name: alert-hidden;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}
+
+@keyframes alert-hidden {
+    form {
+        right: 15px;
+    }
+    to {
+        right: -100%;
+        display: none;
+    }
+}
+
+/* end alert */
