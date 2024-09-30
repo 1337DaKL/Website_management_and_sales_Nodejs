@@ -48,7 +48,8 @@ mixin print-products(products)
                                 id = item.id
                                 ) Không hoạt động
                     td 
-                        button.btn.btn-warning.btn-sm Sửa
+                        a.btn.btn-warning.btn-sm(href=`${frefixAdmin}/products/edit/${item.id}`) Sửa
+
                         button(class="btn btn-danger btn-sm ml-1" id-product=item.id button-delete) Xóa
     else 
         .container.mt-5

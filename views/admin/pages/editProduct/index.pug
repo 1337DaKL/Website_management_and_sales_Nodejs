@@ -1,0 +1,128 @@
+extends ../../layouts/defaut.pug
+block main  
+    -if(messages.error)
+        .messages.info
+            span(
+                class="alert alert-danger" 
+                show-alert 
+                data-time= "5000"
+            ) #{messages.error} <button type="button" class="btn-close" aria-label="Close" button-close-alert></button>
+    h1(class="mb-4") Sửa sản phẩm
+    form(
+        action=`${frefixAdmin}/products/edit/${product.id}?_method=PATCH`
+        id="form-edit"
+        method="POST"
+        enctype="multipart/form-data"
+    )
+        div(class="form-group")
+            label(for="title") Tiêu đề
+            input(
+                type="text"
+                class="form-control"
+                id="title"
+                name="title"
+                placeholder="Nhập tên sản phẩm"
+                required
+                value = product.title
+            )
+        div(class="form-group")
+            label(for="description") Mô tả
+            textarea(
+                class="form-control"
+                id="description"
+                name="description"
+                rows="5"
+                value = product.description
+            ) 
+        div(class="form-group")
+            label(for="price") Giá
+            input(
+                id="price"
+                name="price"
+                type="number"
+                class="form-control"
+                min="0"
+                placeholder="Nhập giá của sản phẩm đơn vị nghìn đông"
+                value = product.price
+            )
+        div(class="form-group")
+            label(for="discount") Giảm giá
+            input(
+                id="discount"
+                name="discount"
+                type="number"
+                class="form-control"
+                min="0"
+                placeholder="Đơn vị phần trăm"
+                value = product.discount
+            )
+        div(class="form-group" upload-image)
+            label(for="thumbnail") Tải ảnh 
+            input(
+                id="thumbnail"
+                name="thumbnail"
+                type="file"
+                class="form-control-file"
+                accept=".jpg, .png"
+                value = product.thumbnail
+                input-image
+            )
+            button(type="button" id="clearUpload" clear-upload) X
+            br
+            img(
+                id="blah" 
+                src=product.thumbnail 
+                alt="Ảnh bạn đã tải lên" 
+                img-image 
+                width="200px" 
+                height="200px"
+            )
+
+        div(class="form-group") 
+            label(for="stock") Số lượng
+            input(
+                id="stock"
+                name="stock"
+                min="0"
+                type="number"
+                placeholder="Đơn vị cái"
+                class="form-control"
+                value = product.stock
+            )
+        div(class="form-group")
+            label(for="position") Vị trí
+            input(
+                id="position"
+                name="position"
+                type="number"
+                class="form-control"
+                min="1"
+                placeholder="Không nhập thì vị trí tự động tăng"
+                value = product.position
+            )
+        div(class="form-group form-check form-check-inline")
+            label(for="statusActive" class="form-check-label" style="margin-right: 10px") Hoạt động
+            input(
+                type="radio"
+                class="form-check-input"
+                id="statusActive"
+                name="status"
+                value="active"
+                checked=product.status == "active" ? true : false
+            )
+        div(class="form-group form-check form-check-inline")
+            label(for="statusInactive" class="form-check-label" style="margin-right: 10px") Dừng hoạt động    
+            input(
+                type="radio"
+                class="form-check-input"
+                id="statusInactive"
+                name="status"
+                value="inactive"
+                checked=product.status == "inactive" ? true : false
+            )
+        div(class="form-group")
+            button(
+                type="submit"
+                class="btn btn-primary"
+            ) Sửa
+    script(src="/admin/js/create.js") 

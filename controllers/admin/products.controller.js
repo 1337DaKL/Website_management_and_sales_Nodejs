@@ -3,6 +3,7 @@ const priceString = require("../../helper/chuanHoaGiaHang");
 const filterStatusHelper = require("../../helper/filterStatus");
 const searchHeper = require("../../helper/search");
 const paginationHeper = require("../../helper/pagination");
+const { model } = require("mongoose");
 module.exports.index = async (req , res) => {
     //Filter status
     const filtersStatus = filterStatusHelper(req.query);
@@ -151,4 +152,59 @@ module.exports.createNewProduct = async (req , res) => {
     await product.save();
     req.flash("success" , "Tạo mới sản phẩm thành công!!");
     res.redirect("back");
+}
+
+
+module.exports.editProduct = async (req , res) =>{
+    try {
+        let find = {
+            _id : req.params.id,
+            deleted : false
+        }
+        const productID = await Product.findOne(find);
+        productID.price = productID.price.toString().substring(0, productID.price.toString().length - 3);
+        res.render("admin/pages/editProduct/index.pug" , {
+            titlePage : "Chỉnh sửa sản phẩm",
+            product : productID
+        })
+    } catch (error) {
+        res.redirect("back");
+    }
+}
+
+module.exports.editProductInDatabase = async (req , res) => {
+    if(!req.body.title)
+        {
+            req.flash("error" , "Sản phẩm bắt buộc phải có tên sản phẩm !!")
+            res.redirect("back");
+            return;
+        }
+    if(req.body.discount != "")
+    {
+        req.body.discount = parseInt(req.body.discount);
+    }
+    if(req.body.price != "")
+    {
+        req.body.price = parseInt(req.body.price + "000");
+    }
+    if(req.body.stock)
+    {
+        req.body.stock = parseInt(req.body.stock);
+    }
+    if(req.body.position)
+    {
+        req.body.position = parseInt(req.body.position);
+    }
+    if(req.file)
+    {
+        req.body.thumbnail = `/admin/uploads/${req.file.filename}`;
+    }
+    try {
+        await Product.updateOne({_id : req.params.id} , req.body);
+        req.flash("success" , "Chỉnh sửa sản phẩm thành công!!");
+        res.redirect("back");
+    } catch (error) {
+        req.flash("error" , "Chỉnh sửa sản phẩm thất bại!!");
+        res.redirect("back");
+    }
 }
