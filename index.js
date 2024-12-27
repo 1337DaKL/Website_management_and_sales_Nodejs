@@ -14,12 +14,7 @@ var session = require('express-session')
 
 const passwordcookieParser = process.env.PASSWORLD;
 app.use(cookieParser(passwordcookieParser));
-app.use(session({ 
-    secret: process.env.PASSWORLD, // Thêm một khóa bí mật cho session
-    resave: false, 
-    saveUninitialized: true, 
-    cookie: { maxAge: 86400000 } // 1 ngày
-}));
+app.use(session({ cookie: { maxAge: 60000 } }));
 app.use(flash());
 //end express-flash
 //Body parser
@@ -53,14 +48,14 @@ dashboard(app);
 
 //cai pug
 
-app.set("views" , `${__dirname}/views`);
-app.set("view engine" ,"pug");
+app.set("views", `${__dirname}/views`);
+app.set("view engine", "pug");
 
 //App locals Variables
-app.locals.frefixAdmin = systemConfig.prefixAdmin; 
+app.locals.frefixAdmin = systemConfig.prefixAdmin;
 
 
 //kiem tra web co chay khong
-app.listen(port , () => {
+app.listen(port, () => {
     console.log(`Running in port ${port}`);
 });
