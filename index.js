@@ -14,7 +14,12 @@ var session = require('express-session')
 
 const passwordcookieParser = process.env.PASSWORLD;
 app.use(cookieParser(passwordcookieParser));
-app.use(session({ cookie: { maxAge: 60000 }}));
+app.use(session({ 
+    secret: process.env.PASSWORLD, // Thêm một khóa bí mật cho session
+    resave: false, 
+    saveUninitialized: true, 
+    cookie: { maxAge: 86400000 } // 1 ngày
+}));
 app.use(flash());
 //end express-flash
 //Body parser
