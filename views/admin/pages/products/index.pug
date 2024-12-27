@@ -4,11 +4,13 @@ include ../../mixins/search.pug
 include ../../mixins/products.pug
 include ../../mixins/pagination.pug
 include ../../mixins/change-status-multi.pug
+include ../../mixins/sort.pug
 block main
     h1 Trang san pham admin
     <br/>
         .card.mb-3 
             .card-header Bo loc va tim kiem
+
             .card-body
                 .row 
                     //-Filter-Search
@@ -26,7 +28,10 @@ block main
                             class="btn btn-outline-success"
                         ) +Thêm mới sản phẩm
                 .row
-                    +change-status-multi()           
+                    +change-status-multi()
+                    +sort()
+                    
+           
     //- product s    
     table(
         class="table table-hover table-sm"

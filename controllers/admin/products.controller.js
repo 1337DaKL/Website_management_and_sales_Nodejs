@@ -28,8 +28,16 @@ module.exports.index = async (req , res) => {
     const countOjects = await Product.countDocuments(find);
     const ojectPagination = paginationHeper(req.query , countOjects);
     //End Pagination
-
-    const products = await Product.find(find).limit(ojectPagination.limitPage).skip(ojectPagination.skipPage).sort({position:"desc"});
+    let sort ={};
+    if(req.query.sortKey && req.query.sortValue)
+    {
+        sort[req.query.sortKey]= req.query.sortValue;
+    }
+    else
+    {
+        sort.position = "desc";
+    }
+    const products = await Product.find(find).limit(ojectPagination.limitPage).skip(ojectPagination.skipPage).sort(sort);
 
     //Chuan hoa lai price
     const newProducts = products.map((tmp) => {
@@ -144,10 +152,7 @@ module.exports.createNewProduct = async (req , res) => {
     {
         req.body.position = parseInt(req.body.position);
     }
-    if(req.file)
-    {
-        req.body.thumbnail = `/admin/uploads/${req.file.filename}`;
-    }
+    
     const product = new Product(req.body);
     await product.save();
     req.flash("success" , "Tạo mới sản phẩm thành công!!");
@@ -194,10 +199,6 @@ module.exports.editProductInDatabase = async (req , res) => {
     if(req.body.position)
     {
         req.body.position = parseInt(req.body.position);
-    }
-    if(req.file)
-    {
-        req.body.thumbnail = `/admin/uploads/${req.file.filename}`;
     }
     try {
         await Product.updateOne({_id : req.params.id} , req.body);

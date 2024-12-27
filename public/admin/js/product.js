@@ -33,6 +33,37 @@ if(buttonsDelete)
 }
 //End delete product
 
-//position
+//sort
+const sort = document.querySelector("#sort-select");
+if(sort)
+{   
+    let url = new URL(window.location.href);
+    sort.addEventListener("change" , (e) => {
+        const [sortKey , sortValue] = e.target.value.split("-");
+        if(sortKey && sortValue)
+        {
+            url.searchParams.set("sortKey" , sortKey);
+            url.searchParams.set("sortValue" , sortValue);
+            window.location.href = url.href;
+            
+        }
+        
+    })
+    const sKey = url.searchParams.get("sortKey");
+    const sValue = url.searchParams.get("sortValue");
+    const str = `${sKey}-${sValue}`;
+    const optionSelect = sort.querySelector(`option[value='${str}']`);
+    optionSelect.selected = true;
+}
+const clearSort = document.querySelector("#sort-clear");
+if(clearSort)
+{
+    clearSort.addEventListener("click" , () => {
+        let url = new URL(window.location.href);
+        url.searchParams.delete("sortKey");
+        url.searchParams.delete("sortValue");
+        window.location.href = url.href;
+    })
+}
 
-//end position
+//endsort
