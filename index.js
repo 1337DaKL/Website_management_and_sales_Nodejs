@@ -10,19 +10,15 @@ const port = process.env.PORT;
 var flash = require('express-flash');
 var cookieParser = require('cookie-parser');
 var session = require('express-session')
-const MongoStore = require('connect-mongo')(session);
+
 
 const passwordcookieParser = process.env.PASSWORLD;
 app.use(cookieParser(passwordcookieParser));
-app.use(session({
-    store: new MongoStore({
-        mongooseConnection: mongoose.connection,
-        collection: 'sessions'
-    }),
-    secret: 'your-secret-key',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false, maxAge: 86400000 }
+app.use(session({ 
+    secret: process.env.PASSWORLD, // Thêm một khóa bí mật cho session
+    resave: false, 
+    saveUninitialized: true, 
+    cookie: { maxAge: 86400000 } // 1 ngày
 }));
 app.use(flash());
 //end express-flash
@@ -57,14 +53,14 @@ dashboard(app);
 
 //cai pug
 
-app.set("views", `${__dirname}/views`);
-app.set("view engine", "pug");
+app.set("views" , `${__dirname}/views`);
+app.set("view engine" ,"pug");
 
 //App locals Variables
-app.locals.frefixAdmin = systemConfig.prefixAdmin;
+app.locals.frefixAdmin = systemConfig.prefixAdmin; 
 
 
 //kiem tra web co chay khong
-app.listen(port, () => {
+app.listen(port , () => {
     console.log(`Running in port ${port}`);
 });
