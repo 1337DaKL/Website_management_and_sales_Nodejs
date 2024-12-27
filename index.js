@@ -35,7 +35,7 @@ const database = require("./configs/database.js")
 database.connect();
 
 //Nhung file tinh
-app.use(express.static("public"));
+app.use(express.static(`${__dirname}/public`));
 
 
 //Nhung route vao file
@@ -48,7 +48,7 @@ dashboard(app);
 
 //cai pug
 
-app.set("views" , "./views");
+app.set("views" , `${__dirname}/views`);
 app.set("view engine" ,"pug");
 
 //App locals Variables
