@@ -18,8 +18,8 @@ module.exports.index = async (req, res) => {
     const countOjects = await Category.countDocuments();
     const ojectPagination = paginationHeper(req.query, countOjects);
     let sort = {};
-    if (req.query.sortKey && req.query.sortvalue) {
-        sort[req.query.sortKey] = req.query.sortValue
+    if (req.query.sortKey && req.query.sortValue) {
+        sort[req.query.sortKey] = req.query.sortValue;
     }
     else {
         sort.position = "desc";
