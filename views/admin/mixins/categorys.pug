@@ -1,5 +1,5 @@
-mixin print-products(products)
-    if products.length > 0 
+mixin print-products(categorys)
+    if categorys.length > 0 
         thead 
                 tr
                     th
@@ -7,12 +7,12 @@ mixin print-products(products)
                     th STT 
                     th Hình ảnh 
                     th Tiêu đề 
-                    th Giá 
+                    th Id Parent
                     th Vị trí
                     th Trạng thái 
                     th Hành động 
         tbody 
-            each item, index in products 
+            each item, index in categorys 
                 tr 
                     td
                         input(type="checkbox" name="id" value=item.id)
@@ -20,7 +20,10 @@ mixin print-products(products)
                     td 
                         img(src=item.thumbnail, alt=item.title, width="100px", height="auto")
                     td #{item.title}
-                    td #{item.priceString} vnđ   
+                    if !item.idParent
+                        td Không có cha 
+                    else 
+                        td #{item.idParent}
                     td 
                         input(
                             type="number"
@@ -61,6 +64,6 @@ mixin print-products(products)
                         i.bi.bi-exclamation-triangle-fill 
                         | Không có sản phẩm nào!!
 
-    form(action="", method="POST" id="form-change" path="products/change-status/") 
-    form(action="" method="POST" id="form-delete" path=`${frefixAdmin}/products/delete`)
+    form(action="", method="POST" id="form-change" path="categorys/change-status/") 
+    form(action="" method="POST" id="form-delete" path=`${frefixAdmin}/categorys/delete`)
     script(src="/admin/js/product.js")

@@ -12,4 +12,5 @@ router.get("/create" , controller.create);
 router.post("/create" , upload.single('thumbnail') , cloud.clouldMiddlewares, controller.createNewProduct)
 router.get("/edit/:id" , controller.editProduct )
 router.patch("/edit/:id" , upload.single('thumbnail') , cloud.clouldMiddlewares , controller.editProductInDatabase)
+router.get("/detel/:id" , controller.detelProduct);
 module.exports = router;

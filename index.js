@@ -2,6 +2,7 @@
 const systemConfig = require("./configs/systems.js");
 const express = require("express");
 const app = express();
+var path = require('path');
 //Nhung filr env vao
 
 
@@ -31,6 +32,7 @@ var methodOverride = require('method-override');
 app.use(methodOverride('_method'));
 //end method-overide
 
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
 
 //nhung database vao    
 const database = require("./configs/database.js")

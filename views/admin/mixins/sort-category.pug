@@ -1,0 +1,13 @@
+mixin sort()
+    .card.mb-3
+        .card-header Sắp xếp theo tiêu chí
+        .card-body
+            .row
+            .col-4
+                .sort
+                select.form-control(name="sort", id="sort-select")
+                    option(value="position-desc") Vị trí giảm dần
+                    option(value="position-asc") Vị trí tăng dần
+                    option(value="title-asc") Tiều đề từ A - Z
+                    option(value="title-desc") Tiêu đề từ Z - A
+                button.btn.btn-danger.mt-2(id="sort-clear") Clear
