@@ -89,9 +89,31 @@ module.exports.changeMulti = async (req, res) => {
     }
     res.redirect("back");
 }
-module.exports.createCategory = (req, res) => {
+module.exports.createCategory = async (req, res) => {
+    let find = {
+        deleted : false
+    }
+    function findTree(arr , idParent = ""){
+        let tree = [];
+        arr.forEach(item => {
+            if(item.idParent === idParent)
+            {
+                let newItem = item;
+                const childen = findTree(arr , item.id);
+                if( childen.length > 0)
+                {
+                    newItem.childen = childen;
+                }
+                tree.push(newItem);
+            }
+        });
+        return tree;
+    }
+    const category = await Category.find(find);
+    const level = findTree(category );
     res.render("admin/pages/category/createCategory.pug", {
-        titlePage: "Tạo mới loại sản phẩm"
+        titlePage: "Tạo mới loại sản phẩm",
+        levell : level
     })
 }
 module.exports.createNewCategory = async (req, res) => {
@@ -104,8 +126,21 @@ module.exports.createNewCategory = async (req, res) => {
         const count = await Category.countDocuments();
         req.body.position = count + 1;
     }
+    if(!req.body.idParent)
+    {
+        req.body.idParent= "";
+    }
     const category = new Category(req.body);
     category.save();
     req.flash("success", "Tạo mới loại sản phẩm thành công");
+    res.redirect("back");
+}
+module.exports.deleteCategory = async (req , res) => {
+    console.log(req.params.id);
+    await Category.deleteOne(
+        {
+            _id : req.params.id
+        }
+    )
     res.redirect("back");
 }

@@ -1,0 +1,6 @@
+mixin level-tree(category , level = 1)
+    each item in category 
+        -const fre = Array(level + 1).join("--");
+        option(value=item.id) #{fre} #{item.title} 
+        if  item.childen && item.childen.length > 0
+            +level-tree(item.childen , level + 1)

@@ -51,9 +51,9 @@ mixin print-products(categorys)
                                 id = item.id
                                 ) Không hoạt động
                     td 
-                        a.btn.btn-success.btn-sm(href=`${frefixAdmin}/products/detel/${item.id}`) Chi tiết
+                        a.btn.btn-success.btn-sm(href=`${frefixAdmin}/categorys/detel/${item.id}`) Chi tiết
                         d 
-                        a.btn.btn-warning.btn-sm(href=`${frefixAdmin}/products/edit/${item.id}`) Sửa
+                        a.btn.btn-warning.btn-sm(href=`${frefixAdmin}/categorys/edit/${item.id}`) Sửa
 
                         button(class="btn btn-danger btn-sm ml-1" id-product=item.id button-delete) Xóa
     else 

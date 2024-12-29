@@ -9,4 +9,5 @@ router.get("/create" , controller.createCategory);
 router.post("/create" ,upload.single('thumbnail') , cloud.clouldMiddlewares, controller.createNewCategory);
 router.patch("/change-status/:status/:id" , controller.changeStatus);
 router.patch("/change-multi" , controller.changeMulti);
+router.delete("/delete/:id" , controller.deleteCategory);
 module.exports = router;
