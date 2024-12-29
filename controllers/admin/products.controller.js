@@ -41,6 +41,9 @@ module.exports.index = async (req, res) => {
         return tmp;
     })
     //End Chuan hoa lai price
+
+    console.log(ojectPagination)
+
     res.render("admin/pages/products/index.pug", {
         titlePage: "Trang san pham admin",
         products: newProducts,

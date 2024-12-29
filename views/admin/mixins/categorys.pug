@@ -7,7 +7,7 @@ mixin print-products(categorys)
                     th STT 
                     th Hình ảnh 
                     th Tiêu đề 
-                    th Id Parent
+                    th Loại sản phẩm cha
                     th Vị trí
                     th Trạng thái 
                     th Hành động 
@@ -16,14 +16,15 @@ mixin print-products(categorys)
                 tr 
                     td
                         input(type="checkbox" name="id" value=item.id)
-                    td #{index + 1}
+                    -const stt = (pagination.currentPage - 1) * pagination.limitPage + (index + 1)
+                    td #{stt}
                     td 
                         img(src=item.thumbnail, alt=item.title, width="100px", height="auto")
                     td #{item.title}
                     if !item.idParent
-                        td Không có cha 
+                        td Không có
                     else 
-                        td #{item.idParent}
+                        td #{item.nameParent}
                     td 
                         input(
                             type="number"

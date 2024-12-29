@@ -2,6 +2,7 @@ const Category = require("../../models/category.model");
 const paginationHeper = require("../../helper/pagination");
 const filterStatusHelper = require("../../helper/filterStatus");
 const searchHeper = require("../../helper/search");
+const findTreeContro = require("../../helper/findTree")
 module.exports.index = async (req, res) => {
     let find = {
         deleted: false
@@ -25,8 +26,26 @@ module.exports.index = async (req, res) => {
         sort.position = "desc";
     }
     const categorys = await Category.find(find).limit(ojectPagination.limitPage).skip(ojectPagination.skipPage).sort(sort);
+
+    const categoryss = [];
+    for (const tmp of categorys) {
+        const idP = tmp.idParent;
+        let nameParent ;
+        if(idP !== "")
+        {
+            const categoryParent = await Category.findOne({ _id: idP });
+            nameParent = categoryParent.title;
+        }
+        else
+        {
+            nameParent = "";
+        }
+        tmp.nameParent = nameParent; 
+        categoryss.push(tmp);
+    }
+
     res.render("admin/pages/category/index.pug", {
-        categorys: categorys,
+        categorys: categoryss,
         filtersStatus: filtersStatus,
         titlePage: "Trang loại sản phẩm",
         pagination: ojectPagination,
@@ -93,24 +112,8 @@ module.exports.createCategory = async (req, res) => {
     let find = {
         deleted : false
     }
-    function findTree(arr , idParent = ""){
-        let tree = [];
-        arr.forEach(item => {
-            if(item.idParent === idParent)
-            {
-                let newItem = item;
-                const childen = findTree(arr , item.id);
-                if( childen.length > 0)
-                {
-                    newItem.childen = childen;
-                }
-                tree.push(newItem);
-            }
-        });
-        return tree;
-    }
     const category = await Category.find(find);
-    const level = findTree(category );
+    const level = findTreeContro(category);
     res.render("admin/pages/category/createCategory.pug", {
         titlePage: "Tạo mới loại sản phẩm",
         levell : level
@@ -142,5 +145,36 @@ module.exports.deleteCategory = async (req , res) => {
             _id : req.params.id
         }
     )
+    req.flash("success", "Xóa sản phẩm thành công!!");
     res.redirect("back");
+}
+module.exports.viewEdit =async (req , res) => {
+    try {
+        let find = {
+            _id: req.params.id,
+            deleted: false
+        }
+
+        const category = await Category.findOne(find);
+        let nameParent ;
+        if(category.idParent)
+        {
+            const categoryParent = await Category.findOne({_id : category.idParent});
+            nameParent = categoryParent.title;
+        }
+        else
+        {
+            nameParent = "Không có cha";
+        }
+        const allCategory = await Category.find({deleted : false});
+        const treeLevel = findTreeContro(allCategory);
+        res.render("admin/pages/category/editcategory.pug" , {
+            titlePage : "Chỉnh sửa loại sản phẩm",
+            category : category,
+            treeLevel : treeLevel,
+            nameParent : nameParent
+        })
+    } catch (error) {
+        res.redirect("back");
+    }
 }
