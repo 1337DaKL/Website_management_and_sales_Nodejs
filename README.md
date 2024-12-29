@@ -5,15 +5,28 @@ Có thể ấn vào link để xem trang web demo bằng các bước như sau:
   
 ![image](https://github.com/user-attachments/assets/1eec2074-7494-47c1-8739-596f3d3beea6)
 <br>
--Click vào link mới nhất chính là nằm ở đầu danh sách Deployments. Sau đó sẽ hiện ra link năm ở ngay đầu như sau
+-Click vào Deployments. Sau đó sẽ hiện ra 1 danh sách các Deployments. Ta sẽ chú ý đến phần danh sách Deployments phía bên trái.
 <br>
 
 
-![image](https://github.com/user-attachments/assets/f419bef4-7dfb-4f74-985d-ef4f63e99329)
+![image](https://github.com/user-attachments/assets/9ac6b304-d90a-4468-a09a-62e3e4f89c55)
+
 
 
 <br>
--Click vào link và xem trang web demo
+-Click vào Deployment đầu tiên để xem trang web demo hoàn thiện nhất.
+<br>
+
+![image](https://github.com/user-attachments/assets/3fc387c1-b177-42ce-adcf-30d6ebee2fb9)
+
+<br>
+-Sau đó click vào link hiện ngay đầu production.
+<br>
+
+![image](https://github.com/user-attachments/assets/b36ac800-46eb-43f4-a40c-869a64681aef)
+
+<br>
+Và sẽ hiện ra trang web demo.
 <br>
 
 ![image](https://github.com/user-attachments/assets/ff514bec-d129-47af-88cb-51b3ca9d578d)
