@@ -1,0 +1,64 @@
+extends ../../layouts/defaut.pug
+block main
+    h1 
+        b Trang loại sản phẩm admin
+    <br/>
+        .card.mb-3 
+
+
+
+                    
+           
+    //- product s    
+    table(
+        class="table table-hover table-sm"
+        change-status-multi
+    )
+        if mess.length > 0 
+            thead 
+                    tr
+                        th
+                            input(type="checkbox" name="checkall")
+                        th STT 
+                        th Người gửi
+                        th Tiêu đề 
+                        td Hành động
+            tbody 
+                each item, index in mess 
+                    if item.status == "notSeen"
+                        tr(tr-mess id-mess=item.id)
+                            td
+                                input(type="checkbox" name="id" value=mess.id)
+                            td 
+                                b #{index + 1}
+                            td 
+                                b #{item.name}                           
+                            td 
+                                b #{item.title}
+                            td 
+                                button.btn.btn-sm.ml-1(type="button" button-delete id=`${item.id}`)
+                                    i(class="bi bi-trash3 mr-1")
+                    else 
+                        tr(tr-mess id-mess=item.id)
+                            td
+                                input(type="checkbox" name="id" value=mess.id)
+                            td #{index + 1}
+                            td #{item.name}                           
+                            td #{item.title}
+                            td 
+                                button.btn.btn-sm.ml-1(type="button" button-delete id=`${item.id}`)
+                                    i(class="bi bi-trash3 mr-1")
+                    
+
+        else 
+            .container.mt-5
+                .row.justify-content-center
+                    .col-md-6
+                        .alert.alert-warning.text-center
+                            i.bi.bi-exclamation-triangle-fill 
+                            | Không có sản phẩm nào!!
+    script(src="/admin/js/chat.js")
+
+
+    
+    

@@ -1,0 +1,38 @@
+extends ../../layouts/defaut.pug
+
+block main
+    -if(messages.error)
+        .messages.info
+            span(
+                class="alert alert-danger" 
+                show-alert 
+                data-time= "5000"
+            ) #{messages.error} <button type="button" class="btn-close" aria-label="Close" button-close-alert></button>
+    -if(messages.success)
+            .messages.info
+                span(
+                    class="alert alert-success" 
+                    show-alert 
+                    data-time= "5000"
+                ) #{messages.success} <button type="button" class="btn-close" aria-label="Close" button-close-alert></button>
+    .container.mt-5#contact
+        h2.text-center Liên Hệ Chúng Tôi
+        .row.justify-content-center
+            .col-md-8
+                form(action="/contact", method="post")
+                    .form-group
+                        label(for="name") Họ Tên
+                        input.form-control(type="text", id="name", name="name", placeholder="Nhập tên của bạn")
+                    .form-group
+                        label(for="email") Email
+                        input.form-control(type="email", id="email", name="email", placeholder="Nhập email của bạn" , required)
+                    .form-group
+                        label(for="telephone") Số điện thoại
+                        input.form-control(type="telephone", id="telephone", name="telephone", placeholder="Nhập số điện thoại của bạn" , required)
+                    .form-group 
+                        label(for="title") Tiêu đề 
+                        input.form-control(type="title", id="title", name="title", placeholder="Bạn muốn nói về vấn đề gì?") 
+                    .form-group
+                        label(for="message") Tin nhắn
+                        textarea.form-control(id="message", name="message", rows="5", placeholder="Nhập tin nhắn")
+                    button.btn.btn-success(type="submit") Gửi Tin Nhắn

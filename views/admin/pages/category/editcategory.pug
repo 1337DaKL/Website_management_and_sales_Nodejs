@@ -31,6 +31,7 @@ block main
             br
             select(name="idParent")
                 option(value=category.idParent)  #{nameParent}
+                option(value="") Không có cha 
                 +level-tree(treeLevel)
 
         div(class="form-group")

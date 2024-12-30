@@ -178,3 +178,27 @@ module.exports.viewEdit =async (req , res) => {
         res.redirect("back");
     }
 }
+module.exports.editCategory = async (req , res) => {
+    if(!req.body.title)
+    {
+        req.flash("error" , "Phải có tên của loại sản phẩm!!");
+        res.redirect("back");
+        return;
+    }
+    try {
+        await Category.updateOne({_id : req.params.id} , req.body);
+        req.flash("success" , "Chỉnh sửa thành công");
+        res.redirect("back");
+    } catch (error) {
+        req.flash("error" , "Chỉnh sửa thất bại");
+        res.redirect("back");
+    }
+}
+module.exports.viewDetelCategory =async (req , res) => { 
+    const category = await Category.findOne({_id : req.params.id});
+    res.render("admin/pages/category/detelCategory.pug" , {
+        category : category,
+        titlePage : `Chi tiết sản phẩm ${category.title}`
+    })
+}
+

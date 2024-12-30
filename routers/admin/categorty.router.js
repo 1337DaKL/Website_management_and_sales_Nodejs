@@ -11,4 +11,6 @@ router.patch("/change-status/:status/:id" , controller.changeStatus);
 router.patch("/change-multi" , controller.changeMulti);
 router.delete("/delete/:id" , controller.deleteCategory);
 router.get("/edit/:id" , controller.viewEdit);
+router.patch("/edit/:id" ,upload.single('thumbnail') , cloud.clouldMiddlewares, controller.editCategory);
+router.get("/detel/:id" , controller.viewDetelCategory);
 module.exports = router;

@@ -106,3 +106,61 @@
     border-radius: 8px;
 }
 
+
+/* alert */
+[show-alert] {
+    position: fixed;
+    top: 70px;
+    right: -70%; /* Đẩy phần lớn alert ra khỏi màn hình, chỉ để lại một phần nhỏ */
+    z-index: 9999;
+    background-color: #4CAF50; /* Màu nền xanh lá */
+    color: white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    opacity: 0.9; /* Làm mờ alert một chút */
+    white-space: nowrap; /* Đảm bảo nội dung không bị xuống dòng */
+    transition: right 0.5s ease;
+    max-width: 90%; /* Giới hạn chiều rộng tối đa của alert */
+    overflow: hidden;
+}
+
+[show-alert].alert-hidden {
+    animation-name: alert-hidden;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}
+
+@keyframes alert-hidden {
+    form {
+        right: 15px;
+    }
+    to {
+        right: -100%;
+        display: none;
+    }
+}
+
+/* end alert */
+
+
+@media (max-width: 768px) {
+    .navbar-collapse {
+      display: none;
+    }
+    .navbar-toggler {
+      display: block;
+    }
+  }
+  
+  /* Khi màn hình đủ rộng, hiển thị toàn bộ menu */
+  @media (min-width: 768px) {
+    .navbar-collapse {
+      display: flex !important; /* Đảm bảo navbar luôn hiển thị trên màn hình lớn */
+    }
+    .navbar-toggler {
+      display: none; /* Ẩn nút toggle khi màn hình lớn */
+    }
+  }
