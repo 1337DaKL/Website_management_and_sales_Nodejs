@@ -22,6 +22,10 @@ module.exports.contact = async (req, res) => {
         res.redirect("back");
         return;
     }
+    if(!req.body.title)
+    {
+        req.body.title = "";
+    }
     req.body.status = "notSeen";
     const count = await Messenger.countDocuments();
     req.body.position = count + 1;
