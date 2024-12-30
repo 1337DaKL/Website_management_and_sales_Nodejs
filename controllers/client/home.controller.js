@@ -24,7 +24,7 @@ module.exports.contact = async (req, res) => {
     }
     if(!req.body.title)
     {
-        req.body.title = "";
+        req.body.title = "Không có tiêu đề";
     }
     req.body.status = "notSeen";
     const count = await Messenger.countDocuments();
