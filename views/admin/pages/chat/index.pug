@@ -26,25 +26,25 @@ block main
             tbody 
                 each item, index in mess 
                     if item.status == "notSeen"
-                        tr(tr-mess id-mess=item.id)
+                        tr(id-mess=item.id)
                             td
                                 input(type="checkbox" name="id" value=mess.id)
-                            td 
+                            td(tr-mess) 
                                 b #{index + 1}
-                            td 
+                            td(tr-mess) 
                                 b #{item.name}                           
-                            td 
+                            td(tr-mess) 
                                 b #{item.title}
                             td 
                                 button.btn.btn-sm.ml-1(type="button" button-delete id=`${item.id}`)
                                     i(class="bi bi-trash3 mr-1")
                     else 
-                        tr(tr-mess id-mess=item.id)
+                        tr( id-mess=item.id)
                             td
                                 input(type="checkbox" name="id" value=mess.id)
-                            td #{index + 1}
-                            td #{item.name}                           
-                            td #{item.title}
+                            td(tr-mess) #{index + 1}
+                            td(tr-mess) #{item.name}                           
+                            td(tr-mess) #{item.title}
                             td 
                                 button.btn.btn-sm.ml-1(type="button" button-delete id=`${item.id}`)
                                     i(class="bi bi-trash3 mr-1")

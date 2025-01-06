@@ -1,0 +1,52 @@
+extends ../../layouts/defaut.pug
+block main
+    -if(messages.error)
+        .messages.info
+            span(
+                class="alert alert-danger" 
+                show-alert 
+                data-time= "5000"
+            ) #{messages.error} <button type="button" class="btn-close" aria-label="Close" button-close-alert></button>
+    button(class="fa fa-arrow-left" button-back)     
+
+
+    div(style="max-width: 800px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);")
+        h1(style="font-size: 24px; color: #333; text-align: center;") Chi Tiết Tin Nhắn
+        p(style="font-size: 16px; margin: 10px 0;")
+            strong Tiêu đề: 
+            | #{mess.title}
+        p(style="font-size: 16px; margin: 10px 0;")
+            strong Tên: 
+            | #{mess.name}
+        p(style="font-size: 16px; margin: 10px 0;")
+            strong Email: 
+            | #{mess.email}
+        p(style="font-size: 16px; margin: 10px 0;")
+            strong Số điện thoại: 
+            | #{mess.telephone}
+        p(style="font-size: 16px; margin: 10px 0;")
+            strong Nội dung: 
+            | !{mess.content}
+        p(style="font-size: 16px; margin: 10px 0;")
+            strong Ngày gửi: 
+            | #{mess.createdAt}
+
+    div(style="max-width: 800px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);")
+        h1(style="font-size: 24px; color: #333; text-align: center;") Trả lời tin nhắn    
+        .container.mt-5#contact
+            .row.justify-content-center
+                .col-md-8
+                    form(action=`/admin/chat/reply/${mess.id}`, method="post")
+                        .form-group 
+                            label(for="titleRep") Tiêu đề 
+                            input.form-control(type="titleRep", id="titleRep", name="titleRep", placeholder="Tiêu đề email" required) 
+                        .form-group
+                            label(for="contentRep") Tin nhắn
+                            textarea.form-control(id="contentRep", name="contentRep", rows="5", placeholder="Nhập tin nhắn phản hồi" required)
+                        button.btn.btn-success(type="submit") Phản hồi
+
+    script(src="/admin/js/chat.js")
+
+
+    
+    

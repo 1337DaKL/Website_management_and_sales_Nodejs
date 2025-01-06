@@ -90,3 +90,16 @@
 }
 
 /* end alert */
+/* Ẩn menu con mặc định */
+.nav-item .dropdown-menu {
+    display: none;
+}
+
+/* Hiển thị menu con khi di chuột vào thùng rác */
+.nav-item:hover .dropdown-menu {
+    display: block;
+}
+.dropdown-menu {
+    background-color: #343a40; /* Màu tối */
+    color: black; /* Màu chữ trắng */
+}
