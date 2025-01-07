@@ -30,17 +30,15 @@ module.exports.index = async (req, res) => {
     const categoryss = [];
     for (const tmp of categorys) {
         const idP = tmp.idParent;
-        let nameParent ;
-        if(idP !== "")
-        {
+        let nameParent;
+        if (idP !== "") {
             const categoryParent = await Category.findOne({ _id: idP });
             nameParent = categoryParent.title;
         }
-        else
-        {
+        else {
             nameParent = "";
         }
-        tmp.nameParent = nameParent; 
+        tmp.nameParent = nameParent;
         categoryss.push(tmp);
     }
 
@@ -110,13 +108,13 @@ module.exports.changeMulti = async (req, res) => {
 }
 module.exports.createCategory = async (req, res) => {
     let find = {
-        deleted : false
+        deleted: false
     }
     const category = await Category.find(find);
     const level = findTreeContro(category);
     res.render("admin/pages/category/createCategory.pug", {
         titlePage: "Tạo mới loại sản phẩm",
-        levell : level
+        levell: level
     })
 }
 module.exports.createNewCategory = async (req, res) => {
@@ -129,26 +127,24 @@ module.exports.createNewCategory = async (req, res) => {
         const count = await Category.countDocuments();
         req.body.position = count + 1;
     }
-    if(!req.body.idParent)
-    {
-        req.body.idParent= "";
+    if (!req.body.idParent) {
+        req.body.idParent = "";
     }
     const category = new Category(req.body);
     category.save();
     req.flash("success", "Tạo mới loại sản phẩm thành công");
     res.redirect("back");
 }
-module.exports.deleteCategory = async (req , res) => {
-    console.log(req.params.id);
+module.exports.deleteCategory = async (req, res) => {
     await Category.deleteOne(
         {
-            _id : req.params.id
+            _id: req.params.id
         }
     )
     req.flash("success", "Xóa sản phẩm thành công!!");
     res.redirect("back");
 }
-module.exports.viewEdit =async (req , res) => {
+module.exports.viewEdit = async (req, res) => {
     try {
         let find = {
             _id: req.params.id,
@@ -156,49 +152,46 @@ module.exports.viewEdit =async (req , res) => {
         }
 
         const category = await Category.findOne(find);
-        let nameParent ;
-        if(category.idParent)
-        {
-            const categoryParent = await Category.findOne({_id : category.idParent});
+        let nameParent;
+        if (category.idParent) {
+            const categoryParent = await Category.findOne({ _id: category.idParent });
             nameParent = categoryParent.title;
         }
-        else
-        {
+        else {
             nameParent = "Không có cha";
         }
-        const allCategory = await Category.find({deleted : false});
+        const allCategory = await Category.find({ deleted: false });
         const treeLevel = findTreeContro(allCategory);
-        res.render("admin/pages/category/editcategory.pug" , {
-            titlePage : "Chỉnh sửa loại sản phẩm",
-            category : category,
-            treeLevel : treeLevel,
-            nameParent : nameParent
+        res.render("admin/pages/category/editcategory.pug", {
+            titlePage: "Chỉnh sửa loại sản phẩm",
+            category: category,
+            treeLevel: treeLevel,
+            nameParent: nameParent
         })
     } catch (error) {
         res.redirect("back");
     }
 }
-module.exports.editCategory = async (req , res) => {
-    if(!req.body.title)
-    {
-        req.flash("error" , "Phải có tên của loại sản phẩm!!");
+module.exports.editCategory = async (req, res) => {
+    if (!req.body.title) {
+        req.flash("error", "Phải có tên của loại sản phẩm!!");
         res.redirect("back");
         return;
     }
     try {
-        await Category.updateOne({_id : req.params.id} , req.body);
-        req.flash("success" , "Chỉnh sửa thành công");
+        await Category.updateOne({ _id: req.params.id }, req.body);
+        req.flash("success", "Chỉnh sửa thành công");
         res.redirect("back");
     } catch (error) {
-        req.flash("error" , "Chỉnh sửa thất bại");
+        req.flash("error", "Chỉnh sửa thất bại");
         res.redirect("back");
     }
 }
-module.exports.viewDetelCategory =async (req , res) => { 
-    const category = await Category.findOne({_id : req.params.id});
-    res.render("admin/pages/category/detelCategory.pug" , {
-        category : category,
-        titlePage : `Chi tiết sản phẩm ${category.title}`
+module.exports.viewDetelCategory = async (req, res) => {
+    const category = await Category.findOne({ _id: req.params.id });
+    res.render("admin/pages/category/detelCategory.pug", {
+        category: category,
+        titlePage: `Chi tiết sản phẩm ${category.title}`
     })
 }
 

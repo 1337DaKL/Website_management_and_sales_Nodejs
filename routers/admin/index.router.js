@@ -4,6 +4,7 @@ const productsRouter = require("./products.router");
 const dustbinRouter = require("./dustbin.router");
 const categoryRouter = require("./categorty.router");
 const chatRouter = require("./chat.router");
+const dustbinMessRouter = require("./dustbinMess.router");
 module.exports = (app) => {
     const PATH_ADMIN = systemConfig.prefixAdmin;
     app.use(PATH_ADMIN + "/" ,dashboardRouter);
@@ -11,4 +12,5 @@ module.exports = (app) => {
     app.use(PATH_ADMIN + "/dustbin" , dustbinRouter);
     app.use(PATH_ADMIN + "/categorys" , categoryRouter);
     app.use(PATH_ADMIN + "/chat" , chatRouter);
+    app.use(PATH_ADMIN + "/dustbin-mess" , dustbinMessRouter);
 };

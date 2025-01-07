@@ -1,9 +1,10 @@
 extends ../../layouts/defaut.pug
 block main
     h1 
-        b Trang loại sản phẩm admin
+        b Thùng rác tin nhắn 
     <br/>
-    button.btn.btn-icon(type="button" button-delete-multi)
+        .card.mb-3 
+        button.btn.btn-icon(type="button" button-delete-multi)
         i(class="bi bi-trash3")
               
     div(style="display: flex; gap: 15px;")
@@ -11,25 +12,24 @@ block main
         style="padding: 10px 20px; border: none; border-radius: 5px; color: white; font-size: 16px; cursor: pointer; background-color: #28a745;"
         onmouseover="this.style.backgroundColor='#218838'"
         onmouseout="this.style.backgroundColor='#28a745'"
-        fillter
+        fillter-dustbin
         status=""
     ) Tất cả 
     button(
         style="padding: 10px 20px; border: none; border-radius: 5px; color: white; font-size: 16px; cursor: pointer; background-color: #007bff;"
         onmouseover="this.style.backgroundColor='#0056b3'"
         onmouseout="this.style.backgroundColor='#007bff'"
-        fillter
+        fillter-dustbin
         status="seen"
     ) Đã xem 
     button(
         style="padding: 10px 20px; border: none; border-radius: 5px; color: white; font-size: 16px; cursor: pointer; background-color: #dc3545;"
         onmouseover="this.style.backgroundColor='#c82333'"
         onmouseout="this.style.backgroundColor='#dc3545'"
-        fillter
+        fillter-dustbin
         status="notSeen"
 
     ) Chưa xem
-    //- product s    
     table(
         class="table table-hover table-sm"
         change-status-multi
@@ -48,7 +48,7 @@ block main
                     if item.status == "notSeen"
                         tr(id-mess=item.id)
                             td
-                                input(type="checkbox" name="id" value=item.id)
+                                input(type="checkbox" name="id" value=mess.id)
                             td(tr-mess) 
                                 b #{index + 1}
                             td(tr-mess) 
@@ -61,7 +61,7 @@ block main
                     else 
                         tr( id-mess=item.id)
                             td
-                                input(type="checkbox" name="id" value=item.id)
+                                input(type="checkbox" name="id" value=mess.id)
                             td(tr-mess) #{index + 1}
                             td(tr-mess) #{item.name}                           
                             td(tr-mess) #{item.title}
