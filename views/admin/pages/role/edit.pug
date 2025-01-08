@@ -1,0 +1,42 @@
+extends ../../layouts/defaut.pug
+block main  
+    -if(messages.error)
+        .messages.info
+            span(
+                class="alert alert-danger" 
+                show-alert 
+                data-time= "5000"
+            ) #{messages.error} <button type="button" class="btn-close" aria-label="Close" button-close-alert></button>
+    h1(class="mb-4") Chỉnh sửa quyền quản trị
+    form(
+        action=`${frefixAdmin}/role/edit/${role.id}?_method=PATCH`
+        id="form-create"
+        method="POST"
+        enctype="multipart/form-data"
+    )
+        div(class="form-group")
+            label(for="title") Tiêu đề
+            input(
+                type="text"
+                class="form-control"
+                id="title"
+                name="title"
+                placeholder="Nhập tên sản phẩm"
+                value=role.title
+                required
+            )
+        div(class="form-group")
+            label(for="description") Mô tả
+            textarea(
+                class="form-control"
+                id="description"
+                name="description"
+                rows="5",
+                tinymce
+            ) #{role.description}
+        div(class="form-group")
+            button(
+                type="submit"
+                class="btn btn-primary"
+            ) Chỉnh sửa 
+    script(src="/admin/js/create.js") 

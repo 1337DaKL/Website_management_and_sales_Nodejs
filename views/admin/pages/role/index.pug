@@ -1,0 +1,60 @@
+extends ../../layouts/defaut.pug
+block main
+    h1 Quyền quản trị
+    br
+    .card.mb-3 
+            .card-header Bo loc va tim kiem
+
+            .card-body
+                .row 
+                    //-Filter-Search
+                    .col-4
+                        //- +filter-status(filtersStatus)  
+                    //-End Filter-Search
+
+                    //-Search
+                    .col-6
+                        //- +search(keyword)
+                    //-End Search
+                    .col-2
+                        a(
+                            href=`${frefixAdmin}/role/create`
+                            class="btn btn-outline-success"
+                        ) + Thêm các quyền quản trị
+                .row
+                    //- +change-status-multi()
+                    //- +sort()
+
+    table(
+        class="table table-hover table-sm"
+        change-status-multi
+    )
+        if roles.length > 0 
+            thead 
+                    tr
+                        th
+                            input(type="checkbox" name="checkall")
+                        th STT 
+                        th Tiêu đề 
+                        th Mô tả 
+                        th Hành động 
+            tbody 
+                each item, index in roles 
+                    tr 
+                        td
+                            input(type="checkbox" name="id" value=item.id)
+                        td #{index + 1}
+                        td #{item.title}
+                        td !{item.description} 
+                        td 
+                            a.btn.btn-warning.btn-sm(href=`${frefixAdmin}/role/edit/${item.id}`) Sửa
+
+                            button(class="btn btn-danger btn-sm ml-1" id-role=item.id button-delete) Xóa
+        else 
+            .container.mt-5
+                .row.justify-content-center
+                    .col-md-6
+                        .alert.alert-warning.text-center
+                            i.bi.bi-exclamation-triangle-fill 
+                            | Chưa có quyền quản trị nào được tạo
+        script(src="/admin/js/role.js") 

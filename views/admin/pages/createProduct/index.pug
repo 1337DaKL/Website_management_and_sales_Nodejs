@@ -1,4 +1,5 @@
 extends ../../layouts/defaut.pug
+include ../../mixins/level-tree.pug
 block main  
     -if(messages.error)
         .messages.info
@@ -24,6 +25,15 @@ block main
                 placeholder="Nhập tên sản phẩm"
                 required
             )
+        div(class="form-group")
+            label(for="category") Chọn loại sản phẩm cha
+            br
+            select(
+                id="category"
+                name="category"
+            ) 
+                option(value="" ) --Sản phẩm không có cha--
+                +level-tree(levell)
         div(class="form-group")
             label(for="description") Mô tả
             textarea(

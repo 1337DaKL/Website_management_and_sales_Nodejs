@@ -1,0 +1,12 @@
+const express = require("express");
+const router = express.Router();
+const controller = require("../../controllers/admin/role.controller");
+const cloud = require("../../middlewares/admin/cloud.middlewares");
+var multer = require('multer');
+var upload = multer();
+router.get("/" , controller.index);
+router.get("/create" , controller.viewCreate);
+router.post("/create" , upload.single('thumbnail') , cloud.clouldMiddlewares, controller.createRole);
+router.get("/edit/:id" , controller.viewEditRole);
+router.patch("/edit/:id" ,upload.single('thumbnail') , cloud.clouldMiddlewares, controller.editRole );
+module.exports = router;

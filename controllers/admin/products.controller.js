@@ -4,6 +4,8 @@ const filterStatusHelper = require("../../helper/filterStatus");
 const searchHeper = require("../../helper/search");
 const paginationHeper = require("../../helper/pagination");
 const { model } = require("mongoose");
+const Category = require("../../models/category.model");
+const findTreeContro = require("../../helper/findTree");
 module.exports.index = async (req, res) => {
     //Filter status
     const filtersStatus = filterStatusHelper(req.query);
@@ -115,9 +117,12 @@ module.exports.deleteProduct = async (req, res) => {
     res.redirect("back");
 }
 
-module.exports.create = (req, res) => {
+module.exports.create = async (req, res) => {
+    const category = await Category.find({deleted : false});
+    const level = findTreeContro(category);
     res.render("admin/pages/createProduct/index.pug", {
-        titlePage: "Trang tạo mới sản phẩm"
+        titlePage: "Trang tạo mới sản phẩm",
+        levell : level
     })
 }
 
@@ -153,15 +158,20 @@ module.exports.createNewProduct = async (req, res) => {
 
 module.exports.editProduct = async (req, res) => {
     try {
+        const category = await Category.find({deleted : false});
+        const level = findTreeContro(category);
         let find = {
             _id: req.params.id,
             deleted: false
         }
         const productID = await Product.findOne(find);
         productID.price = productID.price.toString().substring(0, productID.price.toString().length - 3);
+        const cate = await Category.findOne({_id : productID.category});
         res.render("admin/pages/editProduct/index.pug", {
             titlePage: "Chỉnh sửa sản phẩm",
-            product: productID
+            product: productID,
+            levell : level,
+            cate : cate
         })
     } catch (error) {
         res.redirect("back");
