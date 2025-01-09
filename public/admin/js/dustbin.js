@@ -117,7 +117,6 @@ formOption.addEventListener("submit" , (e) => {
                 })
                 const formSubmit = document.querySelector("[input-submit]");
                 formSubmit.setAttribute("value" , ids.join(","));
-                console.log(formSubmit);
                 formOption.submit();
             }
         }
