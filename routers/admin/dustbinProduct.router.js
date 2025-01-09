@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("../../controllers/admin/dustbin.controller");
+const controller = require("../../controllers/admin/dustbinProduct.controller");
 
 router.get("/" , controller.index);
 router.patch("/restore/:id" , controller.restoreProduct);

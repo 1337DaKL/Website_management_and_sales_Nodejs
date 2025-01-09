@@ -120,7 +120,7 @@ module.exports.deleteProduct = async (req, res) => {
 module.exports.create = async (req, res) => {
     const category = await Category.find({deleted : false});
     const level = findTreeContro(category);
-    res.render("admin/pages/createProduct/index.pug", {
+    res.render("admin/pages/products/create.pug", {
         titlePage: "Trang tạo mới sản phẩm",
         levell : level
     })
@@ -167,7 +167,7 @@ module.exports.editProduct = async (req, res) => {
         const productID = await Product.findOne(find);
         productID.price = productID.price.toString().substring(0, productID.price.toString().length - 3);
         const cate = await Category.findOne({_id : productID.category});
-        res.render("admin/pages/editProduct/index.pug", {
+        res.render("admin/pages/products/edit.pug", {
             titlePage: "Chỉnh sửa sản phẩm",
             product: productID,
             levell : level,
@@ -213,7 +213,7 @@ module.exports.detelProduct = async (req, res) => {
             deleted: false
         }
         const productDetel = await Product.findOne(find);
-        res.render("admin/pages/detelProduct/index.pug", {
+        res.render("admin/pages/products/detel.pug", {
             title: `Chi tiết sản phầm ${productDetel.title}`,
             product: productDetel,
             priceString: priceString(productDetel.price)

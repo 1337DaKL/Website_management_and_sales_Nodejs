@@ -18,7 +18,7 @@ mixin search-and-apply(keyword)
                             | Tìm kiếm
 
             // Chọn và nút áp dụng
-            form(action=`${frefixAdmin}/dustbin/change-multi?_method=PATCH` method="post" form-option)
+            form(action=`${frefixAdmin}/dustbinProduct/change-multi?_method=PATCH` method="post" form-option)
                 .input-group
                     select.form-control(name="type" select-option)
                         option(disabled selected) --Chọn hành động--

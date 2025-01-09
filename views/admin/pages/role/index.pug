@@ -1,9 +1,9 @@
 extends ../../layouts/defaut.pug
+include ../../mixins/change-status-multi.pug
 block main
     h1 Quyền quản trị
     br
     .card.mb-3 
-            .card-header Bo loc va tim kiem
 
             .card-body
                 .row 
@@ -21,10 +21,8 @@ block main
                             href=`${frefixAdmin}/role/create`
                             class="btn btn-outline-success"
                         ) + Thêm các quyền quản trị
-                .row
-                    //- +change-status-multi()
-                    //- +sort()
-
+    button.btn.btn-icon(type="button" button-delete-multi)
+        i(class="bi bi-trash3")
     table(
         class="table table-hover table-sm"
         change-status-multi
@@ -57,4 +55,5 @@ block main
                         .alert.alert-warning.text-center
                             i.bi.bi-exclamation-triangle-fill 
                             | Chưa có quyền quản trị nào được tạo
+        form(action="" method="POST" id="form-delete" path=`${frefixAdmin}/role/delete`)
         script(src="/admin/js/role.js") 

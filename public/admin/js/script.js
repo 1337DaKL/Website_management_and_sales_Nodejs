@@ -1,4 +1,5 @@
 //button status
+
 const buttonsStatus = document.querySelectorAll("[button-status]");
 if(buttonsStatus.length > 0)
 {
@@ -24,76 +25,109 @@ if(buttonsStatus.length > 0)
 //Search input
 const searchInput = document.querySelector("#form-search");
 let url = new URL(window.location.href);
-searchInput.addEventListener("submit" , (e) => {
-    e.preventDefault();
-    const keyword = e.target.elements.keyword.value;
-    url.searchParams.delete("page");
-    if(keyword)
-    {
-        url.searchParams.set("keyword" , keyword);
-    }
-    else
-    {
-        url.searchParams.delete("keyword");
-    }
-    window.location.href = url.href;
-})
+if(searchInput)
+{
+    searchInput.addEventListener("submit" , (e) => {
+        e.preventDefault();
+        const keyword = e.target.elements.keyword.value;
+        url.searchParams.delete("page");
+        if(keyword)
+        {
+            url.searchParams.set("keyword" , keyword);
+        }
+        else
+        {
+            url.searchParams.delete("keyword");
+        }
+        window.location.href = url.href;
+    })
+}
 //End search input
 
 //Pagination
 const buttonsPagination = document.querySelectorAll("[button-pagination]");
-buttonsPagination.forEach((button) => {
-    button.addEventListener("click" , () => {
-        let url = new URL(window.location.href);
-        const page = button.getAttribute("button-pagination");
-        url.searchParams.set("page" , page);
-        window.location.href = url.href;
-    })
-});
+if(buttonsPagination)
+{
+    buttonsPagination.forEach((button) => {
+        button.addEventListener("click" , () => {
+            let url = new URL(window.location.href);
+            const page = button.getAttribute("button-pagination");
+            url.searchParams.set("page" , page);
+            window.location.href = url.href;
+        })
+    });
+}
 //End Pagination
 
 
 //Button-Clear
 const buttonClear = document.querySelector("#button-clear");
-buttonClear.addEventListener("click" , (e) => {
-    let url = new URL(window.location.href);
-    url.searchParams.delete("keyword");
-    window.location.href = url.href;
-})
+if(buttonClear)
+{
+    buttonClear.addEventListener("click" , (e) => {
+        let url = new URL(window.location.href);
+        url.searchParams.delete("keyword");
+        window.location.href = url.href;
+    })
+}
 //End Button-clear
+// alert
 
+const alertHidden = document.querySelector("[show-alert]");
+if(alertHidden)
+{
+    const dataTime = parseInt(alertHidden.getAttribute("data-time"));
+    setTimeout(() => {
+        alertHidden.classList.add("alert-hidden");
+    } , dataTime);
+}
+const buttonCloseAlert = alertHidden.querySelector("[button-close-alert]");
+if(buttonCloseAlert)
+{
+    buttonCloseAlert.addEventListener("click" , () => {
+        alertHidden.classList.add("alert-hidden");
+    })
+}
+// end alert
 //Change button all status
 const changeStatusAll = document.querySelector("[change-status-multi]");
 const tickAll = changeStatusAll.querySelector("input[name='checkall']");
 const inputsTick = changeStatusAll.querySelectorAll("input[name='id']");
-tickAll.addEventListener("click" , () => {
-    const statusClick = tickAll.checked;
-    if(statusClick)
-    {
-        inputsTick.forEach((input) => {
-            input.checked = true;
-        })
-    }
-    else{
-        inputsTick.forEach((input) => {
-            input.checked = false;
-        })
-    }
-})
-inputsTick.forEach((input) => {
-    input.addEventListener("click" , () => {
-        const countAllTick = inputsTick.length;
-        const countAllChecked = changeStatusAll.querySelectorAll("input[name='id']:checked").length;
-        if(countAllTick == countAllChecked)
+
+if(tickAll)
+{
+    tickAll.addEventListener("click" , () => {
+        const statusClick = tickAll.checked;
+        if(statusClick)
         {
-            tickAll.checked = true;
+            inputsTick.forEach((input) => {
+                input.checked = true;
+            })
         }
-        else
-        {
-            tickAll.checked = false;
+        else{
+            inputsTick.forEach((input) => {
+                input.checked = false;
+            })
         }
     })
-})
+}
+if(inputsTick)
+{
+    inputsTick.forEach((input) => {
+        input.addEventListener("click" , () => {
+            const countAllTick = inputsTick.length;
+            const countAllChecked = changeStatusAll.querySelectorAll("input[name='id']:checked").length;
+            if(countAllTick == countAllChecked)
+            {
+                tickAll.checked = true;
+            }
+            else
+            {
+                tickAll.checked = false;
+            }
+        })
+    })
+}
 //end Change button all status
 
 //form change status multi
@@ -145,21 +179,4 @@ if(formChangeMulti)
 //end form change status multi
 
 
-// alert
-const alertHidden = document.querySelector("[show-alert]");
-if(alertHidden)
-{
-    const dataTime = parseInt(alertHidden.getAttribute("data-time"));
-    setTimeout(() => {
-        alertHidden.classList.add("alert-hidden");
-    } , dataTime);
-}
-const buttonCloseAlert = alertHidden.querySelector("[button-close-alert]");
-if(buttonCloseAlert)
-{
-    buttonCloseAlert.addEventListener("click" , () => {
-        alertHidden.classList.add("alert-hidden");
-    })
-}
-// end alert
 

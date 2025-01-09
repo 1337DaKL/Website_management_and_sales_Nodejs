@@ -1,0 +1,55 @@
+extends ../../layouts/defaut.pug
+include ../../mixins/search-and-apply.pug
+include ../../mixins/pagination.pug
+block main 
+    h1 Thùng rác quyền quản trị
+    .container.mt-4
+        //- +search-and-apply(keyword)
+
+        if roles.length > 0 
+            .row.mt-4   
+                .col-md-12
+                    table.table.table-striped.table-bordered
+                        thead.thead-dark
+                            tr
+                                th
+                                    input(type="checkbox" name="checkall")
+                                th.text-center(w-10) STT
+                                th.text-center(w-20) Tên quyền quản trị
+                                th.text-center(w-20) Mô tả
+                                th.text-center(w-20) Ngày xóa
+                                th.text-center(w-20) Hành động
+                        tbody
+                            each item , index in roles
+                                tr
+                                    td  
+                                        input(type="checkbox" name="id" id=item.id)
+                                    td.text-center #{index + 1}
+                                    td.text-center #{item.title}
+                                    td.text-center !{item.description}
+                                    td.text-center #{item.dateDeleted}
+                                    td.text-center
+                                        button(
+                                            class="btn btn-primary mr-2"
+                                            id-role = item.id
+                                            restore-role
+                                        ) Khôi phục
+                                        button(
+                                            class="btn btn-danger"
+                                            id-role = item.id 
+                                            delete-role
+                                        ) Xóa vĩnh viễn 
+        else
+            .container.mt-5
+                .row.justify-content-center
+                    .col-md-6
+                        .alert.alert-warning.text-center
+                            i.bi.bi-exclamation-triangle-fill 
+                            | Thùng rác rỗng
+
+        form(action=""  method="POST" id="form-restore" path=`${frefixAdmin}/dustbinRole/restore`)
+        form(action=""  method="POST" id="form-delete" path=`${frefixAdmin}/dustbinRole/delete`)
+    //- +pagination(pagination)
+    script(src="/admin/js/dustbinRole.js") 
+
+

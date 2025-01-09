@@ -20,7 +20,7 @@ module.exports.index = async (req , res) => {
     }
     //end search
     const products = await Product.find(find).limit(ojectPagination.limitPage).skip(ojectPagination.skipPage);;
-    res.render("admin/pages/dustbin/index.pug" , {
+    res.render("admin/pages/dustbinProduct/index.pug" , {
         titlePage : "Thùng rác",
         products : products,
         keyword: searchDustbin.keyword,

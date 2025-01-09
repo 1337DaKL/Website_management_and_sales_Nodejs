@@ -9,4 +9,8 @@ router.get("/create" , controller.viewCreate);
 router.post("/create" , upload.single('thumbnail') , cloud.clouldMiddlewares, controller.createRole);
 router.get("/edit/:id" , controller.viewEditRole);
 router.patch("/edit/:id" ,upload.single('thumbnail') , cloud.clouldMiddlewares, controller.editRole );
+router.delete("/delete/:id" , controller.deleteRole);
+router.patch("/delete/:id" , controller.deleteMultiRole);
+router.get("/permission" , controller.viewPagePemission);
+router.patch("/update-permission" , upload.single('thumbnail') , cloud.clouldMiddlewares, controller.updatePermissionRole);
 module.exports = router;
