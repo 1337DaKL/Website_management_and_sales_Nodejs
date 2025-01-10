@@ -18,40 +18,6 @@ if (buttonsRestore) {
 }
 //end restore role
 
-//checked all
-const checkAll = document.querySelector("input[name='checkall']");
-const checkId = document.querySelectorAll("input[name='id']");
-if (checkAll) {
-    checkAll.addEventListener("click", () => {
-        if (checkId) {
-            if (checkAll.checked) {
-                checkId.forEach((input) => {
-                    input.checked = true;
-                })
-            }
-            else {
-                checkId.forEach((input) => {
-                    input.checked = false;
-                })
-            }
-        }
-    })
-}
-if (checkId) {
-    checkId.forEach((item) => {
-        item.addEventListener("click", () => {
-            const countCheckedItem = document.querySelectorAll("input[name='id']:checked").length;
-            if (countCheckedItem === checkId.length) {
-                checkAll.checked = true;
-            }
-            else {
-                checkAll.checked = false;
-            }
-        })
-    })
-}
-
-//end tick all
 
 
 // delete role

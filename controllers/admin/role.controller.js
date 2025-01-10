@@ -46,7 +46,7 @@ module.exports.editRole = async (req, res) => {
     // res.send("ok");
 }
 module.exports.deleteRole = async (req, res) => {
-    await Role.updateOne({ _id: req.params.id },  { $set: { deleted: true, dateDeleted: new Date() } });
+    await Role.updateOne({ _id: req.params.id }, { $set: { deleted: true, dateDeleted: new Date() } });
     req.flash("success", "Xóa thành công!!");
     res.redirect("back");
 }
@@ -77,7 +77,7 @@ module.exports.updatePermissionRole = async (req, res) => {
     for (let tmp in permissionJson) {
         await Role.updateOne({ _id: permissionJson[tmp].id }, { permission: permissionJson[tmp].permission });
     }
-    req.flash("success", "Nâng cấp thành công");
+    req.flash("success", "Cập nhật phân quyền thành công");
     res.redirect("back");
     // res.send("ok");
 }

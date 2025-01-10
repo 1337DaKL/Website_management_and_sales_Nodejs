@@ -2,12 +2,12 @@ mixin search-and-apply(keyword)
     .row.justify-content-center
         .col-md-8
             // Thanh tìm kiếm
-            form(search-dustbin)
+            form(id="form-search")
                 .input-group.mb-4
                     input.form-control(
                         type="text" 
                         placeholder="Tìm kiếm sản phẩm..." 
-                        name="query"  
+                        name="keyword"  
                         value=keyword 
                         )
                     button.btn.btn-outline-secondary(type="button" id="button-clear")
@@ -16,7 +16,6 @@ mixin search-and-apply(keyword)
                         button.btn.btn-primary(type="submit")
                             i.bi.bi-search
                             | Tìm kiếm
-
             // Chọn và nút áp dụng
             form(action=`${frefixAdmin}/dustbinProduct/change-multi?_method=PATCH` method="post" form-option)
                 .input-group

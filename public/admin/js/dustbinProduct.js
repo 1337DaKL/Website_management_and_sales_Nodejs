@@ -40,59 +40,6 @@ if(buttonsDelete)
 }
 //end delete products
 
-
-//search
-const searchDustbin = document.querySelector("[search-dustbin]");
-const url = new URL(window.location.href);
-searchDustbin.addEventListener("submit" , (e) => {
-    e.preventDefault();
-    url.searchParams.delete("page");
-    const keyword = e.target.elements.query.value;
-    if(keyword)
-    {
-        url.searchParams.set("keyword" , keyword);
-    }
-    else
-    {
-        url.searchParams.delete("keyword");
-    }
-    window.location.href = url;
-})
-//end search
-
-//button clear
-const buttonClear  = document.querySelector("#button-clear");
-buttonClear.addEventListener("click" , () => {
-    url.searchParams.delete("keyword");
-    window.location.href = url;
-})
-// end button claer
-
-
-//check
-const checkAll = document.querySelector("input[name='checkall']");
-const checkId = document.querySelectorAll("input[name='id']");
-checkAll.addEventListener("click" , () => {
-    const check = checkAll.checked == true ? true : false;
-    checkId.forEach(item => {
-        item.checked = check;
-    })
-})
-checkId.forEach(item => {
-    item.addEventListener("click" , () => {
-        const count = document.querySelectorAll("input[name='id']:checked").length;
-        if(count == checkId.length)
-        {
-            checkAll.checked = true;
-        }
-        else
-        {
-            checkAll.checked = false;
-        }
-    })
-})
-//end check
-
 //option 
 const formOption = document.querySelector("[form-option]");
 formOption.addEventListener("submit" , (e) => {
@@ -116,7 +63,10 @@ formOption.addEventListener("submit" , (e) => {
                     ids.push(check.getAttribute("id"));
                 })
                 const formSubmit = document.querySelector("[input-submit]");
-                formSubmit.setAttribute("value" , ids.join(","));
+                if(formSubmit)
+                {
+                    formSubmit.setAttribute("value" , ids.join(","));
+                }
                 formOption.submit();
             }
         }
@@ -127,33 +77,3 @@ formOption.addEventListener("submit" , (e) => {
     }
 })
 //end option
-
-//Pagination
-const buttonsPagination = document.querySelectorAll("[button-pagination]");
-buttonsPagination.forEach((button) => {
-    button.addEventListener("click" , () => {
-        let url = new URL(window.location.href);
-        const page = button.getAttribute("button-pagination");
-        url.searchParams.set("page" , page);
-        window.location.href = url.href;
-    })
-});
-//End Pagination
-
-// alert
-const alertHidden = document.querySelector("[show-alert]");
-if(alertHidden)
-{
-    const dataTime = parseInt(alertHidden.getAttribute("data-time"));
-    setTimeout(() => {
-        alertHidden.classList.add("alert-hidden");
-    } , dataTime);
-}
-const buttonCloseAlert = alertHidden.querySelector("[button-close-alert]");
-if(buttonCloseAlert)
-{
-    buttonCloseAlert.addEventListener("click" , () => {
-        alertHidden.classList.add("alert-hidden");
-    })
-}
-// end alert

@@ -1,20 +1,3 @@
-// alert
-const alertHidden = document.querySelector("[show-alert]");
-if (alertHidden) {
-    const dataTime = parseInt(alertHidden.getAttribute("data-time"));
-    setTimeout(() => {
-        alertHidden.classList.add("alert-hidden");
-    }, dataTime);
-    const buttonCloseAlert = alertHidden.querySelector("[button-close-alert]");
-    if (buttonCloseAlert) {
-        buttonCloseAlert.addEventListener("click", () => {
-            alertHidden.classList.add("alert-hidden");
-        })
-    }
-}
-
-// end alert
-
 
 //delete
 const buttonDelete = document.querySelectorAll("[button-delete]");
@@ -34,39 +17,6 @@ if (buttonDelete) {
 }
 
 //end delete 
-//checked all
-const checkAll = document.querySelector("input[name='checkall']");
-const checkId = document.querySelectorAll("input[name='id']");
-if (checkAll) {
-    checkAll.addEventListener("click", () => {
-        if (checkId) {
-            if (checkAll.checked) {
-                checkId.forEach((input) => {
-                    input.checked = true;
-                })
-            }
-            else {
-                checkId.forEach((input) => {
-                    input.checked = false;
-                })
-            }
-        }
-    })
-}
-if (checkId) {
-    checkId.forEach((item) => {
-        item.addEventListener("click", () => {
-            const countCheckedItem = document.querySelectorAll("input[name='id']:checked").length;
-            if (countCheckedItem === checkId.length) {
-                checkAll.checked = true;
-            }
-            else {
-                checkAll.checked = false;
-            }
-        })
-    })
-}
-//end checked all
 
 //delete multi
 
@@ -83,12 +33,12 @@ if (buttonDeleteMulti) {
                     arrayId.push(idRole);
                 }
             })
-        }
-        const formDelete = document.querySelector("#form-delete");
-        if (formDelete) {
-            const path = formDelete.getAttribute("path");
-            formDelete.setAttribute("action", `${path}/${arrayId.join(',')}?_method=PATCH`);
-            formDelete.submit();
+            const formDelete = document.querySelector("#form-delete");
+            if (formDelete) {
+                const path = formDelete.getAttribute("path");
+                formDelete.setAttribute("action", `${path}/${arrayId.join(',')}?_method=PATCH`);
+                formDelete.submit();
+            }
         }
     })
 }
@@ -136,9 +86,6 @@ if (tablePermission) {
     }
 
 }
-
-
-
 const dataRoles = document.querySelector("[data-role]");
 if(dataRoles)
 {

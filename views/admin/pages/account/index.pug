@@ -1,0 +1,22 @@
+extends ../../layouts/defaut.pug
+block main
+    h1 Tài khoản
+    br
+    .card.mb-3 
+        .card-body
+            .row 
+                //-Filter-Search
+                .col-4
+                    //- +filter-status(filtersStatus)  
+                //-End Filter-Search
+
+                //-Search
+                .col-6
+                    //- +search(keyword)
+                //-End Search
+                .col-2
+                    a(
+                        href=`${frefixAdmin}/account/create`
+                        class="btn btn-outline-success"
+                    ) + Thêm tài khoản
+    

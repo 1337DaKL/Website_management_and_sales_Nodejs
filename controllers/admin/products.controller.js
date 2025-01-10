@@ -98,7 +98,6 @@ module.exports.changeMulti = async (req, res) => {
             req.flash("success", "Xóa sản phẩm thành công!!");
             break;
         case "change-position":
-        case "change-position":
             for (const tmp of ids) {
                 const [id, position] = tmp.split("-");
                 const parsedPosition = parseInt(position);

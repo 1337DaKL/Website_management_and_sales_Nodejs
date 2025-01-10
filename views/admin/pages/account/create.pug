@@ -1,7 +1,6 @@
 extends ../../layouts/defaut.pug
-include ../../mixins/level-tree.pug
 block main  
-    h1(class="mb-4") Thêm mới loại sản phẩm
+    h1(class="mb-4") Thêm mới sản phẩm 
     form(
         action=""
         id="form-create"
@@ -9,37 +8,67 @@ block main
         enctype="multipart/form-data"
     )
         div(class="form-group")
-            label(for="title") Tiêu đề
+            label(for="fullName") Họ và tên *
             input(
                 type="text"
                 class="form-control"
-                id="title"
-                name="title"
-                placeholder="Nhập tên sản phẩm"
+                id="fullName"
+                name="fullName"
+                placeholder="Nhập họ và tên ..."
                 required
             )
         div(class="form-group")
-            label(for="parent") Chọn loại sản phẩm cha
-            br
-            select(
-                id="parent"
-                name="idParent"
-            ) 
-                option(value="" ) --Sản phẩm không có cha--
-                +level-tree(levell)
-        div(class="form-group") 
-            label(for="description") Mô tả
-            textarea(
-                class="form-control"
-                id="description"
-                name="description"
-                rows="5"
-            ) 
-        div(class="form-group" upload-image)
-            label(for="thumbnail") Tải ảnh 
+            label(for="email") Email*
             input(
-                id="thumbnail"
-                name="thumbnail"
+                type="text"
+                class="form-control"
+                id="email"
+                name="email"
+                placeholder="Nhập email ..."
+                required
+            ) 
+
+        div(class="form-group")
+            label(for="password") Mật khẩu*
+            input(
+                id="password"
+                name="password"
+                type="text"
+                class="form-control"
+                placeholder="Nhập mật khẩu ..."
+                required
+            )
+        div(class="form-group")
+            label(for="address") Địa chỉ
+            input(
+                id="address"
+                name="address"
+                type="text"
+                class="form-control"
+                placeholder="Nhập địa chỉ"
+            )
+        div(class="form-group") 
+            label(for="telephone") Số điện thoại
+            input(
+                id="telephone"
+                name="telephone"
+                type="text"
+                placeholder="Nhập số điện thoại ..."
+                class="form-control"
+            )
+        div(class="form-group")
+            label(for="idRole") Quyền quản trị *
+            br
+            select(name="idRole" id="idRole")
+                option(value="" selected) ----Chọn quyền quản trị----
+                option(value="admin") Quản trị viên
+                option(value="user") Người dùng
+   
+        div(class="form-group" upload-image)
+            label(for="avatar") Tải ảnh 
+            input(
+                id="avatar"
+                name="avatar"
                 type="file"
                 class="form-control-file"
                 accept=".jpg, .png"
@@ -48,16 +77,6 @@ block main
             button(type="button" id="clearUpload" clear-upload) X
             br
             <img id="blah" src="#" alt="Ảnh bạn đã tải lên" img-image weith = "200px" height = "200px"/>
-        div(class="form-group")
-            label(for="position") Vị trí
-            input(
-                id="position"
-                name="position"
-                type="number"
-                class="form-control"
-                min="1"
-                placeholder="Không nhập thì vị trí tự động tăng"
-            )
         div(class="form-group form-check form-check-inline")
             label(for="statusActive" class="form-check-label" style="margin-right: 10px") Hoạt động
             input(
@@ -83,3 +102,4 @@ block main
                 class="btn btn-primary"
             ) Tạo mới 
     script(src="/admin/js/create.js") 
+

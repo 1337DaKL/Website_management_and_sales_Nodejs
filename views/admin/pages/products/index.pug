@@ -7,39 +7,27 @@ include ../../mixins/change-status-multi.pug
 include ../../mixins/sort.pug
 block main
     h1 Trang san pham admin
-    <br/>
-        .card.mb-3 
-            .card-header Bo loc va tim kiem
-
-            .card-body
-                .row 
-                    //-Filter-Search
-                    .col-4
-                        +filter-status(filtersStatus)  
-                    //-End Filter-Search
-
-                    //-Search
-                    .col-6
-                        +search(keyword)
-                    //-End Search
-                    .col-2
-                        a(
-                            href=`${frefixAdmin}/products/create`
-                            class="btn btn-outline-success"
-                        ) +Thêm mới sản phẩm
-                .row
-                    +change-status-multi()
-                    +sort()
-                    
-           
-    //- product s    
+    br
+    .card.mb-3 
+        .card-header Bo loc va tim kiem
+        .card-body
+            .row 
+                .col-4
+                    +filter-status(filtersStatus)  
+                .col-6
+                    +search(keyword)
+                .col-2
+                    a(
+                        href=`${frefixAdmin}/products/create`
+                        class="btn btn-outline-success"
+                    ) +Thêm mới sản phẩm
+            .row
+                +change-status-multi()
+                +sort() 
     table(
         class="table table-hover table-sm"
         change-status-multi
     )
         +print-products(products)
-    //-end products
-
-    //-Paginatiion
     +pagination(pagination)
-    //- End Paginatiion
+    script(src="/admin/js/product.js") 

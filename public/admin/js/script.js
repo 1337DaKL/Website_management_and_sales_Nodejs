@@ -1,34 +1,60 @@
-//button status
+// alert
+const alertHidden = document.querySelector("[show-alert]");
+if (alertHidden) {
+    const dataTime = parseInt(alertHidden.getAttribute("data-time"));
+    setTimeout(() => {
+        alertHidden.classList.add("alert-hidden");
+    }, dataTime);
+    const buttonCloseAlert = alertHidden.querySelector("[button-close-alert]");
+    if (buttonCloseAlert) {
+        buttonCloseAlert.addEventListener("click", () => {
+            alertHidden.classList.add("alert-hidden");
+        })
+    }
+}
 
-const buttonsStatus = document.querySelectorAll("[button-status]");
-if(buttonsStatus.length > 0)
-{
-    let url = new URL(window.location.href);
-    buttonsStatus.forEach((button) => {
-        button.addEventListener("click" , () => {
-            url.searchParams.delete("page");
-            const status = button.getAttribute("button-status");
-            if(status)
-            {
-                url.searchParams.set("status" , status);
+// end alert
+//checked all
+const checkAll = document.querySelector("input[name='checkall']");
+const checkId = document.querySelectorAll("input[name='id']");
+if (checkAll) {
+    checkAll.addEventListener("click", () => {
+        if (checkId) {
+            if (checkAll.checked) {
+                checkId.forEach((input) => {
+                    input.checked = true;
+                })
             }
-            else
-            {
-                url.searchParams.delete("status");
+            else {
+                checkId.forEach((input) => {
+                    input.checked = false;
+                })
             }
-            window.location.href = url.href;
+        }
+    })
+}
+if (checkId) {
+    checkId.forEach((item) => {
+        item.addEventListener("click", () => {
+            const countCheckedItem = document.querySelectorAll("input[name='id']:checked").length;
+            if (countCheckedItem === checkId.length) {
+                checkAll.checked = true;
+            }
+            else {
+                checkAll.checked = false;
+            }
         })
     })
 }
-//end button status
+//end checked all
 
 //Search input
 const searchInput = document.querySelector("#form-search");
-let url = new URL(window.location.href);
 if(searchInput)
 {
     searchInput.addEventListener("submit" , (e) => {
         e.preventDefault();
+        let url = new URL(window.location.href);
         const keyword = e.target.elements.keyword.value;
         url.searchParams.delete("page");
         if(keyword)
@@ -43,6 +69,21 @@ if(searchInput)
     })
 }
 //End search input
+
+//Button-Clear search
+const buttonClearKeywordSearch = document.querySelector("#button-clear");
+if(buttonClearKeywordSearch)
+{
+    buttonClearKeywordSearch.addEventListener("click" , (e) => {
+        let url = new URL(window.location.href);
+        if(url.searchParams.get("keyword"))
+        {
+            url.searchParams.delete("keyword");
+            window.location.href = url.href;
+        }
+    })
+}
+//End Button-clear search
 
 //Pagination
 const buttonsPagination = document.querySelectorAll("[button-pagination]");
@@ -60,123 +101,11 @@ if(buttonsPagination)
 //End Pagination
 
 
-//Button-Clear
-const buttonClear = document.querySelector("#button-clear");
-if(buttonClear)
-{
-    buttonClear.addEventListener("click" , (e) => {
-        let url = new URL(window.location.href);
-        url.searchParams.delete("keyword");
-        window.location.href = url.href;
-    })
-}
-//End Button-clear
-// alert
 
-const alertHidden = document.querySelector("[show-alert]");
-if(alertHidden)
-{
-    const dataTime = parseInt(alertHidden.getAttribute("data-time"));
-    setTimeout(() => {
-        alertHidden.classList.add("alert-hidden");
-    } , dataTime);
-}
-const buttonCloseAlert = alertHidden.querySelector("[button-close-alert]");
-if(buttonCloseAlert)
-{
-    buttonCloseAlert.addEventListener("click" , () => {
-        alertHidden.classList.add("alert-hidden");
-    })
-}
-// end alert
-//Change button all status
-const changeStatusAll = document.querySelector("[change-status-multi]");
-const tickAll = changeStatusAll.querySelector("input[name='checkall']");
-const inputsTick = changeStatusAll.querySelectorAll("input[name='id']");
 
-if(tickAll)
-{
-    tickAll.addEventListener("click" , () => {
-        const statusClick = tickAll.checked;
-        if(statusClick)
-        {
-            inputsTick.forEach((input) => {
-                input.checked = true;
-            })
-        }
-        else{
-            inputsTick.forEach((input) => {
-                input.checked = false;
-            })
-        }
-    })
-}
-if(inputsTick)
-{
-    inputsTick.forEach((input) => {
-        input.addEventListener("click" , () => {
-            const countAllTick = inputsTick.length;
-            const countAllChecked = changeStatusAll.querySelectorAll("input[name='id']:checked").length;
-            if(countAllTick == countAllChecked)
-            {
-                tickAll.checked = true;
-            }
-            else
-            {
-                tickAll.checked = false;
-            }
-        })
-    })
-}
-//end Change button all status
 
-//form change status multi
-const formChangeMulti = document.querySelector("[form-change-multi]");
-if(formChangeMulti)
-{
-    formChangeMulti.addEventListener("submit" , (e) => {
-        e.preventDefault();
-        const selectOption = document.querySelector("[select-option]");
-        let string  = `Bạn có chắc chắn muốn thực hiện ${selectOption.value == "active" ? "thay đổi trạng thái thành HOẠT ĐỘNG" : selectOption.value == "inactive" ? "thay đổi trạng thái thành KHÔNG HOẠT ĐỘNG" : selectOption.value == "delete" ? "hành động XÓA không?" : "THAY ĐỔI VỊ TRÍ không?"}`;
-        const idsSubmit = changeStatusAll.querySelectorAll("input[name='id']:checked");
-        if(idsSubmit.length > 0)
-        {
-            if(selectOption.value != "active" && selectOption.value != "inactive" && selectOption.value != "delete" && selectOption.value != "change-position")
-            {
-                alert("Bạn chưa chọn hành động nào cả");
-            }
-            else
-            {
-                let confirmOk = confirm(string);
-                if(confirmOk)
-                {
-                    let ids = [];
-                    idsSubmit.forEach((input) => {
-                        if(selectOption.value == "change-position")
-                        {
-                            const position = input.closest("tr").querySelector("[position-change]").value;
-                            const id = input.getAttribute("value");
-                            ids.push(`${id}-${position}`);
-                        }
-                        else
-                        {   
-                            ids.push(input.getAttribute("value"));
-                        }
-                    })
-                    let url = new URL(window.location.href);
-                    const inputSubmit = document.querySelector("[input-submit]");
-                    inputSubmit.setAttribute("value" , ids.join(","));
-                    formChangeMulti.submit();
-                }
-            }
-        }
-        else
-        {
-            alert("Chua co san pham nao duoc chon!!");
-        }
-    })
-}
-//end form change status multi
+
+
 
 
 

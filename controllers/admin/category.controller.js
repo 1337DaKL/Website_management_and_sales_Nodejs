@@ -16,7 +16,7 @@ module.exports.index = async (req, res) => {
         find.title = ojectsSearch.regex;
     }
     const filtersStatus = filterStatusHelper(req.query);
-    const countOjects = await Category.countDocuments();
+    const countOjects = await Category.countDocuments(find);
     const ojectPagination = paginationHeper(req.query, countOjects);
     let sort = {};
     if (req.query.sortKey && req.query.sortValue) {
@@ -45,7 +45,7 @@ module.exports.index = async (req, res) => {
     res.render("admin/pages/category/index.pug", {
         categorys: categoryss,
         filtersStatus: filtersStatus,
-        titlePage: "Trang loại sản phẩm",
+        titlePage: "Danh mục sản phẩm",
         pagination: ojectPagination,
         keyword: ojectsSearch.keyword
     })
@@ -123,8 +123,7 @@ module.exports.createNewCategory = async (req, res) => {
         res.redirect("back");
         return;
     }
-    if(!req.body.category)
-    {
+    if (!req.body.category) {
         req.body.category = "";
     }
     if (!req.body.position) {

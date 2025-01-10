@@ -5,25 +5,49 @@ const searchHeper = require("../../helper/search");
 const paginationHeper = require("../../helper/pagination");
 
 module.exports.index = async (req , res) => {
+    //Filter status
+    const filtersStatus = filterStatusHelper(req.query);
+    // End filter status
     let find = {
-        deleted : true
+        deleted: true
     }
-    // pagination
+    if (req.query.status) {
+        find.status = req.query.status;
+
+    }
+    //Search
+    const ojectsSearch = searchHeper(req.query);
+    if (ojectsSearch.keyword) {
+        find.title = ojectsSearch.regex;
+    }
+    //End Search
+
+    //Pagination
     const countOjects = await Product.countDocuments(find);
-    const ojectPagination = paginationHeper(req.query , countOjects);
-    // end pagination
-    //search
-    const searchDustbin = searchHeper(req.query);
-    if(searchDustbin.keyword)
-    {
-        find.title = searchDustbin.regex;
+    const ojectPagination = paginationHeper(req.query, countOjects);
+    //End Pagination
+    let sort = {};
+    if (req.query.sortKey && req.query.sortValue) {
+        sort[req.query.sortKey] = req.query.sortValue;
     }
-    //end search
-    const products = await Product.find(find).limit(ojectPagination.limitPage).skip(ojectPagination.skipPage);;
-    res.render("admin/pages/dustbinProduct/index.pug" , {
-        titlePage : "Thùng rác",
-        products : products,
-        keyword: searchDustbin.keyword,
+    else {
+        sort.position = "desc";
+    }
+    const products = await Product.find(find).limit(ojectPagination.limitPage).skip(ojectPagination.skipPage).sort(sort);
+
+    //Chuan hoa lai price
+    const newProducts = products.map((tmp) => {
+        tmp.priceString = priceString(tmp.price);
+        return tmp;
+    })
+    //End Chuan hoa lai price
+
+
+    res.render("admin/pages/dustbinProduct/index.pug", {
+        titlePage: "Thùng rác sản phẩm",
+        products: newProducts,
+        filtersStatus: filtersStatus,
+        keyword: ojectsSearch.keyword,
         pagination: ojectPagination
     })
 }
