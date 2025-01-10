@@ -7,4 +7,6 @@ var upload = multer();
 router.get("/" , controller.index);
 router.get("/create" , controller.viewCreateAccount);
 router.post("/create" , upload.single('avatar') , cloud.clouldMiddlewares, controller.createAccount);
+router.patch("/changeStatus/:inforChange" , controller.changeStatus);
+router.delete("/delete/:id" , controller.deleteAccount);
 module.exports = router;

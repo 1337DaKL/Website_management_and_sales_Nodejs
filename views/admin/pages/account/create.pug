@@ -61,8 +61,8 @@ block main
             br
             select(name="idRole" id="idRole")
                 option(value="" selected) ----Chọn quyền quản trị----
-                option(value="admin") Quản trị viên
-                option(value="user") Người dùng
+                each role in roles 
+                    option(value=role.id) #{role.title} 
    
         div(class="form-group" upload-image)
             label(for="avatar") Tải ảnh 

@@ -19,7 +19,17 @@ var session = require('express-session')
 
 const passwordcookieParser = process.env.PASSWORLD;
 app.use(cookieParser(passwordcookieParser));
-app.use(session({ cookie: { maxAge: 60000 } }));
+const expressSession = require('express-session'); // Đổi tên khai báo
+app.use(expressSession({
+    secret: process.env.PASSWORLD, // Thay bằng khóa bí mật của bạn
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60 * 60
+    }
+}));
+
+
 app.use(flash());
 //end express-flash
 //Body parser
