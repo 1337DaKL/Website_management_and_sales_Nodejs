@@ -3,25 +3,29 @@ const priceString = require("../../helper/chuanHoaGiaHang");
 const filterStatusHelper = require("../../helper/filterStatus");
 const searchHeper = require("../../helper/search");
 const paginationHeper = require("../../helper/pagination");
-module.exports.index = async (req , res) => {
+const formatHelper = require("../../helper/formatDay");
+module.exports.index = async (req, res) => {
     let find = {
-        deleted : true
+        deleted: true
     }
     // pagination
     const countOjects = await Role.countDocuments(find);
-    const ojectPagination = paginationHeper(req.query , countOjects);
+    const ojectPagination = paginationHeper(req.query, countOjects);
     // end pagination
     //search
     const searchDustbin = searchHeper(req.query);
-    if(searchDustbin.keyword)
-    {
+    if (searchDustbin.keyword) {
         find.title = searchDustbin.regex;
     }
     //end search
-    const roles = await Role.find(find).limit(ojectPagination.limitPage).skip(ojectPagination.skipPage);;
-    res.render("admin/pages/dustbinRole/index.pug" , {
-        titlePage : "Thùng rác quản trị",
-        roles : roles,
+    const roles = await Role.find(find).limit(ojectPagination.limitPage).skip(ojectPagination.skipPage);
+    roles.map((role) => {
+        role.dateDeletedNew = formatHelper.formatDate(String(role.dateDeleted));
+        return role;
+    })
+    res.render("admin/pages/dustbinRole/index.pug", {
+        titlePage: "Thùng rác quản trị",
+        roles: roles,
         keyword: searchDustbin.keyword,
         pagination: ojectPagination
     })

@@ -1,9 +1,10 @@
 extends ../../layouts/defaut.pug
+include ../../mixins/level-tree.pug
 block main  
-    h1(class="mb-4") Thêm mới sản phẩm 
+    h1(class="mb-4") Chỉnh sửa tài khoản
     form(
-        action=""
-        id="form-create"
+        action=`${frefixAdmin}/account/edit/${account.id}?_method=PATCH`
+        id="form-edit"
         method="POST"
         enctype="multipart/form-data"
     )
@@ -15,6 +16,7 @@ block main
                 id="fullName"
                 name="fullName"
                 placeholder="Nhập họ và tên ..."
+                value=account.fullName
                 required
             )
         div(class="form-group")
@@ -25,18 +27,18 @@ block main
                 id="email"
                 name="email"
                 placeholder="Nhập email ..."
+                value=account.email
                 required
             ) 
 
         div(class="form-group")
-            label(for="password") Mật khẩu*
+            label(for="password") Mật khẩu
             input(
                 id="password"
                 name="password"
                 type="text"
                 class="form-control"
-                placeholder="Nhập mật khẩu ..."
-                required
+                placeholder="Nhập mật khẩu nếu muốn đổi nếu không thì mật khẩu sẽ như cũ"
             )
         div(class="form-group")
             label(for="address") Địa chỉ
@@ -46,6 +48,7 @@ block main
                 type="text"
                 class="form-control"
                 placeholder="Nhập địa chỉ"
+                value=account.address
             )
         div(class="form-group") 
             label(for="telephone") Số điện thoại
@@ -55,15 +58,15 @@ block main
                 type="text"
                 placeholder="Nhập số điện thoại ..."
                 class="form-control"
+                value=account.telephone
             )
         div(class="form-group")
-            label(for="idRole") Quyền quản trị *
+            label(for="idRole") Quyền quản trị 
             br
             select(name="idRole" id="idRole")
-                option(value="" selected) ----Chọn quyền quản trị----
+                option(value=account.idRole selected) #{account.role.title}
                 each role in roles 
                     option(value=role.id) #{role.title} 
-   
         div(class="form-group" upload-image)
             label(for="avartar") Tải ảnh 
             input(
@@ -72,11 +75,20 @@ block main
                 type="file"
                 class="form-control-file"
                 accept=".jpg, .png"
+                value = account.avartar
                 input-image
             )
             button(type="button" id="clearUpload" clear-upload) X
             br
-            <img id="blah" src="#" alt="Ảnh bạn đã tải lên" img-image weith = "200px" height = "200px"/>
+            img(
+                id="blah" 
+                src=account.avartar 
+                alt="Ảnh bạn đã tải lên" 
+                img-image 
+                width="200px" 
+                height="200px"
+            )
+
         div(class="form-group form-check form-check-inline")
             label(for="statusActive" class="form-check-label" style="margin-right: 10px") Hoạt động
             input(
@@ -85,7 +97,7 @@ block main
                 id="statusActive"
                 name="status"
                 value="active"
-                checked
+                checked=account.status == "active" ? true : false
             )
         div(class="form-group form-check form-check-inline")
             label(for="statusInactive" class="form-check-label" style="margin-right: 10px") Dừng hoạt động    
@@ -95,11 +107,11 @@ block main
                 id="statusInactive"
                 name="status"
                 value="inactive"
+                checked=account.status == "inactive" ? true : false
             )
         div(class="form-group")
             button(
                 type="submit"
                 class="btn btn-primary"
-            ) Tạo mới 
+            ) Cập nhật
     script(src="/admin/js/create.js") 
-

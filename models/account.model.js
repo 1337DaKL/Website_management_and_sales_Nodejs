@@ -3,7 +3,7 @@ const generateToken = require("../helper/generate");
 const accountSchema = new mongoose.Schema(
     {
         fullName: String,
-        avatar: String,
+        avartar: String,
         email: String,
         password: String,
         token: 

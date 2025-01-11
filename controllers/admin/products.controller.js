@@ -6,6 +6,7 @@ const paginationHeper = require("../../helper/pagination");
 const { model } = require("mongoose");
 const Category = require("../../models/category.model");
 const findTreeContro = require("../../helper/findTree");
+const formatHelper = require("../../helper/formatDay");
 module.exports.index = async (req, res) => {
     //Filter status
     const filtersStatus = filterStatusHelper(req.query);
@@ -212,10 +213,14 @@ module.exports.detelProduct = async (req, res) => {
             deleted: false
         }
         const productDetel = await Product.findOne(find);
+        const createdAtNew = formatHelper.formatDate(String(productDetel.createdAt));
+        const updatedAtNew = formatHelper.formatDate(String(productDetel.updatedAt));
         res.render("admin/pages/products/detel.pug", {
             title: `Chi tiết sản phầm ${productDetel.title}`,
             product: productDetel,
-            priceString: priceString(productDetel.price)
+            priceString: priceString(productDetel.price),
+            createdAtNew : createdAtNew ,
+            updatedAtNew : updatedAtNew
         })
     }
     catch (error) {

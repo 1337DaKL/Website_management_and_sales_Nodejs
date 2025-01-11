@@ -1,24 +1,48 @@
 extends ../../layouts/defaut.pug
+include ../../mixins/filter-status.pug
+include ../../mixins/search.pug
+include ../../mixins/products.pug
+include ../../mixins/pagination.pug
+include ../../mixins/change-status-multi.pug
+include ../../mixins/sort.pug
 block main
     h1 Tài khoản
     br
     .card.mb-3 
+        .card-header Bo loc va tim kiem
         .card-body
             .row 
-                //-Filter-Search
                 .col-4
-                    //- +filter-status(filtersStatus)  
-                //-End Filter-Search
-
-                //-Search
+                    +filter-status(filtersStatus)  
                 .col-6
-                    //- +search(keyword)
-                //-End Search
+                    +search(keyword)
                 .col-2
                     a(
                         href=`${frefixAdmin}/account/create`
                         class="btn btn-outline-success"
-                    ) + Thêm tài khoản
+                    ) +Thêm mới tài khoản
+            .row
+                form.form-change-multi(
+                    action=`${frefixAdmin}/account/change-multi?_method=PATCH`, 
+                    method="POST"
+                    form-change-multi
+                )
+                    .d-flex.align-items-start
+                        .form-group.mr-2
+                            select.form-control(name="type" select-option)
+                                option(disabled selected) --Chọn hành động--
+                                option(value="active") Hoạt động 
+                                option(value="inactive") Dừng hoạt động 
+                                option(value="delete") Xóa 
+                        .form-group.mr-2
+                            input.form-control.d-none(
+                                type="text"
+                                name="ids"
+                                value=""
+                                placeholder="San pham ap dung"
+                                input-ids
+                            )
+                        button.btn.btn-primary(type="submit") Áp dụng
     table(
         class="table table-hover table-sm"
         change-status-multi
@@ -40,9 +64,10 @@ block main
                     tr 
                         td
                             input(type="checkbox" name="id" value=item.id)
-                        td #{index + 1}
+                        -const stt = (pagination.currentPage - 1) * pagination.limitPage + (index + 1)
+                        td #{stt}
                         td 
-                            img(src=item.avatar, alt=`avt ${item.fullName}`, width="100px", height="auto")
+                            img(src=item.avartar, alt=`avt ${item.fullName}`, width="100px", height="100px")
                         td #{item.fullName}
                         td #{item.email}  
                         if(item.role)
@@ -67,9 +92,9 @@ block main
                                     id = item.id
                                     ) Không hoạt động
                         td 
-                            a.btn.btn-success.btn-sm(href=`${frefixAdmin}/products/detel/${item.id}`) Chi tiết
+                            a.btn.btn-success.btn-sm(href=`${frefixAdmin}/account/detel/${item.id}`) Chi tiết
                             d 
-                            a.btn.btn-warning.btn-sm(href=`${frefixAdmin}/products/edit/${item.id}`) Sửa
+                            a.btn.btn-warning.btn-sm(href=`${frefixAdmin}/account/edit/${item.id}`) Sửa
 
                             button(class="btn btn-danger btn-sm ml-1" id=item.id button-delete) Xóa
         else 
@@ -81,4 +106,5 @@ block main
                             | Không có tài khoản  nào!!
     form(action="", method="POST" id="form-change" path=`${frefixAdmin}/account/changeStatus`)
     form(action="" method="POST" id="form-delete" path=`${frefixAdmin}/account/delete`)
+    +pagination(pagination)
     script(src="/admin/js/account.js") 

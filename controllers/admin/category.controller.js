@@ -3,6 +3,7 @@ const paginationHeper = require("../../helper/pagination");
 const filterStatusHelper = require("../../helper/filterStatus");
 const searchHeper = require("../../helper/search");
 const findTreeContro = require("../../helper/findTree")
+const formatHelper = require("../../helper/formatDay");
 module.exports.index = async (req, res) => {
     let find = {
         deleted: false
@@ -192,6 +193,10 @@ module.exports.editCategory = async (req, res) => {
 }
 module.exports.viewDetelCategory = async (req, res) => {
     const category = await Category.findOne({ _id: req.params.id });
+    const createdAtNew = formatHelper.formatDate(String(category.createdAt));
+    const updatedAtNew = formatHelper.formatDate(String(category.updatedAt));
+    category.createdAtNew = createdAtNew;
+    category.updatedAtNew = updatedAtNew;
     res.render("admin/pages/category/detelCategory.pug", {
         category: category,
         titlePage: `Chi tiết sản phẩm ${category.title}`

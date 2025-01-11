@@ -3,7 +3,7 @@ const priceString = require("../../helper/chuanHoaGiaHang");
 const filterStatusHelper = require("../../helper/filterStatus");
 const searchHeper = require("../../helper/search");
 const paginationHeper = require("../../helper/pagination");
-
+const formatHelper = require("../../helper/formatDay");
 module.exports.index = async (req , res) => {
     //Filter status
     const filtersStatus = filterStatusHelper(req.query);
@@ -38,10 +38,10 @@ module.exports.index = async (req , res) => {
     //Chuan hoa lai price
     const newProducts = products.map((tmp) => {
         tmp.priceString = priceString(tmp.price);
+        tmp.dateDeletedNew = formatHelper.formatDate(String(tmp.dateDeleted));
         return tmp;
     })
     //End Chuan hoa lai price
-
 
     res.render("admin/pages/dustbinProduct/index.pug", {
         titlePage: "Thùng rác sản phẩm",
