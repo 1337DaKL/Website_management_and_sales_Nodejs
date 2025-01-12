@@ -14,10 +14,18 @@ const categorySchema = new mongoose.Schema(
             type : Boolean,
             default: false
         },
-        dateDeleted: Date,
-        position: Number
-    },{
-        timestamps: true
+        position: Number,
+        deletedBy: {
+            idAccountDeleted: String,
+            dateDeleted: Date
+        },
+        createdBy: {
+            idAccountCreated: String,
+            dateCreated: {
+                type: Date,
+                default: Date.now
+            }
+        }
     }
 );
 

@@ -64,8 +64,14 @@ if (buttonFillter) {
     buttonFillter.forEach((button) => {
         button.addEventListener("click", () => {
             const status = button.getAttribute("status");
-            const url = `${window.location.origin}/admin/chat?status=${status}`;
-            window.location.href = url;
+            if (status !== "") {
+                const url = `${window.location.origin}/admin/chat?status=${status}`;
+                window.location.href = url;
+            }
+            else {
+                const url = `${window.location.origin}/admin/chat`;
+                window.location.href = url;
+            }
         })
     })
 }
@@ -77,8 +83,14 @@ if (buttonFillterDustbin) {
     buttonFillterDustbin.forEach((button) => {
         button.addEventListener("click", () => {
             const status = button.getAttribute("status");
-            const url = `${window.location.origin}/admin/dustbin-mess?status=${status}`;
-            window.location.href = url;
+            if (status !== "") {
+                const url = `${window.location.origin}/admin/dustbin-mess?status=${status}`;
+                window.location.href = url;
+            }
+            else {
+                const url = `${window.location.origin}/admin/dustbin-mess`;
+                window.location.href = url;
+            }
         })
     })
 }

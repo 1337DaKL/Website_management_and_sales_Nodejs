@@ -21,6 +21,12 @@ module.exports.createRole = async (req, res) => {
         return;
 
     }
+    const createdBy = {
+        idAccountCreated: res.locals.userLogin.id
+    }
+    if (createdBy) {
+        req.body.createdBy = createdBy
+    }
     const role = new Role(req.body);
     await role.save();
     req.flash("success", "Tạo quyền mới thành công!!");
@@ -46,7 +52,11 @@ module.exports.editRole = async (req, res) => {
     // res.send("ok");
 }
 module.exports.deleteRole = async (req, res) => {
-    await Role.updateOne({ _id: req.params.id }, { $set: { deleted: true, dateDeleted: new Date() } });
+    const deletedBy = {
+        idAccountDeleted: res.locals.userLogin.id,
+        dateDeleted: new Date()
+    }
+    await Role.updateOne({ _id: req.params.id }, { $set: { deleted: true, deletedBy: deletedBy } });
     req.flash("success", "Xóa thành công!!");
     res.redirect("back");
 }
@@ -57,7 +67,11 @@ module.exports.deleteMultiRole = async (req, res) => {
         res.redirect("back");
         return;
     }
-    await Role.updateMany({ _id: idRoles }, { $set: { deleted: true, dateDeleted: new Date() } });
+    const deletedBy = {
+        idAccountDeleted: res.locals.userLogin.id,
+        dateDeleted: new Date()
+    }
+    await Role.updateMany({ _id: idRoles }, { $set: { deleted: true, deletedBy: deletedBy } });
     req.flash("success", "Xóa tất cả thành công");
     res.redirect("back");
 }

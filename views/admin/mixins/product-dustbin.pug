@@ -11,6 +11,7 @@ mixin product-dustbin(products)
                             th.text-center(w-20) Tên sản phẩm
                             th.text-center(w-20) Hình ảnh
                             th.text-center(w-20) Ngày xóa
+                            th.text-center(w-20) Người xóa
                             th.text-center(w-20) Hành động
                     tbody
                         each item , index in products
@@ -21,7 +22,15 @@ mixin product-dustbin(products)
                                 td.text-center #{item.title}
                                 td.text-center
                                     img(src=item.thumbnail, alt=item.title, width='50')
-                                td.text-center #{item.dateDeletedNew}
+                                td.text-center 
+                                    if item.deletedBy
+                                        - const date = moment(item.deletedBy.dateDeleted).format("DD/MM/YYYY HH:mm:ss")
+                                        p #{date}
+                                td.text-center 
+                                    if item.nameAccountDeleted
+                                        p #{item.nameAccountDeleted}
+                                    else 
+                                        p Không có
                                 td.text-center
                                     if roleLogin.permission.includes("products_edit-dustbin")
                                         button(

@@ -7,6 +7,7 @@ const { model } = require("mongoose");
 const Category = require("../../models/category.model");
 const findTreeContro = require("../../helper/findTree");
 const formatHelper = require("../../helper/formatDay");
+const Account = require("../../models/account.model");
 module.exports.index = async (req, res) => {
     //Filter status
     const filtersStatus = filterStatusHelper(req.query);
@@ -39,16 +40,21 @@ module.exports.index = async (req, res) => {
     const products = await Product.find(find).limit(ojectPagination.limitPage).skip(ojectPagination.skipPage).sort(sort);
 
     //Chuan hoa lai price
-    const newProducts = products.map((tmp) => {
+    for (let tmp of products) {
         tmp.priceString = priceString(tmp.price);
-        return tmp;
-    })
+        const accountCreated = await Account.findOne({
+            _id: tmp.createdBy.idAccountCreated
+        })
+        if(accountCreated)
+        {
+            tmp.nameCreated = accountCreated.fullName
+        }
+    };
     //End Chuan hoa lai price
-
 
     res.render("admin/pages/products/index.pug", {
         titlePage: "Trang san pham admin",
-        products: newProducts,
+        products: products,
         filtersStatus: filtersStatus,
         keyword: ojectsSearch.keyword,
         pagination: ojectPagination
@@ -85,6 +91,10 @@ module.exports.changeMulti = async (req, res) => {
             req.flash("success", "Đổi trạng thái tất cả sản phẩm đã chọn thành công!!");
             break;
         case "delete":
+            const deletedBy = {
+                idAccountDeleted: res.locals.userLogin.id,
+                dateDeleted: new Date()
+            }
             await Product.updateMany(
                 {
                     _id: { $in: ids }
@@ -92,7 +102,7 @@ module.exports.changeMulti = async (req, res) => {
                 {
                     $set: {
                         deleted: true,
-                        dateDeleted: new Date()
+                        deletedBy: deletedBy
                     }
                 }
             )
@@ -112,17 +122,21 @@ module.exports.changeMulti = async (req, res) => {
 
 module.exports.deleteProduct = async (req, res) => {
     const id = req.params.id;
-    await Product.updateOne({ _id: id }, { $set: { deleted: true, dateDeleted: new Date() } });
+    const deletedBy = {
+        idAccountDeleted: res.locals.userLogin.id,
+        dateDeleted: new Date()
+    }
+    await Product.updateOne({ _id: id }, { $set: { deleted: true, deletedBy: deletedBy } });
     req.flash("success", "Xóa sản phẩm thành công!!");
     res.redirect("back");
 }
 
 module.exports.create = async (req, res) => {
-    const category = await Category.find({deleted : false});
+    const category = await Category.find({ deleted: false });
     const level = findTreeContro(category);
     res.render("admin/pages/products/create.pug", {
         titlePage: "Trang tạo mới sản phẩm",
-        levell : level
+        levell: level
     })
 }
 
@@ -148,7 +162,12 @@ module.exports.createNewProduct = async (req, res) => {
     else {
         req.body.position = parseInt(req.body.position);
     }
-
+    const createdBy = {
+        idAccountCreated: res.locals.userLogin.id
+    }
+    if (createdBy) {
+        req.body.createdBy = createdBy
+    }
     const product = new Product(req.body);
     await product.save();
     req.flash("success", "Tạo mới sản phẩm thành công!!");
@@ -158,7 +177,7 @@ module.exports.createNewProduct = async (req, res) => {
 
 module.exports.editProduct = async (req, res) => {
     try {
-        const category = await Category.find({deleted : false});
+        const category = await Category.find({ deleted: false });
         const level = findTreeContro(category);
         let find = {
             _id: req.params.id,
@@ -166,12 +185,12 @@ module.exports.editProduct = async (req, res) => {
         }
         const productID = await Product.findOne(find);
         productID.price = productID.price.toString().substring(0, productID.price.toString().length - 3);
-        const cate = await Category.findOne({_id : productID.category});
+        const cate = await Category.findOne({ _id: productID.category });
         res.render("admin/pages/products/edit.pug", {
             titlePage: "Chỉnh sửa sản phẩm",
             product: productID,
-            levell : level,
-            cate : cate
+            levell: level,
+            cate: cate
         })
     } catch (error) {
         res.redirect("back");
@@ -219,8 +238,8 @@ module.exports.detelProduct = async (req, res) => {
             title: `Chi tiết sản phầm ${productDetel.title}`,
             product: productDetel,
             priceString: priceString(productDetel.price),
-            createdAtNew : createdAtNew ,
-            updatedAtNew : updatedAtNew
+            createdAtNew: createdAtNew,
+            updatedAtNew: updatedAtNew
         })
     }
     catch (error) {

@@ -1,5 +1,5 @@
 .header{
-    background: green;
+    background: rgb(79, 198, 79);
     padding: 10px 0;
     position: sticky;
     top:0;
@@ -13,23 +13,29 @@
 }
 
 
+.body {
+    display: flex; /* Sử dụng flex để đặt nội dung theo chiều ngang */
+    min-height: 100vh; /* Đảm bảo chiều cao phủ hết màn hình */
+    overflow-y: auto; /* Toàn bộ container có thể cuộn */
+}
 
-.body .sider{
+.body .sider {
     width: 150px;
     background: rgb(79, 198, 79);
     color: #fff;
-    height: calc(100vh - 56px);
-    position: fixed;
-    top: 56px;
-    left: 0;
+    position: relative; /* Để slider di chuyển cùng container */
+    overflow-y: auto; /* Cuộn nếu nội dung vượt quá chiều cao */
+    z-index: 1000;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Thêm bóng */
 }
 
-.body .main{
-    margin: 15px;
-    position: relative;
-    left: 150px;
-    width: calc(100% -180px);
+.body .main {
+    flex: 1; /* Chiếm không gian còn lại */
+    padding: 15px;
+    width: calc(100% - 150px); /* Tự động căn chỉnh với slider */
+    overflow-y: auto; /* Cuộn nếu nội dung chính vượt quá chiều cao */
 }
+
 
 
 

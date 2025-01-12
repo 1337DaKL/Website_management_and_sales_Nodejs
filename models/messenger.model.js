@@ -4,25 +4,26 @@ mongoose.plugin(slug);
 const messengerSchema = new mongoose.Schema(
     {
         title: String,
-        name : String,
-        email : String,
+        name: String,
+        email: String,
         telephone: String,
         content: String,
-        status : String,
-        slug: { type: String, slug: "title" , unique: true },
+        status: String,
+        slug: { type: String, slug: "title", unique: true },
         deleted: {
-            type : Boolean,
+            type: Boolean,
             default: false
         },
-        dateDeleted: Date,
-        position: Number
-    },{
-        timestamps: true
+        position: Number,
+        deletedBy: {
+            idAccountDeleted: String,
+            dateDeleted: Date
+        }
     }
 );
 
 
-const Messenger = mongoose.model('Messenger' , messengerSchema , "messenger");
+const Messenger = mongoose.model('Messenger', messengerSchema, "messenger");
 
 
 module.exports = Messenger;

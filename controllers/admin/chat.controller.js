@@ -14,11 +14,10 @@ module.exports.index = async (req, res) => {
         deleted: false
     }
     const status = req.query.status;
-    if(status)
-    {
+    if (status) {
         find.status = status
     }
-    
+
     const mess = await Messenger.find(find);
     res.render("admin/pages/chat/index.pug", {
         mess: mess,
@@ -34,7 +33,16 @@ module.exports.viewMess = async (req, res) => {
     });
 }
 module.exports.deleteMess = async (req, res) => {
-    await Messenger.updateOne({ _id: req.params.id }, { deleted: true });
+    const deletedBy = {
+        idAccountDeleted: res.locals.userLogin.id,
+        dateDeleted: new Date()
+    }
+    await Messenger.updateOne({ _id: req.params.id }, {
+        $set: {
+            deleted: true,
+            deletedBy: deletedBy
+        }
+    });
     req.flash("success", "Xóa tin nhắn thành công !!");
     res.redirect("back");
 }
@@ -67,18 +75,27 @@ module.exports.replyMess = async (req, res) => {
         }
     });
 }
-module.exports.deleteMulti = async(req , res) => {
-    if(req.query["multi-id"] === "")
-    {
-        req.flash("error" , "Bạn chưa chọn tin nhắn nào!!");
+module.exports.deleteMulti = async (req, res) => {
+    if (req.query["multi-id"] === "") {
+        req.flash("error", "Bạn chưa chọn tin nhắn nào!!");
         res.redirect("back");
         return;
     }
     const arrayId = req.query["multi-id"].split(",");
-    await Messenger.updateMany({
-        _id: { $in: arrayId }
-    },
-    { deleted: true });
-    req.flash("success" , "Xóa tất cả  tin nhắn thành công!!");
+    const deletedBy = {
+        idAccountDeleted: res.locals.userLogin.id,
+        dateDeleted: new Date()
+    }
+    await Messenger.updateMany(
+        {
+            _id: { $in: arrayId }
+        },
+        {
+            $set: {
+                deleted: true,
+                deletedBy: deletedBy
+            }
+        });
+    req.flash("success", "Xóa tất cả  tin nhắn thành công!!");
     res.redirect("back");
 }

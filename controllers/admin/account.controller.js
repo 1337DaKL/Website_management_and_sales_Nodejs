@@ -27,6 +27,11 @@ module.exports.index = async (req, res) => {
             _id: account.idRole
         })
         account.role = role;
+        const accountCreated = await Account.findOne({_id : account.createdBy.idAccountCreated});
+        if(accountCreated)
+        {
+            account.nameAccountCreated = accountCreated.fullName;
+        }
     }
     res.render("admin/pages/account/index.pug", {
         titlePage: "Tài khoản",
@@ -66,6 +71,12 @@ module.exports.createAccount = async (req, res) => {
         res.redirect("back");
         return;
     }
+    const createdBy = {
+        idAccountCreated: res.locals.userLogin.id
+    }
+    if (createdBy) {
+        req.body.createdBy = createdBy
+    }
     const account = new Account(req.body);
     account.save();
     req.flash("success", "Tạo tài khoản thành công =))");
@@ -84,9 +95,11 @@ module.exports.changeStatus = async (req, res) => {
 }
 module.exports.deleteAccount = async (req, res) => {
     try {
-        await Account.updateOne({ _id: req.params.id }, {
-            deleted: true
-        })
+        const deletedBy = {
+            idAccountDeleted: res.locals.userLogin.id,
+            dateDeleted: new Date()
+        }
+        await Account.updateOne({ _id: req.params.id }, { $set: { deleted: true, deletedBy: deletedBy } })
         req.flash("success", "Chuyển tài khoản vào thùng rác thành công :3");
         res.redirect("back");
     } catch (error) {
@@ -185,9 +198,15 @@ module.exports.changeMulti = async (req, res) => {
                 res.redirect("back");
                 break;
             case "delete":
+                const deletedBy = {
+                    idAccountDeleted: res.locals.userLogin.id,
+                    dateDeleted: new Date()
+                }
                 await Account.deleteMany({
                     _id: { $in: ids }
-                })
+                },
+                    { $set: { deleted: true, deletedBy: deletedBy } }
+                )
                 req.flash("success", "Xóa thành công !!")
                 res.redirect("back");
                 break;

@@ -40,6 +40,11 @@ module.exports.login = async (req, res) => {
             res.redirect("back");
             return;
         }
+        if (account.status == "inactive") {
+            req.flash("error", "Tài khoản đã bị khóa!! Hãy liên hệ với quản trị viên :3");
+            res.redirect("back");
+            return;
+        }
         req.flash("success", "Đăng nhập thành công :3");
         res.cookie("token", account.token);
         res.redirect(`${prefixAdmin}/dashboard`);

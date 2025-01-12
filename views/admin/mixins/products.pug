@@ -10,6 +10,7 @@ mixin print-products(products)
                     th Giá 
                     th Vị trí
                     th Trạng thái 
+                    th Ngày tạo
                     th Hành động 
         tbody 
             each item, index in products 
@@ -58,6 +59,14 @@ mixin print-products(products)
                                 a(
                                     class="badge badge-danger"
                                     ) Không hoạt động
+                    td 
+                        if item.createdBy
+                            - const date = moment(item.createdBy.dateCreated).format("DD/MM/YYYY HH:mm:ss")
+                            if item.nameCreated
+                                p Người tạo: #{item.nameCreated}
+                            else 
+                                p Người tạo: Không có
+                            p #{date}
                     td 
                         if roleLogin.permission.includes("products_view")
                             a.btn.btn-success.btn-sm(href=`${frefixAdmin}/products/detel/${item.id}`) Chi tiết

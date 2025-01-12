@@ -10,7 +10,7 @@ block main
     br
     if roleLogin.permission.includes("account_view")
         .card.mb-3 
-            .card-header Bo loc va tim kiem
+            .card-header Bộ lọc và tìm kiếm
             .card-body
                 .row 
                     .col-4
@@ -61,6 +61,7 @@ block main
                             th Email
                             th Quyền quản trị
                             th Trạng thái 
+                            th Ngày tạo
                             th Hành động 
                 tbody 
                     each item, index in accounts 
@@ -106,6 +107,14 @@ block main
                                             href="javascript:;" 
                                             class="badge badge-danger"
                                             ) Không hoạt động
+                            td 
+                                if item.createdBy
+                                    - const date = moment(item.createdBy.dateCreated).format("DD/MM/YYYY HH:mm:ss")
+                                    if item.nameAccountCreated
+                                        p Người tạo: #{item.nameAccountCreated}
+                                    else 
+                                        p Người tạo: Không có
+                                    p #{date}
                             td 
                                 if roleLogin.permission.includes("account_view")
                                     a.btn.btn-success.btn-sm(href=`${frefixAdmin}/account/detel/${item.id}`) Chi tiết

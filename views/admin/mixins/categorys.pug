@@ -7,9 +7,10 @@ mixin print-products(categorys)
                     th STT 
                     th Hình ảnh 
                     th Tiêu đề 
-                    th Loại sản phẩm cha
+                    th Danh mục cha
                     th Vị trí
                     th Trạng thái 
+                    th Ngày tạo
                     th Hành động 
         tbody 
             each item, index in categorys 
@@ -64,6 +65,14 @@ mixin print-products(categorys)
                                     class="badge badge-danger"
                                     ) Không hoạt động
                     td 
+                        if item.createdBy
+                            - const date = moment(item.createdBy.dateCreated).format("DD/MM/YYYY HH:mm:ss")
+                            if item.nameAccountCreated
+                                p Người tạo: #{item.nameAccountCreated}
+                            else 
+                                p Người tạo: Không có
+                            p #{date}
+                    td 
                         if roleLogin.permission.includes("products-category_view")
                             a.btn.btn-success.btn-sm(href=`${frefixAdmin}/categorys/detel/${item.id}`) Chi tiết
                             d 
@@ -77,7 +86,7 @@ mixin print-products(categorys)
                 .col-md-6
                     .alert.alert-warning.text-center
                         i.bi.bi-exclamation-triangle-fill 
-                        | Không có sản phẩm nào!!
+                        | Không có danh mục sản phẩm nào!!
 
     form(action="", method="POST" id="form-change" path="categorys/change-status/") 
     form(action="" method="POST" id="form-delete" path=`${frefixAdmin}/categorys/delete`)

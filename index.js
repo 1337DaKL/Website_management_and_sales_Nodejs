@@ -3,6 +3,8 @@ const systemConfig = require("./configs/systems.js");
 const express = require("express");
 const app = express();
 var path = require('path');
+const moment = require('moment');
+app.locals.moment = moment;
 //Nhung filr env vao
 
 

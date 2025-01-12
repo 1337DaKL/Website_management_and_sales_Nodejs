@@ -4,6 +4,7 @@ const filterStatusHelper = require("../../helper/filterStatus");
 const searchHeper = require("../../helper/search");
 const findTreeContro = require("../../helper/findTree")
 const formatHelper = require("../../helper/formatDay");
+const Account = require("../../models/account.model");
 module.exports.index = async (req, res) => {
     let find = {
         deleted: false
@@ -40,7 +41,13 @@ module.exports.index = async (req, res) => {
             nameParent = "";
         }
         tmp.nameParent = nameParent;
+        const accountCreated = await Account.findOne({_id : tmp.createdBy.idAccountCreated});
+        if(accountCreated)
+        {
+            tmp.nameAccountCreated = accountCreated.fullName;
+        }
         categoryss.push(tmp);
+
     }
 
     res.render("admin/pages/category/index.pug", {
@@ -82,6 +89,10 @@ module.exports.changeMulti = async (req, res) => {
             req.flash("success", "Đổi trạng thái tất cả sản phẩm đã chọn thành công!!");
             break;
         case "delete":
+            const deletedBy = {
+                idAccountDeleted: res.locals.userLogin.id,
+                dateDeleted: new Date()
+            }
             await Category.updateMany(
                 {
                     _id: { $in: ids }
@@ -89,7 +100,7 @@ module.exports.changeMulti = async (req, res) => {
                 {
                     $set: {
                         deleted: true,
-                        dateDeleted: new Date()
+                        deletedBy: deletedBy
                     }
                 }
             )
@@ -134,15 +145,32 @@ module.exports.createNewCategory = async (req, res) => {
     if (!req.body.idParent) {
         req.body.idParent = "";
     }
+    const createdBy = {
+        idAccountCreated: res.locals.userLogin.id
+    }
+    if (createdBy) {
+        req.body.createdBy = createdBy
+    }
     const category = new Category(req.body);
     category.save();
     req.flash("success", "Tạo mới loại sản phẩm thành công");
     res.redirect("back");
 }
 module.exports.deleteCategory = async (req, res) => {
+    const deletedBy = {
+        idAccountDeleted: res.locals.userLogin.id,
+        dateDeleted: new Date()
+    }
     await Category.deleteOne(
         {
             _id: req.params.id
+        }
+        ,
+        {
+            $set: {
+                deleted: true,
+                deletedBy: deletedBy
+            }
         }
     )
     req.flash("success", "Xóa sản phẩm thành công!!");
