@@ -4,8 +4,11 @@ include ../../mixins/product-dustbin.pug
 include ../../mixins/pagination.pug
 block main
     h1 Thùng rác sản phẩm
-    .container.mt-4
-        +search-and-apply(keyword)
-        +product-dustbin(products)
-    +pagination(pagination)
-    script(src="/admin/js/dustbinProduct.js") 
+    if roleLogin.permission.includes("products_view-dustbin")
+        .container.mt-4
+            +search-and-apply(keyword)
+            +product-dustbin(products)
+        +pagination(pagination)
+        script(src="/admin/js/dustbinProduct.js") 
+    else 
+        h2 Bạn không có quyền truy cập vào trang này

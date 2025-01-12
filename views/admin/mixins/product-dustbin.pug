@@ -23,16 +23,19 @@ mixin product-dustbin(products)
                                     img(src=item.thumbnail, alt=item.title, width='50')
                                 td.text-center #{item.dateDeletedNew}
                                 td.text-center
-                                    button(
-                                        class="btn btn-primary mr-2"
-                                        id-product = item.id
-                                        restore-product
-                                    ) Khôi phục
-                                    button(
-                                        class="btn btn-danger"
-                                        id-delete = item.id 
-                                        delete-product
-                                    ) Xóa vĩnh viễn 
+                                    if roleLogin.permission.includes("products_edit-dustbin")
+                                        button(
+                                            class="btn btn-primary mr-2"
+                                            id-product = item.id
+                                            restore-product
+                                        ) Khôi phục
+                                        button(
+                                            class="btn btn-danger"
+                                            id-delete = item.id 
+                                            delete-product
+                                        ) Xóa vĩnh viễn 
+                                    else 
+                                        h6 Bạn không được thực hiện hành động nào
     else
         .container.mt-5
             .row.justify-content-center

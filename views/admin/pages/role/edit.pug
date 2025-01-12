@@ -1,35 +1,38 @@
 extends ../../layouts/defaut.pug
 block main  
     h1(class="mb-4") Chỉnh sửa quyền quản trị
-    form(
-        action=`${frefixAdmin}/role/edit/${role.id}?_method=PATCH`
-        id="form-create"
-        method="POST"
-        enctype="multipart/form-data"
-    )
-        div(class="form-group")
-            label(for="title") Tiêu đề
-            input(
-                type="text"
-                class="form-control"
-                id="title"
-                name="title"
-                placeholder="Nhập tên sản phẩm"
-                value=role.title
-                required
-            )
-        div(class="form-group")
-            label(for="description") Mô tả
-            textarea(
-                class="form-control"
-                id="description"
-                name="description"
-                rows="5",
-                tinymce
-            ) #{role.description}
-        div(class="form-group")
-            button(
-                type="submit"
-                class="btn btn-primary"
-            ) Chỉnh sửa 
-    script(src="/admin/js/create.js") 
+    if roleLogin.permission.includes("role_edit")
+        form(
+            action=`${frefixAdmin}/role/edit/${role.id}?_method=PATCH`
+            id="form-create"
+            method="POST"
+            enctype="multipart/form-data"
+        )
+            div(class="form-group")
+                label(for="title") Tiêu đề
+                input(
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    placeholder="Nhập tên sản phẩm"
+                    value=role.title
+                    required
+                )
+            div(class="form-group")
+                label(for="description") Mô tả
+                textarea(
+                    class="form-control"
+                    id="description"
+                    name="description"
+                    rows="5",
+                    tinymce
+                ) #{role.description}
+            div(class="form-group")
+                button(
+                    type="submit"
+                    class="btn btn-primary"
+                ) Chỉnh sửa 
+        script(src="/admin/js/create.js") 
+    else 
+        h2 Bạn không có quyền truy cập vào trang này

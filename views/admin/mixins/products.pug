@@ -32,28 +32,40 @@ mixin print-products(products)
                             position-change
                         )
                     td(id="swap-status")
-                        if(item.status == "active")
-                            a(
-                                href="javascript:;" 
-                                class="badge badge-success"
-                                change-status 
-                                status = item.status
-                                id = item.id
-                            ) Hoạt động
+                        if roleLogin.permission.includes("products_edit") 
+                            if(item.status == "active")
+                                a(
+                                    href="javascript:;" 
+                                    class="badge badge-success"
+                                    change-status 
+                                    status = item.status
+                                    id = item.id
+                                ) Hoạt động
+                            else 
+                                a(
+                                    href="javascript:;" 
+                                    class="badge badge-danger"
+                                    change-status 
+                                    status = item.status
+                                    id = item.id
+                                    ) Không hoạt động
                         else 
-                            a(
-                                href="javascript:;" 
-                                class="badge badge-danger"
-                                change-status 
-                                status = item.status
-                                id = item.id
-                                ) Không hoạt động
+                            if(item.status == "active")
+                                a(
+                                    class="badge badge-success"
+                                ) Hoạt động
+                            else 
+                                a(
+                                    class="badge badge-danger"
+                                    ) Không hoạt động
                     td 
-                        a.btn.btn-success.btn-sm(href=`${frefixAdmin}/products/detel/${item.id}`) Chi tiết
-                        d 
-                        a.btn.btn-warning.btn-sm(href=`${frefixAdmin}/products/edit/${item.id}`) Sửa
-
-                        button(class="btn btn-danger btn-sm ml-1" id-product=item.id button-delete) Xóa
+                        if roleLogin.permission.includes("products_view")
+                            a.btn.btn-success.btn-sm(href=`${frefixAdmin}/products/detel/${item.id}`) Chi tiết
+                            d 
+                        if roleLogin.permission.includes("products_edit")
+                            a.btn.btn-warning.btn-sm(href=`${frefixAdmin}/products/edit/${item.id}`) Sửa
+                        if roleLogin.permission.includes("products_delete")
+                            button(class="btn btn-danger btn-sm ml-1" id-product=item.id button-delete) Xóa
     else 
         .container.mt-5
             .row.justify-content-center

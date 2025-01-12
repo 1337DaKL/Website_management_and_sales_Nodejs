@@ -7,28 +7,33 @@ include ../../mixins/change-multi-category.pug
 include ../../mixins/sort-category.pug
 block main
     h1 
-        b Trang loại sản phẩm admin
-    br
-    .card.mb-3 
-        .card-header Bo loc va tim kiem
-        .card-body
-            .row 
-                .col-4
-                    +filter-status(filtersStatus)  
-                .col-6
-                    +search(keyword)
-                .col-2
-                    a(
-                        href=`${frefixAdmin}/categorys/create`
-                        class="btn btn-outline-success"
-                    ) +Thêm mới danh mục sản phẩm
-            .row
-                +change-status-multi()
-                +sort() 
-    table(
-        class="table table-hover table-sm"
-        change-status-multi
-    )
-        +print-products(categorys)
-    +pagination(pagination)
-    script(src="/admin/js/category.js") 
+        b Trang danh mục sản phẩm
+    if roleLogin.permission.includes("products-category_view")
+        br
+        .card.mb-3 
+            .card-header Bo loc va tim kiem
+            .card-body
+                .row 
+                    .col-4
+                        +filter-status(filtersStatus)  
+                    .col-6
+                        +search(keyword)
+                    .col-2
+                        if roleLogin.permission.includes("products-category_create")
+                            a(
+                                href=`${frefixAdmin}/categorys/create`
+                                class="btn btn-outline-success"
+                            ) +Thêm mới danh mục sản phẩm
+                .row
+                    if roleLogin.permission.includes("products-category_edit")
+                        +change-status-multi()
+                    +sort() 
+        table(
+            class="table table-hover table-sm"
+            change-status-multi
+        )
+            +print-products(categorys)
+        +pagination(pagination)
+        script(src="/admin/js/category.js") 
+    else 
+        h2(style="color: red;") Bạn không có quyền xem trang này

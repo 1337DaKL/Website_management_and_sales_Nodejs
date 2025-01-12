@@ -2,116 +2,119 @@ extends ../../layouts/defaut.pug
 include ../../mixins/level-tree.pug
 block main  
     h1(class="mb-4") Chỉnh sửa tài khoản
-    form(
-        action=`${frefixAdmin}/account/edit/${account.id}?_method=PATCH`
-        id="form-edit"
-        method="POST"
-        enctype="multipart/form-data"
-    )
-        div(class="form-group")
-            label(for="fullName") Họ và tên *
-            input(
-                type="text"
-                class="form-control"
-                id="fullName"
-                name="fullName"
-                placeholder="Nhập họ và tên ..."
-                value=account.fullName
-                required
-            )
-        div(class="form-group")
-            label(for="email") Email*
-            input(
-                type="text"
-                class="form-control"
-                id="email"
-                name="email"
-                placeholder="Nhập email ..."
-                value=account.email
-                required
-            ) 
+    if roleLogin.permission.includes("account_edit")
+        form(
+            action=`${frefixAdmin}/account/edit/${account.id}?_method=PATCH`
+            id="form-edit"
+            method="POST"
+            enctype="multipart/form-data"
+        )
+            div(class="form-group")
+                label(for="fullName") Họ và tên *
+                input(
+                    type="text"
+                    class="form-control"
+                    id="fullName"
+                    name="fullName"
+                    placeholder="Nhập họ và tên ..."
+                    value=account.fullName
+                    required
+                )
+            div(class="form-group")
+                label(for="email") Email*
+                input(
+                    type="text"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    placeholder="Nhập email ..."
+                    value=account.email
+                    required
+                ) 
 
-        div(class="form-group")
-            label(for="password") Mật khẩu
-            input(
-                id="password"
-                name="password"
-                type="text"
-                class="form-control"
-                placeholder="Nhập mật khẩu nếu muốn đổi nếu không thì mật khẩu sẽ như cũ"
-            )
-        div(class="form-group")
-            label(for="address") Địa chỉ
-            input(
-                id="address"
-                name="address"
-                type="text"
-                class="form-control"
-                placeholder="Nhập địa chỉ"
-                value=account.address
-            )
-        div(class="form-group") 
-            label(for="telephone") Số điện thoại
-            input(
-                id="telephone"
-                name="telephone"
-                type="text"
-                placeholder="Nhập số điện thoại ..."
-                class="form-control"
-                value=account.telephone
-            )
-        div(class="form-group")
-            label(for="idRole") Quyền quản trị 
-            br
-            select(name="idRole" id="idRole")
-                option(value=account.idRole selected) #{account.role.title}
-                each role in roles 
-                    option(value=role.id) #{role.title} 
-        div(class="form-group" upload-image)
-            label(for="avartar") Tải ảnh 
-            input(
-                id="avartar"
-                name="avartar"
-                type="file"
-                class="form-control-file"
-                accept=".jpg, .png"
-                value = account.avartar
-                input-image
-            )
-            button(type="button" id="clearUpload" clear-upload) X
-            br
-            img(
-                id="blah" 
-                src=account.avartar 
-                alt="Ảnh bạn đã tải lên" 
-                img-image 
-                width="200px" 
-                height="200px"
-            )
+            div(class="form-group")
+                label(for="password") Mật khẩu
+                input(
+                    id="password"
+                    name="password"
+                    type="text"
+                    class="form-control"
+                    placeholder="Nhập mật khẩu nếu muốn đổi nếu không thì mật khẩu sẽ như cũ"
+                )
+            div(class="form-group")
+                label(for="address") Địa chỉ
+                input(
+                    id="address"
+                    name="address"
+                    type="text"
+                    class="form-control"
+                    placeholder="Nhập địa chỉ"
+                    value=account.address
+                )
+            div(class="form-group") 
+                label(for="telephone") Số điện thoại
+                input(
+                    id="telephone"
+                    name="telephone"
+                    type="text"
+                    placeholder="Nhập số điện thoại ..."
+                    class="form-control"
+                    value=account.telephone
+                )
+            div(class="form-group")
+                label(for="idRole") Quyền quản trị 
+                br
+                select(name="idRole" id="idRole")
+                    option(value=account.idRole selected) #{account.role.title}
+                    each role in roles 
+                        option(value=role.id) #{role.title} 
+            div(class="form-group" upload-image)
+                label(for="avartar") Tải ảnh 
+                input(
+                    id="avartar"
+                    name="avartar"
+                    type="file"
+                    class="form-control-file"
+                    accept=".jpg, .png"
+                    value = account.avartar
+                    input-image
+                )
+                button(type="button" id="clearUpload" clear-upload) X
+                br
+                img(
+                    id="blah" 
+                    src=account.avartar 
+                    alt="Ảnh bạn đã tải lên" 
+                    img-image 
+                    width="200px" 
+                    height="200px"
+                )
 
-        div(class="form-group form-check form-check-inline")
-            label(for="statusActive" class="form-check-label" style="margin-right: 10px") Hoạt động
-            input(
-                type="radio"
-                class="form-check-input"
-                id="statusActive"
-                name="status"
-                value="active"
-                checked=account.status == "active" ? true : false
-            )
-        div(class="form-group form-check form-check-inline")
-            label(for="statusInactive" class="form-check-label" style="margin-right: 10px") Dừng hoạt động    
-            input(
-                type="radio"
-                class="form-check-input"
-                id="statusInactive"
-                name="status"
-                value="inactive"
-                checked=account.status == "inactive" ? true : false
-            )
-        div(class="form-group")
-            button(
-                type="submit"
-                class="btn btn-primary"
-            ) Cập nhật
-    script(src="/admin/js/create.js") 
+            div(class="form-group form-check form-check-inline")
+                label(for="statusActive" class="form-check-label" style="margin-right: 10px") Hoạt động
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="statusActive"
+                    name="status"
+                    value="active"
+                    checked=account.status == "active" ? true : false
+                )
+            div(class="form-group form-check form-check-inline")
+                label(for="statusInactive" class="form-check-label" style="margin-right: 10px") Dừng hoạt động    
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="statusInactive"
+                    name="status"
+                    value="inactive"
+                    checked=account.status == "inactive" ? true : false
+                )
+            div(class="form-group")
+                button(
+                    type="submit"
+                    class="btn btn-primary"
+                ) Cập nhật
+        script(src="/admin/js/create.js") 
+    else 
+        h2 Bạn không có quyền truy cập vào trang này

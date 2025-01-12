@@ -3,50 +3,54 @@ extends ../../layouts/defaut.pug
 
 block main 
     h3 Chi tiết tài khoản
-    a(href=`${frefixAdmin}/account`) Quay về
-    div.container(style="max-width: 1400px; margin: 0 auto; padding: 40px;")
-      div.product-card(style="margin-top: 60px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); overflow: hidden;")
-        div(style="display: flex; gap: 30px;")
-          div.image-section(style="flex: 1; display: flex; align-items: center; justify-content: center; background-color: #f1f1f1;")
-            img(src=account.avartar alt="avt" style="max-width: 100%; max-height: 100%; object-fit: cover;")
-          div.details-section(style="flex: 2; padding: 30px;")
-            h1(style="font-size: 36px; font-weight: 800; margin-bottom: 20px;") #{account.fullName}
-            div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
-              span Trạng thái: 
-              if(account.status == "active")
-                span(style="color: #28a745; font-weight: 600;") Đang hoạt động
-              else 
-                span(style="color: #dc3545; font-weight: 600;") Không hoạt động
+    if roleLogin.permission.includes("account_view")
+      a(href=`${frefixAdmin}/account`) Quay về
+      div.container(style="max-width: 1400px; margin: 0 auto; padding: 40px;")
+        div.product-card(style="margin-top: 60px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); overflow: hidden;")
+          div(style="display: flex; gap: 30px;")
+            div.image-section(style="flex: 1; display: flex; align-items: center; justify-content: center; background-color: #f1f1f1;")
+              img(src=account.avartar alt="avt" style="max-width: 100%; max-height: 100%; object-fit: cover;")
+            div.details-section(style="flex: 2; padding: 30px;")
+              h1(style="font-size: 36px; font-weight: 800; margin-bottom: 20px;") #{account.fullName}
+              div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
+                span Trạng thái: 
+                if(account.status == "active")
+                  span(style="color: #28a745; font-weight: 600;") Đang hoạt động
+                else 
+                  span(style="color: #dc3545; font-weight: 600;") Không hoạt động
 
-            div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
-              span Email:
-              span 
-                b #{account.email}
+              div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
+                span Email:
+                span 
+                  b #{account.email}
 
-            div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
-              span Địa chỉ:
-              span 
-                b #{account.address}
+              div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
+                span Địa chỉ:
+                span 
+                  b #{account.address}
 
-            div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
-              span Số điện thoại:
-              span 
-                b #{account.telephone}
+              div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
+                span Số điện thoại:
+                span 
+                  b #{account.telephone}
 
-            div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
-              span Quyền quản trị:  
-              span 
-                b #{account.role.title}
-            div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
-              span Thời gian tạo: 
-              span 
-                b #{createdAtNew}
-            div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
-              span Thời gian cập nhật gần nhất: 
-              span 
-                b #{updatedAtNew}
-            p(style="font-size: 18px; line-height: 1.8; color: #555; margin-bottom: 30px;") !{account.description}
-            a(href=`${frefixAdmin}/account/edit/${account.id}` style="display: inline-block; padding: 15px 30px; background-color: #28a745; color: #fff; text-decoration: none; font-size: 18px; font-weight: 600; border-radius: 6px; transition: background-color 0.3s ease;") Chỉnh sửa
+              div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
+                span Quyền quản trị:  
+                span 
+                  b #{account.role.title}
+              div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
+                span Thời gian tạo: 
+                span 
+                  b #{createdAtNew}
+              div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
+                span Thời gian cập nhật gần nhất: 
+                span 
+                  b #{updatedAtNew}
+              p(style="font-size: 18px; line-height: 1.8; color: #555; margin-bottom: 30px;") !{account.description}
+              if roleLogin.permission.includes("account_edit")
+                a(href=`${frefixAdmin}/account/edit/${account.id}` style="display: inline-block; padding: 15px 30px; background-color: #28a745; color: #fff; text-decoration: none; font-size: 18px; font-weight: 600; border-radius: 6px; transition: background-color 0.3s ease;") Chỉnh sửa
+    else
+      h2 Bạn không có quyền truy cập vào trang này
 
       
 
