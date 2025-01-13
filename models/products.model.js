@@ -12,11 +12,11 @@ const productSchema = new mongoose.Schema(
         description: String,
         stock: Number,
         slug: { type: String, slug: "title", unique: true },
-        deleted: {
-            type: Boolean,
-            default: false
-        },
         position: Number,
+        deleted : {
+            type : Boolean,
+            default : false
+        },
         deletedBy: {
             idAccountDeleted: String,
             dateDeleted: Date
@@ -27,7 +27,38 @@ const productSchema = new mongoose.Schema(
                 type: Date,
                 default: Date.now
             }
-        }
+        },
+        updatedBy: [
+            {
+                idAccountUpdated: String,
+                nameAccountUpdated : String,
+                dateUpdated: Date,
+                oldProduct: {
+                    title: String,
+                    category: String,
+                    nameCategory : String,
+                    price: Number,
+                    thumbnail: String,
+                    discount: Number,
+                    status: String,
+                    description: String,
+                    stock: Number,
+                    position: Number
+                },
+                newProduct: {
+                    title: String,
+                    category: String,
+                    nameCategory : String,
+                    price: Number,
+                    thumbnail: String,
+                    discount: Number,
+                    status: String,
+                    description: String,
+                    stock: Number,
+                    position: Number
+                },
+            }
+        ]
     }
 );
 

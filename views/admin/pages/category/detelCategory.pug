@@ -19,16 +19,14 @@ block main
                 else 
                   span(style="color: #dc3545; font-weight: 600;") Không hoạt động
               div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
+                - const date = moment(category.createdBy.dateCreated).format("DD/MM/YYYY HH:mm:ss")
                 span Ngày tạo: 
                 span 
-                  b #{category.createdAtNew}
-              div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
-                span Ngày update gần nhất: 
-                span 
-                  b #{category.updatedAtNew}
+                  b #{date} bởi #{category.createdBy.nameAccountCreated}
               p(style="font-size: 18px; line-height: 1.8; color: #555; margin-bottom: 30px;") !{category.description}
               if roleLogin.permission.includes("products-category_edit")
-                a(href=`${frefixAdmin}/categorys/edit/${category.id}` style="display: inline-block; padding: 15px 30px; background-color: #28a745; color: #fff; text-decoration: none; font-size: 18px; font-weight: 600; border-radius: 6px; transition: background-color 0.3s ease;") Chỉnh sửa
+                a(href=`${frefixAdmin}/categorys/edit/${category.id}` style="display: inline-block; padding: 15px 30px; background-color: #28a745; color: #fff; text-decoration: none; font-size: 18px; font-weight: 600; border-radius: 6px; transition: background-color 0.3s ease;margin-right: 20px;") Chỉnh sửa
+              a(href=`${frefixAdmin}/categorys/logUpdate/${category.id}` style="display: inline-block; padding: 15px 30px; background-color:rgb(136, 179, 20); color: #fff; text-decoration: none; font-size: 18px; font-weight: 600; border-radius: 6px; transition: background-color 0.3s ease;") Lịch sử cập nhập danh mục
     else 
       h2 Bạn không có quyền truy cập vào trang này
 

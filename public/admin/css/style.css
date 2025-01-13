@@ -113,3 +113,75 @@
 /* chat css */
 
 /* end chatcss */
+.history-container {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.history-item {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+}
+
+.history-item h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.history-item p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.old-product, .new-product {
+    margin-top: 10px;
+}
+
+.old-product h4, .new-product h4 {
+    font-weight: bold;
+    color: #555;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+ul li {
+    margin-bottom: 5px;
+    line-height: 1.5;
+}
+
+img {
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+table {
+    width: 50%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}

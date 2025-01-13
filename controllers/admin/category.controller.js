@@ -41,13 +41,16 @@ module.exports.index = async (req, res) => {
             nameParent = "";
         }
         tmp.nameParent = nameParent;
-        const accountCreated = await Account.findOne({_id : tmp.createdBy.idAccountCreated});
-        if(accountCreated)
-        {
+        const accountCreated = await Account.findOne({ _id: tmp.createdBy.idAccountCreated });
+        if (accountCreated) {
             tmp.nameAccountCreated = accountCreated.fullName;
         }
+        const arrayUpdatedBy = tmp.updatedBy;
+        if (arrayUpdatedBy.length > 0) {
+            const lastUpdated = arrayUpdatedBy[arrayUpdatedBy.length - 1];
+            tmp.lastUpdated = lastUpdated;
+        }
         categoryss.push(tmp);
-
     }
 
     res.render("admin/pages/category/index.pug", {
@@ -59,62 +62,144 @@ module.exports.index = async (req, res) => {
     })
 }
 module.exports.changeStatus = async (req, res) => {
-    const status = req.params.status;
-    const id = req.params.id;
-    await Category.updateOne({ _id: id }, { status: status });
-    req.flash("success", "Đổi trạng thái sản phẩm thành công!!");
-    res.redirect("back");
+    try {
+        const status = req.params.status;
+        const id = req.params.id;
+        const updatedBy = {
+            idAccountUpdated: res.locals.userLogin.id,
+            nameAccountUpdated: res.locals.userLogin.fullName,
+            dateUpdated: new Date()
+        };
+        const oldCategory = await Category.findOne({ _id: id }).select("-deleted -deletedBy -createdBy -slug -updatedBy");
+        await Category.updateOne({ _id: id }, { status: status });
+        const newCategory = await Category.findOne({ _id: id }).select("-deleted -deletedBy -createdBy -slug -updatedBy");
+        await Category.updateOne({ _id: id }, {
+            $push: {
+                updatedBy: {
+                    ...updatedBy,
+                    oldCategory: oldCategory,
+                    newCategory: newCategory
+                }
+            }
+        })
+        req.flash("success", "Đổi trạng thái sản phẩm thành công!!");
+        res.redirect("back");
+    } catch (error) {
+        req.flash("error", "Đổi trạng thái sản phẩm thất bại!");
+        res.redirect("back");
+    }
 }
-
 module.exports.changeMulti = async (req, res) => {
     const ids = req.body.ids.split(",");
     const type = req.body.type;
     switch (type) {
         case "active":
-            await Category.updateMany(
-                {
-                    _id: { $in: ids }
-                },
-                { status: "active" }
-            )
-            req.flash("success", "Đổi trạng thái tất cả sản phẩm đã chọn thành công!!");
-            break;
-        case "inactive":
-            await Category.updateMany(
-                {
-                    _id: { $in: ids }
-                },
-                { status: "inactive" }
-            )
-            req.flash("success", "Đổi trạng thái tất cả sản phẩm đã chọn thành công!!");
-            break;
-        case "delete":
-            const deletedBy = {
-                idAccountDeleted: res.locals.userLogin.id,
-                dateDeleted: new Date()
-            }
-            await Category.updateMany(
-                {
-                    _id: { $in: ids }
-                },
-                {
-                    $set: {
-                        deleted: true,
-                        deletedBy: deletedBy
-                    }
+            try {
+                const updatedBy = {
+                    idAccountUpdated: res.locals.userLogin.id,
+                    nameAccountUpdated: res.locals.userLogin.fullName,
+                    dateUpdated: new Date()
                 }
-            )
-            req.flash("success", "Xóa sản phẩm thành công!!");
-            break;
-        case "change-position":
-        case "change-position":
-            for (const tmp of ids) {
-                const [id, position] = tmp.split("-");
-                const parsedPosition = parseInt(position);
-                await Category.updateOne({ _id: id }, { position: parsedPosition });
+                for (let i = 0; i < ids.length; i++) {
+                    const oldCategory = await Category.findOne({ _id: ids[i] }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                    await Category.updateOne({ _id: ids[i] }, { status: "active" });
+                    const newCategory = await Category.findOne({ _id: ids[i] }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                    await Category.updateOne({ _id: ids[i] }, {
+                        $push: {
+                            updatedBy: {
+                                ...updatedBy,
+                                oldCategory: oldCategory,
+                                newCategory: newCategory
+                            }
+                        }
+                    })
+                }
+                req.flash("success", "Đổi trạng thái tất cả sản phẩm đã chọn thành công!!");
+                break;
+            } catch (error) {
+                req.flash("error", "Đổi trạng thái tất cả sản phẩm đã chọn không thành công!!");
+                break;
             }
-            req.flash("success", "Đổi vị trí tất cả sản phẩm đã chọn thành công!!");
-            break;
+        case "inactive":
+            try {
+                const updatedBy = {
+                    idAccountUpdated: res.locals.userLogin.id,
+                    nameAccountUpdated: res.locals.userLogin.fullName,
+                    dateUpdated: new Date()
+                }
+                for (let i = 0; i < ids.length; i++) {
+                    const oldCategory = await Category.findOne({ _id: ids[i] }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                    await Category.updateOne({ _id: ids[i] }, { status: "inactive" });
+                    const newCategory = await Category.findOne({ _id: ids[i] }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                    await Category.updateOne({ _id: ids[i] }, {
+                        $push: {
+                            updatedBy: {
+                                ...updatedBy,
+                                oldCategory: oldCategory,
+                                newCategory: newCategory
+                            }
+                        }
+                    })
+                }
+                req.flash("success", "Đổi trạng thái tất cả sản phẩm đã chọn thành công!!");
+                break;
+            } catch (error) {
+                req.flash("error", "Đổi trạng thái tất cả sản phẩm đã chọn không thành công!!");
+                break;
+            }
+        case "delete":
+            try {
+                const deletedBy = {
+                    idAccountDeleted: res.locals.userLogin.id,
+                    nameAccountCreated: res.locals.userLogin.fullName,
+                    dateDeleted: new Date()
+                }
+                await Category.updateMany(
+                    {
+                        _id: { $in: ids }
+                    },
+                    {
+                        $set: {
+                            deleted: true,
+                            deletedBy: deletedBy
+                        }
+                    }
+                )
+                req.flash("success", "Xóa sản phẩm thành công!!");
+                break;
+            } catch (error) {
+                req.flash("error", "Xóa sản phẩm không thành công!!");
+                break;
+            }
+        case "change-position":
+            try {
+                const updatedBy = {
+                    idAccountUpdated: res.locals.userLogin.id,
+                    nameAccountUpdated: res.locals.userLogin.fullName,
+                    dateUpdated: new Date()
+                }
+                for (const tmp of ids) {
+                    const [id, position] = tmp.split("-");
+                    const parsedPosition = parseInt(position);
+                    const oldCategory = await Category.findOne({ _id: id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                    await Category.updateOne({ _id: id }, { position: parsedPosition });
+                    const newCategory = await Category.findOne({ _id: id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                    await Category.updateOne({ _id: id }, {
+                        $push: {
+                            updatedBy: {
+                                ...updatedBy,
+                                oldCategory: oldCategory,
+                                newCategory: newCategory
+                            }
+                        }
+                    })
+                }
+                req.flash("success", "Đổi vị trí tất cả sản phẩm đã chọn thành công!!");
+                break;
+            } catch (error) {
+                req.flash("error", "Đổi vị trí tất cả sản phẩm đã chọn không thành công!!");
+                break;
+            }
     }
     res.redirect("back");
 }
@@ -130,51 +215,63 @@ module.exports.createCategory = async (req, res) => {
     })
 }
 module.exports.createNewCategory = async (req, res) => {
-    if (!req.body.title) {
-        req.flash("error", "Tên loại sản phẩm không được để trống!!");
+    try {
+        if (!req.body.title) {
+            req.flash("error", "Tên loại sản phẩm không được để trống!!");
+            res.redirect("back");
+            return;
+        }
+        if (!req.body.category) {
+            req.body.category = "";
+        }
+        if (!req.body.position) {
+            const count = await Category.countDocuments();
+            req.body.position = count + 1;
+        }
+        if (!req.body.idParent) {
+            req.body.idParent = "";
+        }
+        const createdBy = {
+            idAccountCreated: res.locals.userLogin.id,
+            nameAccountCreated: res.locals.userLogin.fullName
+        }
+        if (createdBy) {
+            req.body.createdBy = createdBy
+        }
+        const category = new Category(req.body);
+        category.save();
+        req.flash("success", "Tạo mới loại sản phẩm thành công");
         res.redirect("back");
-        return;
+    } catch (error) {
+        req.flash("error", "Tạo mới loại sản phẩm không thành công");
+        res.redirect("back");
     }
-    if (!req.body.category) {
-        req.body.category = "";
-    }
-    if (!req.body.position) {
-        const count = await Category.countDocuments();
-        req.body.position = count + 1;
-    }
-    if (!req.body.idParent) {
-        req.body.idParent = "";
-    }
-    const createdBy = {
-        idAccountCreated: res.locals.userLogin.id
-    }
-    if (createdBy) {
-        req.body.createdBy = createdBy
-    }
-    const category = new Category(req.body);
-    category.save();
-    req.flash("success", "Tạo mới loại sản phẩm thành công");
-    res.redirect("back");
 }
 module.exports.deleteCategory = async (req, res) => {
-    const deletedBy = {
-        idAccountDeleted: res.locals.userLogin.id,
-        dateDeleted: new Date()
-    }
-    await Category.deleteOne(
-        {
-            _id: req.params.id
+    try {
+        const deletedBy = {
+            idAccountDeleted: res.locals.userLogin.id,
+            nameAccountCreated: res.locals.userLogin.fullName,
+            dateDeleted: new Date()
         }
-        ,
-        {
-            $set: {
-                deleted: true,
-                deletedBy: deletedBy
+        await Category.deleteOne(
+            {
+                _id: req.params.id
             }
-        }
-    )
-    req.flash("success", "Xóa sản phẩm thành công!!");
-    res.redirect("back");
+            ,
+            {
+                $set: {
+                    deleted: true,
+                    deletedBy: deletedBy
+                }
+            }
+        )
+        req.flash("success", "Xóa sản phẩm thành công!!");
+        res.redirect("back");
+    } catch (error) {
+        req.flash("error", "Xóa sản phẩm không thành công!!");
+        res.redirect("back");
+    }
 }
 module.exports.viewEdit = async (req, res) => {
     try {
@@ -211,7 +308,23 @@ module.exports.editCategory = async (req, res) => {
         return;
     }
     try {
+        const updatedBy = {
+            idAccountUpdated: res.locals.userLogin.id,
+            nameAccountUpdated: res.locals.userLogin.fullName,
+            dateUpdated: new Date()
+        }
+        let oldCategory = await Category.findOne({ _id: req.params.id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
         await Category.updateOne({ _id: req.params.id }, req.body);
+        let newCategory = await Category.findOne({ _id: req.params.id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+        await Category.updateOne({ _id: req.params.id }, {
+            $push: {
+                updatedBy: {
+                    ...updatedBy,
+                    oldCategory: oldCategory,
+                    newCategory: newCategory
+                }
+            }
+        })
         req.flash("success", "Chỉnh sửa thành công");
         res.redirect("back");
     } catch (error) {
@@ -228,6 +341,37 @@ module.exports.viewDetelCategory = async (req, res) => {
     res.render("admin/pages/category/detelCategory.pug", {
         category: category,
         titlePage: `Chi tiết sản phẩm ${category.title}`
+    })
+}
+module.exports.logUpdated = async (req, res) => {
+    const category = await Category.findOne({
+        _id: req.params.id,
+        deleted: false
+    })
+    const logsUpdated = category.updatedBy;
+    for (let log of logsUpdated) {
+        if (log.oldCategory.idParent) {
+            const oldParent = await Category.findOne({ _id: log.oldCategory.idParent });
+            if (oldParent) {
+                log.nameOldParent = oldParent.title;
+            }
+            else {
+                log.nameOldParent = "Khong co";
+            }
+        }
+        if (log.newCategory.idParent) {
+            const newParent = await Category.findOne({ _id: log.newCategory.idParent });
+            if (newParent) {
+                log.nameNewParent = newParent.title;
+            }
+            else {
+                log.nameNewParent = "Khong co";
+            }
+        }
+    }
+    res.render("admin/pages/category/logUpdated.pug", {
+        titlePage: "Lịch sử thay đổi danh mục sản phẩm",
+        logsUpdated: logsUpdated
     })
 }
 

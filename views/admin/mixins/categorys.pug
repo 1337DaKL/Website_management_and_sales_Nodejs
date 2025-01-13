@@ -11,6 +11,7 @@ mixin print-products(categorys)
                     th Vị trí
                     th Trạng thái 
                     th Ngày tạo
+                    th Ngày cập nhật gần nhất
                     th Hành động 
         tbody 
             each item, index in categorys 
@@ -68,10 +69,22 @@ mixin print-products(categorys)
                         if item.createdBy
                             - const date = moment(item.createdBy.dateCreated).format("DD/MM/YYYY HH:mm:ss")
                             if item.nameAccountCreated
-                                p Người tạo: #{item.nameAccountCreated}
+                                p Người tạo: 
+                                    b #{item.nameAccountCreated}
                             else 
                                 p Người tạo: Không có
                             p #{date}
+                    td 
+                        if item.lastUpdated
+                            - const dateUpdated = moment(item.lastUpdated.dateUpdated).format("DD/MM/YYYY HH:mm:ss")
+                            if item.lastUpdated.nameAccountUpdated
+                                p Người cập nhật: 
+                                    b #{item.lastUpdated.nameAccountUpdated}
+                            else 
+                                p Người cập nhật: Không có
+                            p #{dateUpdated}
+                        else 
+                            p Không có thay đổi nào
                     td 
                         if roleLogin.permission.includes("products-category_view")
                             a.btn.btn-success.btn-sm(href=`${frefixAdmin}/categorys/detel/${item.id}`) Chi tiết

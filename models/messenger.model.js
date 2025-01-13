@@ -10,11 +10,11 @@ const messengerSchema = new mongoose.Schema(
         content: String,
         status: String,
         slug: { type: String, slug: "title", unique: true },
-        deleted: {
-            type: Boolean,
-            default: false
-        },
         position: Number,
+        deleted : {
+            type : Boolean,
+            default : false
+        },
         deletedBy: {
             idAccountDeleted: String,
             dateDeleted: Date

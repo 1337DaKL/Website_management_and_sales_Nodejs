@@ -6,10 +6,10 @@ const accountSchema = new mongoose.Schema(
         avartar: String,
         email: String,
         password: String,
-        token: 
+        token:
         {
-            type : String,
-            default : generateToken.generateToken(25)
+            type: String,
+            default: generateToken.generateToken(25)
         },
         idRole: String,
         telephone: String,
@@ -29,7 +29,36 @@ const accountSchema = new mongoose.Schema(
                 type: Date,
                 default: Date.now
             }
-        }
+        },
+        updatedBy: [
+            {
+                idAccountUpdated: String,
+                nameAccountUpdated: String,
+                dateUpdated: Date,
+                oldAccount: {
+                    fullName: String,
+                    avartar: String,
+                    email: String,
+                    password: String,
+                    idRole: String,
+                    nameRole: String,
+                    telephone: String,
+                    address: String,
+                    status: String
+                },
+                newAccount: {
+                    fullName: String,
+                    avartar: String,
+                    email: String,
+                    password: String,
+                    idRole: String,
+                    nameRole: String,
+                    telephone: String,
+                    address: String,
+                    status: String
+                }
+            }
+        ]
     }
 );
 const Account = mongoose.model('Account', accountSchema, "account");

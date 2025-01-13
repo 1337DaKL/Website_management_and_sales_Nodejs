@@ -45,9 +45,15 @@ module.exports.index = async (req, res) => {
         const accountCreated = await Account.findOne({
             _id: tmp.createdBy.idAccountCreated
         })
-        if(accountCreated)
-        {
+        if (accountCreated) {
             tmp.nameCreated = accountCreated.fullName
+        }
+        if (tmp.updatedBy.length > 0) {
+            const lastUpdated = tmp.updatedBy[tmp.updatedBy.length - 1];
+            if (lastUpdated) {
+                tmp.nameAccountUpdated = lastUpdated.nameAccountUpdated;
+                tmp.timeLastUpdated = lastUpdated.dateUpdated;
+            }
         }
     };
     //End Chuan hoa lai price
@@ -63,7 +69,21 @@ module.exports.index = async (req, res) => {
 module.exports.changeStatus = async (req, res) => {
     const status = req.params.status;
     const id = req.params.id;
+    const oldProduct = await Product.findOne({ _id: id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+    const updatedBy = {
+        idAccountUpdated: res.locals.userLogin.id,
+        nameAccountUpdated: res.locals.userLogin.fullName,
+        dateUpdated: new Date(),
+        oldProduct: oldProduct,
+    }
     await Product.updateOne({ _id: id }, { status: status });
+    const newProduct = await Product.findOne({ _id: id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+    updatedBy.newProduct = newProduct;
+    await Product.updateOne({ _id: id }, {
+        $push: {
+            updatedBy: updatedBy
+        }
+    });
     req.flash("success", "Đổi trạng thái sản phẩm thành công!!");
     res.redirect("back");
 }
@@ -71,51 +91,105 @@ module.exports.changeStatus = async (req, res) => {
 module.exports.changeMulti = async (req, res) => {
     const ids = req.body.ids.split(",");
     const type = req.body.type;
+    const updatedBy = {
+        idAccountUpdated: res.locals.userLogin.id,
+        nameAccountUpdated: res.locals.userLogin.fullName,
+        dateUpdated: new Date()
+    }
     switch (type) {
         case "active":
-            await Product.updateMany(
-                {
-                    _id: { $in: ids }
-                },
-                { status: "active" }
-            )
-            req.flash("success", "Đổi trạng thái tất cả sản phẩm đã chọn thành công!!");
-            break;
-        case "inactive":
-            await Product.updateMany(
-                {
-                    _id: { $in: ids }
-                },
-                { status: "inactive" }
-            )
-            req.flash("success", "Đổi trạng thái tất cả sản phẩm đã chọn thành công!!");
-            break;
-        case "delete":
-            const deletedBy = {
-                idAccountDeleted: res.locals.userLogin.id,
-                dateDeleted: new Date()
-            }
-            await Product.updateMany(
-                {
-                    _id: { $in: ids }
-                },
-                {
-                    $set: {
-                        deleted: true,
-                        deletedBy: deletedBy
-                    }
+            try {
+                for (let i = 0; i < ids.length; i++) {
+                    const id = ids[i];
+                    const oldProduct = await Product.findOne({ _id: id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                    await Product.updateOne({ _id: id }, { status: "active" });
+                    const newProduct = await Product.findOne({ _id: id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                    await Product.updateOne({ _id: id }, {
+                        $push: {
+                            updatedBy: {
+                                ...updatedBy,
+                                oldProduct: oldProduct,
+                                newProduct: newProduct
+                            }
+                        }
+                    });
                 }
-            )
-            req.flash("success", "Xóa sản phẩm thành công!!");
-            break;
-        case "change-position":
-            for (const tmp of ids) {
-                const [id, position] = tmp.split("-");
-                const parsedPosition = parseInt(position);
-                await Product.updateOne({ _id: id }, { position: parsedPosition });
+                req.flash("success", "Đổi trạng thái tất cả sản phẩm đã chọn thành công!!");
+                break;
+            } catch (error) {
+                req.flash("error", "Đổi trạng thái tất cả sản phẩm đã chọn thất bại!!");
+                break;
             }
-            req.flash("success", "Đổi vị trí tất cả sản phẩm đã chọn thành công!!");
-            break;
+        case "inactive":
+            try {
+                for (let i = 0; i < ids.length; i++) {
+                    const id = ids[i];
+                    const oldProduct = await Product.findOne({ _id: id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                    await Product.updateOne({ _id: id }, { status: "inactive" });
+                    const newProduct = await Product.findOne({ _id: id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                    await Product.updateOne({ _id: id }, {
+                        $push: {
+                            updatedBy: {
+                                ...updatedBy,
+                                oldProduct: oldProduct,
+                                newProduct: newProduct
+                            }
+                        }
+                    });
+                }
+                req.flash("success", "Đổi trạng thái tất cả sản phẩm đã chọn thành công!!");
+                break;
+            } catch (error) {
+                req.flash("error", "Đổi trạng thái tất cả sản phẩm đã chọn thất bại!!");
+                break;
+            }
+        case "delete":
+            try {
+                const deletedBy = {
+                    idAccountDeleted: res.locals.userLogin.id,
+                    dateDeleted: new Date()
+                }
+                await Product.updateMany(
+                    {
+                        _id: { $in: ids }
+                    },
+                    {
+                        $set: {
+                            deleted: true,
+                            deletedBy: deletedBy
+                        }
+                    }
+                )
+                req.flash("success", "Xóa tất cả sản phẩm thành công!!");
+                break;
+            } catch (error) {
+                req.flash("error", "Xóa tất cả sản phẩm thất bại!!");
+                break;
+            }
+        case "change-position":
+            try {
+                for (const tmp of ids) {
+                    const [id, position] = tmp.split("-");
+                    const parsedPosition = parseInt(position);
+                    const oldProduct = await Product.findOne({ _id: id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                    await Product.updateOne({ _id: id }, { position: parsedPosition });
+                    const newProduct = await Product.findOne({ _id: id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                    await Product.updateOne({ _id: id }, {
+                        $push: {
+                            updatedBy: {
+                                ...updatedBy,
+                                oldProduct: oldProduct,
+                                newProduct: newProduct
+                            }
+                        }
+                    });
+                }
+                req.flash("success", "Đổi vị trí tất cả sản phẩm đã chọn thành công!!");
+                break;
+            } catch (error) {
+                req.flash("error", "Đổi vị trí tất cả sản phẩm đã chọn thất bại!!");
+                break;
+            }
     }
     res.redirect("back");
 }
@@ -216,7 +290,23 @@ module.exports.editProductInDatabase = async (req, res) => {
         req.body.position = parseInt(req.body.position);
     }
     try {
+        const updatedBy = {
+            idAccountUpdated: res.locals.userLogin.id,
+            nameAccountUpdated: res.locals.userLogin.fullName,
+            dateUpdated: new Date(),
+        }
+        const oldProduct = await Product.findOne({ _id: req.params.id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
         await Product.updateOne({ _id: req.params.id }, req.body);
+        const newProduct = await Product.findOne({ _id: req.params.id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+        await Product.updateOne({ _id: req.params.id }, {
+            $push: {
+                updatedBy: {
+                    ...updatedBy,
+                    oldProduct: oldProduct,
+                    newProduct: newProduct
+                }
+            }
+        });
         req.flash("success", "Chỉnh sửa sản phẩm thành công!!");
         res.redirect("back");
     } catch (error) {
@@ -232,17 +322,43 @@ module.exports.detelProduct = async (req, res) => {
             deleted: false
         }
         const productDetel = await Product.findOne(find);
-        const createdAtNew = formatHelper.formatDate(String(productDetel.createdAt));
-        const updatedAtNew = formatHelper.formatDate(String(productDetel.updatedAt));
+        const nameCreated = await Account.findOne({ _id: productDetel.createdBy.idAccountCreated });
+        productDetel.nameCreated = nameCreated.fullName;
         res.render("admin/pages/products/detel.pug", {
             title: `Chi tiết sản phầm ${productDetel.title}`,
             product: productDetel,
             priceString: priceString(productDetel.price),
-            createdAtNew: createdAtNew,
-            updatedAtNew: updatedAtNew
         })
     }
     catch (error) {
         res.redirect("back");
     }
+}
+
+module.exports.logUpdateProduct = async (req, res) => {
+    const product = await Product.findOne({
+        _id: req.params.id,
+        deleted: false
+    })
+    for (let tmp of product.updatedBy) {
+        if (tmp.oldProduct.category != "") {
+            const oldNameCategory = await Category.findOne({ _id: tmp.oldProduct.category });
+            tmp.oldNameCategory = oldNameCategory.title;
+        }
+        else {
+            tmp.oldNameCategory = "Không có";
+        }
+        if (tmp.newProduct.category != "") {
+            const newNameCategory = await Category.findOne({ _id: tmp.newProduct.category });
+            tmp.newNameCategory = newNameCategory.title;
+        }
+        else {
+            tmp.newNameCategory = "Không có";
+        }
+    }
+    const updatedBy = product.updatedBy;
+    res.render("admin/pages/products/log.pug", {
+        titlePage: "Lịch sử thay đổi sản phẩm",
+        updatedBy: updatedBy
+    })
 }

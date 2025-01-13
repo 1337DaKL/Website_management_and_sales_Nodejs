@@ -50,19 +50,16 @@ if (checkId) {
 
 //Search input
 const searchInput = document.querySelector("#form-search");
-if(searchInput)
-{
-    searchInput.addEventListener("submit" , (e) => {
+if (searchInput) {
+    searchInput.addEventListener("submit", (e) => {
         e.preventDefault();
         let url = new URL(window.location.href);
         const keyword = e.target.elements.keyword.value;
         url.searchParams.delete("page");
-        if(keyword)
-        {
-            url.searchParams.set("keyword" , keyword);
+        if (keyword) {
+            url.searchParams.set("keyword", keyword);
         }
-        else
-        {
+        else {
             url.searchParams.delete("keyword");
         }
         window.location.href = url.href;
@@ -72,12 +69,10 @@ if(searchInput)
 
 //Button-Clear search
 const buttonClearKeywordSearch = document.querySelector("#button-clear");
-if(buttonClearKeywordSearch)
-{
-    buttonClearKeywordSearch.addEventListener("click" , (e) => {
+if (buttonClearKeywordSearch) {
+    buttonClearKeywordSearch.addEventListener("click", (e) => {
         let url = new URL(window.location.href);
-        if(url.searchParams.get("keyword"))
-        {
+        if (url.searchParams.get("keyword")) {
             url.searchParams.delete("keyword");
             window.location.href = url.href;
         }
@@ -87,13 +82,12 @@ if(buttonClearKeywordSearch)
 
 //Pagination
 const buttonsPagination = document.querySelectorAll("[button-pagination]");
-if(buttonsPagination)
-{
+if (buttonsPagination) {
     buttonsPagination.forEach((button) => {
-        button.addEventListener("click" , () => {
+        button.addEventListener("click", () => {
             let url = new URL(window.location.href);
             const page = button.getAttribute("button-pagination");
-            url.searchParams.set("page" , page);
+            url.searchParams.set("page", page);
             window.location.href = url.href;
         })
     });
@@ -103,7 +97,19 @@ if(buttonsPagination)
 
 
 
-
+//Button logout
+const buttonLogout = document.querySelector("[button-logout]");
+if (buttonLogout) {
+    buttonLogout.addEventListener("click", () => {
+        const confrimLogout = confirm("Bạn có muốn đăng xuất ra khỏi tài khoản không??");
+        if (confrimLogout) {
+            // console.log(window.location)
+            const path = buttonLogout.getAttribute("path");
+            window.location.href = `${window.location.origin}${path}/auth/logout`
+        }
+    })
+}
+//End button logout
 
 
 

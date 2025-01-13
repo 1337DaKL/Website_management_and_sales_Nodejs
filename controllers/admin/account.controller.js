@@ -27,9 +27,8 @@ module.exports.index = async (req, res) => {
             _id: account.idRole
         })
         account.role = role;
-        const accountCreated = await Account.findOne({_id : account.createdBy.idAccountCreated});
-        if(accountCreated)
-        {
+        const accountCreated = await Account.findOne({ _id: account.createdBy.idAccountCreated });
+        if (accountCreated) {
             account.nameAccountCreated = accountCreated.fullName;
         }
     }
@@ -63,7 +62,6 @@ module.exports.createAccount = async (req, res) => {
         return;
     }
     const accountFindEqual = await Account.findOne({
-        deleted: false,
         email: req.body.email
     })
     if (accountFindEqual) {
@@ -75,8 +73,9 @@ module.exports.createAccount = async (req, res) => {
         idAccountCreated: res.locals.userLogin.id
     }
     if (createdBy) {
-        req.body.createdBy = createdBy
+        req.body.createdBy = createdBy;
     }
+
     const account = new Account(req.body);
     account.save();
     req.flash("success", "Tạo tài khoản thành công =))");

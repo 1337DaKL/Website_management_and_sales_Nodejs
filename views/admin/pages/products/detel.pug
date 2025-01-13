@@ -21,13 +21,11 @@ block main
                 span 
                   b  #{product.stock}
               div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
+                - const date = moment(product.createdBy.dateCreated).format("DD/MM/YYYY HH:mm:ss")
                 span Ngày tạo: 
                 span 
-                  b #{createdAtNew}
-              div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
-                span Ngày update gần nhất: 
-                span 
-                  b #{updatedAtNew}
+                  b #{date} bởi 
+                    i #{product.nameCreated}
               div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
                 span Giảm giá hiện tại: 
                 span(style="color: #dc3545; font-weight: 600;") #{product.discount}%
@@ -38,7 +36,10 @@ block main
                 span Mô tả: 
                 p(style="font-size: 18px; line-height: 1.8; color: #555; margin-bottom: 30px;") !{product.description}
               if roleLogin.permission.includes("products_edit")
-                a(href=`${frefixAdmin}/products/edit/${product.id}` style="display: inline-block; padding: 15px 30px; background-color: #28a745; color: #fff; text-decoration: none; font-size: 18px; font-weight: 600; border-radius: 6px; transition: background-color 0.3s ease;") Chỉnh sửa
+                a(href=`${frefixAdmin}/products/edit/${product.id}` style="display: inline-block; padding: 15px 30px; background-color: #28a745; color: #fff; text-decoration: none; font-size: 18px; font-weight: 600; border-radius: 6px; transition: background-color 0.3s ease;margin-right: 20px;") Chỉnh sửa 
+              
+              a(href=`${frefixAdmin}/products/logUpdate/${product.id}` style="display: inline-block; padding: 15px 30px; background-color:rgb(136, 179, 20); color: #fff; text-decoration: none; font-size: 18px; font-weight: 600; border-radius: 6px; transition: background-color 0.3s ease;") Lịch sử cập nhập sản phẩm
+              
     else 
       h2 Bạn không có quyền truy cập vào trang này
 

@@ -11,6 +11,7 @@ mixin print-products(products)
                     th Vị trí
                     th Trạng thái 
                     th Ngày tạo
+                    th Ngày cập nhật gần nhất
                     th Hành động 
         tbody 
             each item, index in products 
@@ -67,6 +68,11 @@ mixin print-products(products)
                             else 
                                 p Người tạo: Không có
                             p #{date}
+                    td 
+                        if item.updatedBy.length > 0
+                            - const dateUpdate = moment(item.timeLastUpdated).format("DD/MM/YYYY HH:mm:ss")
+                            p Người cập nhật: #{item.nameAccountUpdated}
+                            p #{dateUpdate}
                     td 
                         if roleLogin.permission.includes("products_view")
                             a.btn.btn-success.btn-sm(href=`${frefixAdmin}/products/detel/${item.id}`) Chi tiết

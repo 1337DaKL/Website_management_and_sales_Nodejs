@@ -13,4 +13,5 @@ router.delete("/delete/:id" , controller.deleteCategory);
 router.get("/edit/:id" , controller.viewEdit);
 router.patch("/edit/:id" ,upload.single('thumbnail') , cloud.clouldMiddlewares, controller.editCategory);
 router.get("/detel/:id" , controller.viewDetelCategory);
+router.get("/logUpdate/:id" , controller.logUpdated)
 module.exports = router;

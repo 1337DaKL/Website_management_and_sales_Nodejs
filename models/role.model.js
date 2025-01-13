@@ -21,7 +21,30 @@ const RoleSchema = new mongoose.Schema(
                 type: Date,
                 default: Date.now
             }
-        }
+        },
+        updatedBy: [
+            {
+                idAccountUpdated: String,
+                nameAccountUpdated: String,
+                dateUpdated: Date,
+                oldRole: {
+                    title: String,
+                    description: String,
+                    permission: {
+                        type: Array,
+                        default: []
+                    },
+                },
+                newRole: {
+                    title: String,
+                    description: String,
+                    permission: {
+                        type: Array,
+                        default: []
+                    },
+                },
+            }
+        ]
     }
 );
 
