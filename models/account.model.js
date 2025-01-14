@@ -21,10 +21,12 @@ const accountSchema = new mongoose.Schema(
         },
         deletedBy: {
             idAccountDeleted: String,
+            nameAccountDeleted: String,
             dateDeleted: Date
         },
         createdBy: {
             idAccountCreated: String,
+            nameAccountCreated: String,
             dateCreated: {
                 type: Date,
                 default: Date.now

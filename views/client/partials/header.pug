@@ -1,3 +1,4 @@
+include ../mixins/tree-category.pug
 header.header
     nav.navbar.navbar-expand-lg.navbar-dark.bg-dark       
         a(href="/")
@@ -8,10 +9,11 @@ header.header
         .collapse.navbar-collapse#navbarNav
         ul.navbar-nav.ml-auto
             li.nav-item
-            a.nav-link(href="/") Trang Chủ
+                a.nav-link(href="/") Trang Chủ
             li.nav-item
-            a.nav-link(href="#about") Giới Thiệu
+                a.nav-link(href="#about") Giới Thiệu
+            li.nav-item.sub-menu
+                a.nav-link(href="/products") Sản phẩm
+                +tree-category(categoryTree)
             li.nav-item
-            a.nav-link(href="/products") Sản Phẩm
-            li.nav-item
-            a.nav-link(href="/contact") Liên Hệ
+                a.nav-link(href="/contact") Liên Hệ

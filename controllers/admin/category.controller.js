@@ -28,8 +28,6 @@ module.exports.index = async (req, res) => {
         sort.position = "desc";
     }
     const categorys = await Category.find(find).limit(ojectPagination.limitPage).skip(ojectPagination.skipPage).sort(sort);
-
-    const categoryss = [];
     for (const tmp of categorys) {
         const idP = tmp.idParent;
         let nameParent;
@@ -41,20 +39,21 @@ module.exports.index = async (req, res) => {
             nameParent = "";
         }
         tmp.nameParent = nameParent;
-        const accountCreated = await Account.findOne({ _id: tmp.createdBy.idAccountCreated });
-        if (accountCreated) {
-            tmp.nameAccountCreated = accountCreated.fullName;
+        if (tmp.createdBy.idAccountCreated) {
+            const accountCreated = await Account.findOne({ _id: tmp.createdBy.idAccountCreated });
+            if (accountCreated) {
+                tmp.nameAccountCreated = accountCreated.fullName;
+            }
         }
         const arrayUpdatedBy = tmp.updatedBy;
         if (arrayUpdatedBy.length > 0) {
             const lastUpdated = arrayUpdatedBy[arrayUpdatedBy.length - 1];
             tmp.lastUpdated = lastUpdated;
         }
-        categoryss.push(tmp);
     }
 
     res.render("admin/pages/category/index.pug", {
-        categorys: categoryss,
+        categorys: categorys,
         filtersStatus: filtersStatus,
         titlePage: "Danh mục sản phẩm",
         pagination: ojectPagination,
@@ -251,19 +250,17 @@ module.exports.deleteCategory = async (req, res) => {
     try {
         const deletedBy = {
             idAccountDeleted: res.locals.userLogin.id,
-            nameAccountCreated: res.locals.userLogin.fullName,
+            nameAccountDeleted: res.locals.userLogin.fullName,
             dateDeleted: new Date()
         }
-        await Category.deleteOne(
+        await Category.updateOne(
             {
                 _id: req.params.id
             }
             ,
             {
-                $set: {
-                    deleted: true,
-                    deletedBy: deletedBy
-                }
+                deleted: true,
+                deletedBy: deletedBy
             }
         )
         req.flash("success", "Xóa sản phẩm thành công!!");

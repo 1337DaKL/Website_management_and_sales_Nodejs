@@ -1,0 +1,11 @@
+const express = require("express");
+const router = express.Router();
+const controller = require("../../controllers/admin/dustbinCategory.controller");
+const cloud = require("../../middlewares/admin/cloud.middlewares");
+var multer = require('multer');
+var upload = multer();
+router.get("/", controller.index);
+router.patch("/restore/:id", controller.restoreCategory);
+router.delete("/delete/:id", controller.deleteCategory);
+router.patch("/change-multi", controller.changeMulti);
+module.exports = router;

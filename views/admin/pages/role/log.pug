@@ -1,0 +1,181 @@
+extends ../../layouts/defaut.pug
+block main 
+    h3 Lịch sử thay đổi sản phẩm 
+    if arrayUpdatedBy && arrayUpdatedBy.length > 0
+        div.history-container
+            each update , index in arrayUpdatedBy.reverse()
+                div.history-item
+                    h1  
+                        b 
+                            i Số thứ tự : #{index + 1}
+                    h3 Thay đổi bởi: #{update.nameAccountUpdated} (ID: #{update.idAccountUpdated})
+                    - const date = moment(update.dateUpdated).format("DD/MM/YYYY HH:mm:ss")
+                    p Thời gian thay đổi: #{date}
+                    h3 Thông tin thay đổi gồm : 
+                    table
+                        thead 
+                            tr 
+                                th Nội dung
+                                th Thông tin cũ 
+                                th Thông tin mới
+                        tbody 
+                            if update.oldRole.title != update.newRole.title
+                                tr 
+                                    td Tiêu đề
+                                    td #{update.oldRole.title}
+                                    td #{update.newRole.title}
+                            if update.oldRole.description != update.newRole.description
+                                tr 
+                                    td Mô tả
+                                    td !{update.oldRole.description}
+                                    td !{update.newRole.description}
+                            if update.oldRole.permission != update.newRole.permission
+                                tr 
+                                    td Phân quyền
+                                    td 
+                                        p 
+                                            b Loại bỏ:
+                                        each permiss in update.oldRole.permission
+                                            if !update.newRole.permission.includes(permiss)
+                                                if permiss == "products-category_view"
+                                                    p - Quyền xem danh mục sản phẩm
+                                                if permiss == "products-category_create"
+                                                    p - Quyền tạo danh mục sản phẩm
+                                                if permiss == "products-category_edit"
+                                                    p - Quyền sửa danh mục sản phẩm
+                                                if permiss == "products-category_delete"
+                                                    p - Quyền xóa danh mục sản phẩm
+                                                if permiss == "products-category_view-dustbin"
+                                                    p - Quyền xem thùng rác danh mục sản phẩm
+                                                if permiss == "products-category_edit-dustbin"
+                                                    p - Khôi phục hoặc xóa vĩnh viễn danh mục sản phẩm
+                                                //- Sản phẩm
+                                                if permiss == "products_view"
+                                                    p - Quyền xem sản phẩm
+                                                if permiss == "products_create"
+                                                    p - Quyền tạo sản phẩm
+                                                if permiss == "products_edit"
+                                                    p - Quyền sửa sản phẩm
+                                                if permiss == "products_delete"
+                                                    p - Quyền xóa sản phẩm
+                                                if permiss == "products_view-dustbin"
+                                                    p - Quyền xem thùng rác sản phẩm
+                                                if permiss == "products_edit-dustbin"
+                                                    p - Khôi phục hoặc xóa vĩnh viễn sản phẩm
+
+                                                //- Tài khoản
+                                                if permiss == "account_view"
+                                                    p - Quyền xem tài khoản 
+                                                if permiss == "account_create"
+                                                    p - Quyền tạo tài khoản
+                                                if permiss == "account_edit"
+                                                    p - Quyền sửa tài khoản
+                                                if permiss == "account_delete"
+                                                    p - Quyền xóa tài khoản
+                                                if permiss == "account_view-dustbin"
+                                                    p - Quyền xem thùng rác tài khoản
+                                                if permiss == "account_edit-dustbin"
+                                                    p - Khôi phục hoặc xóa vĩnh viễn tài khoản
+
+                                                //-Tin nhắn
+                                                if permiss == "messenger_view"
+                                                    p - Quyền xem tin nhắn 
+                                                if permiss == "messenger_delete"
+                                                    p - Quyền xóa tin nhắn
+                                                if permiss == "messenger_view-dustbin"
+                                                    p - Quyền xem thùng rác tài khoản
+                                                if permiss == "messenger_edit-dustbin"
+                                                    p - Khôi phục hoặc xóa vĩnh viễn tin nhắn
+                                                
+                                                //-Quản trị
+                                                //- Sản phẩm
+                                                if permiss == "role_view"
+                                                    p - Quyền xem quyền quản trị
+                                                if permiss == "role_create"
+                                                    p - Quyền tạo quyền quản trị
+                                                if permiss == "role_edit"
+                                                    p - Quyền sửa quyền quản trị
+                                                if permiss == "role_delete"
+                                                    p - Quyền xóa quyền quản trị
+                                                if permiss == "role_view-dustbin"
+                                                    p - Quyền xem thùng rác quyền quản trị
+                                                if permiss == "role_edit-dustbin"
+                                                    p - Khôi phục hoặc xóa vĩnh viễn quyền quản trị
+                                                if permiss == "role_permission"
+                                                    p - Phân quyền
+                                                   
+                                    td 
+                                        p 
+                                            b Thêm mới:
+                                        each permiss in update.newRole.permission
+                                            if !update.oldRole.permission.includes(permiss)
+                                                if permiss == "products-category_view"
+                                                    p - Quyền xem danh mục sản phẩm
+                                                if permiss == "products-category_create"
+                                                    p - Quyền tạo danh mục sản phẩm
+                                                if permiss == "products-category_edit"
+                                                    p - Quyền sửa danh mục sản phẩm
+                                                if permiss == "products-category_delete"
+                                                    p - Quyền xóa danh mục sản phẩm
+                                                if permiss == "products-category_view-dustbin"
+                                                    p - Quyền xem thùng rác danh mục sản phẩm
+                                                if permiss == "products-category_edit-dustbin"
+                                                    p - Khôi phục hoặc xóa vĩnh viễn danh mục sản phẩm
+                                                //- Sản phẩm
+                                                if permiss == "products_view"
+                                                    p - Quyền xem sản phẩm
+                                                if permiss == "products_create"
+                                                    p - Quyền tạo sản phẩm
+                                                if permiss == "products_edit"
+                                                    p - Quyền sửa sản phẩm
+                                                if permiss == "products_delete"
+                                                    p - Quyền xóa sản phẩm
+                                                if permiss == "products_view-dustbin"
+                                                    p - Quyền xem thùng rác sản phẩm
+                                                if permiss == "products_edit-dustbin"
+                                                    p - Khôi phục hoặc xóa vĩnh viễn sản phẩm
+
+                                                //- Tài khoản
+                                                if permiss == "account_view"
+                                                    p - Quyền xem tài khoản 
+                                                if permiss == "account_create"
+                                                    p - Quyền tạo tài khoản
+                                                if permiss == "account_edit"
+                                                    p - Quyền sửa tài khoản
+                                                if permiss == "account_delete"
+                                                    p - Quyền xóa tài khoản
+                                                if permiss == "account_view-dustbin"
+                                                    p - Quyền xem thùng rác tài khoản
+                                                if permiss == "account_edit-dustbin"
+                                                    p - Khôi phục hoặc xóa vĩnh viễn tài khoản
+
+                                                //-Tin nhắn
+                                                if permiss == "messenger_view"
+                                                    p - Quyền xem tin nhắn 
+                                                if permiss == "messenger_delete"
+                                                    p - Quyền xóa tin nhắn
+                                                if permiss == "messenger_view-dustbin"
+                                                    p - Quyền xem thùng rác tài khoản
+                                                if permiss == "messenger_edit-dustbin"
+                                                    p - Khôi phục hoặc xóa vĩnh viễn tin nhắn
+                                                
+                                                //-Quản trị
+                                                //- Sản phẩm
+                                                if permiss == "role_view"
+                                                    p - Quyền xem quyền quản trị
+                                                if permiss == "role_create"
+                                                    p - Quyền tạo quyền quản trị
+                                                if permiss == "role_edit"
+                                                    p - Quyền sửa quyền quản trị
+                                                if permiss == "role_delete"
+                                                    p - Quyền xóa quyền quản trị
+                                                if permiss == "role_view-dustbin"
+                                                    p - Quyền xem thùng rác quyền quản trị
+                                                if permiss == "role_edit-dustbin"
+                                                    p - Khôi phục hoặc xóa vĩnh viễn quyền quản trị
+                                                if permiss == "role_permission"
+                                                    p - Phân quyền
+    else 
+        p Không có thay đổi nào
+      
+

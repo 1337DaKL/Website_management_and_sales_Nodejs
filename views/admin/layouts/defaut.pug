@@ -11,28 +11,33 @@ html
         link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css")
 
     body
-        if roleLogin.permission.length > 0
-            include ../partials/header.pug
-            -if(messages.success)
-                .messages.info
-                    span(
-                        class="alert alert-success" 
-                        show-alert 
-                        data-time= "5000"
-                    ) #{messages.success} <button type="button" class="btn-close" aria-label="Close" button-close-alert></button>
-            -if(messages.error)
-                .messages.info
-                    span(
-                        class="alert alert-danger" 
-                        show-alert 
-                        data-time= "5000"
-                    ) #{messages.error} <button type="button" class="btn-close" aria-label="Close" button-close-alert></button>
-            .body
-                include ../partials/sider.pug            
-                .main
-                    block main
+        if roleLogin
+            if roleLogin.permission.length > 0
+                include ../partials/header.pug
+                -if(messages.success)
+                    .messages.info
+                        span(
+                            class="alert alert-success" 
+                            show-alert 
+                            data-time= "5000"
+                        ) #{messages.success} <button type="button" class="btn-close" aria-label="Close" button-close-alert></button>
+                -if(messages.error)
+                    .messages.info
+                        span(
+                            class="alert alert-danger" 
+                            show-alert 
+                            data-time= "5000"
+                        ) #{messages.error} <button type="button" class="btn-close" aria-label="Close" button-close-alert></button>
+                .body
+                    include ../partials/sider.pug            
+                    .main
+                        block main
+            else 
+                h1 Bạn không có quyền truy cập vào trang này
+                a(href=`${frefixAdmin}/auth/logout`)
+                    | Quay lại
         else 
-            h1 Bạn không có quyền truy cập vào trang này
+            h1 Bạn chưa được cấp quyền nào cả, vui lòng liên hệ quản trị viên để được cấp đầy đủ các quyền
             a(href=`${frefixAdmin}/auth/logout`)
                 | Quay lại
 

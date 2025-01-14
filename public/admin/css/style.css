@@ -185,3 +185,35 @@ tr:nth-child(even) {
 tr:hover {
     background-color: #ddd;
 }
+
+
+.circle-container {
+    text-align: center; /* Căn giữa cả khung ảnh và tên */
+    font-family: Arial, sans-serif; /* Font chữ tùy chỉnh */
+}
+
+.circle-frame {
+    width: 50px; /* Kích thước khung ảnh */
+    height: 50px; /* Kích thước khung ảnh */
+    border: 1px solid #4CAF50; /* Đường viền của khung */
+    border-radius: 50%; /* Biến khung thành hình tròn */
+    overflow: hidden; /* Ẩn phần hình ảnh thừa ra ngoài */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto; /* Để căn giữa khung ảnh */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng đổ bóng */
+}
+
+.circle-frame img {
+    width: 100%; /* Đảm bảo hình ảnh lấp đầy khung */
+    height: 100%;
+    object-fit: cover; /* Duy trì tỉ lệ hình ảnh và cắt phần thừa */
+}
+
+.circle-name {
+    margin-top: 10px; /* Khoảng cách giữa tên và khung ảnh */
+    font-size: 16px; /* Kích thước chữ */
+    color: #333; /* Màu chữ */
+    font-weight: bold; /* Đậm chữ */
+}

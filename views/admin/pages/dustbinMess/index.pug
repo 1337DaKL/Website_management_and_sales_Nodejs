@@ -7,7 +7,15 @@ block main
         .card.mb-3 
         if roleLogin.permission.includes("messenger_edit-dustbin")
             button.btn.btn-icon(type="button" button-delete-multi)
-            i(class="bi bi-trash3")
+                i(class="bi bi-trash3")
+            form(action=`${frefixAdmin}/dustbin-mess/deleteMulti?_method=DELETE` method="post" form-delete-multi)
+                input.form-control.d-none(
+                    type="text"
+                    name="ids"
+                    value=""
+                    placeholder="San pham ap dung"
+                    ids
+                )
                 
         div(style="display: flex; gap: 15px;")
         button(
@@ -50,7 +58,7 @@ block main
                         if item.status == "notSeen"
                             tr(id-mess=item.id)
                                 td
-                                    input(type="checkbox" name="id" value=mess.id)
+                                    input(type="checkbox" name="id" value=item.id)
                                 td(tr-mess) 
                                     b #{index + 1}
                                 td(tr-mess) 
@@ -61,12 +69,13 @@ block main
                                     if roleLogin.permission.includes("messenger_edit-dustbin")
                                         button.btn.btn-sm.ml-1(type="button" button-delete id=`${item.id}`)
                                             i(class="bi bi-trash3 mr-1")
+                                        form(action=""  method="POST" id="form-delete" path=`${frefixAdmin}/dustbin-mess/delete`)
                                     else 
                                         h6 Không có quyền thực hiện hành động nào
                         else 
                             tr( id-mess=item.id)
                                 td
-                                    input(type="checkbox" name="id" value=mess.id)
+                                    input(type="checkbox" name="id" value=item.id)
                                 td(tr-mess) #{index + 1}
                                 td(tr-mess) #{item.name}                           
                                 td(tr-mess) #{item.title}
@@ -74,6 +83,7 @@ block main
                                     if roleLogin.permission.includes("messenger_edit-dustbin")
                                         button.btn.btn-sm.ml-1(type="button" button-delete id=`${item.id}`)
                                             i(class="bi bi-trash3 mr-1")
+                                        form(action=""  method="POST" id="form-delete" path=`${frefixAdmin}/dustbin-mess/delete`)
                                     else 
                                         h6 Không có quyền thực hiện hành động nào
                         
@@ -84,8 +94,8 @@ block main
                         .col-md-6
                             .alert.alert-warning.text-center
                                 i.bi.bi-exclamation-triangle-fill 
-                                | Không có sản phẩm nào!!
-        script(src="/admin/js/chat.js")
+                                | Không có tin nhắn  nào!!
+        script(src="/admin/js/dustbinMessenger.js")
     else 
         h2 Bạn không có quyền truy cập vào trang này
 

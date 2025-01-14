@@ -76,22 +76,3 @@ if (buttonFillter) {
     })
 }
 //end fillter
-
-//fillter dustbin
-const buttonFillterDustbin = document.querySelectorAll("[fillter-dustbin]");
-if (buttonFillterDustbin) {
-    buttonFillterDustbin.forEach((button) => {
-        button.addEventListener("click", () => {
-            const status = button.getAttribute("status");
-            if (status !== "") {
-                const url = `${window.location.origin}/admin/dustbin-mess?status=${status}`;
-                window.location.href = url;
-            }
-            else {
-                const url = `${window.location.origin}/admin/dustbin-mess`;
-                window.location.href = url;
-            }
-        })
-    })
-}
-//end fillter dustbin

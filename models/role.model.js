@@ -13,10 +13,12 @@ const RoleSchema = new mongoose.Schema(
         },
         deletedBy: {
             idAccountDeleted: String,
+            nameAccountUpdated: String,
             dateDeleted: Date
         },
         createdBy: {
             idAccountCreated: String,
+            nameAccountUpdated: String,
             dateCreated: {
                 type: Date,
                 default: Date.now

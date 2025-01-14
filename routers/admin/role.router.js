@@ -13,4 +13,5 @@ router.delete("/delete/:id" , controller.deleteRole);
 router.patch("/delete/:id" , controller.deleteMultiRole);
 router.get("/permission" , controller.viewPagePemission);
 router.patch("/update-permission" , upload.single('thumbnail') , cloud.clouldMiddlewares, controller.updatePermissionRole);
+router.get("/logUpdated/:id" , controller.viewLogUpdated);
 module.exports = router;

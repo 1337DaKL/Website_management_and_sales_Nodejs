@@ -27,10 +27,6 @@ module.exports.index = async (req, res) => {
             _id: account.idRole
         })
         account.role = role;
-        const accountCreated = await Account.findOne({ _id: account.createdBy.idAccountCreated });
-        if (accountCreated) {
-            account.nameAccountCreated = accountCreated.fullName;
-        }
     }
     res.render("admin/pages/account/index.pug", {
         titlePage: "Tài khoản",
@@ -70,7 +66,8 @@ module.exports.createAccount = async (req, res) => {
         return;
     }
     const createdBy = {
-        idAccountCreated: res.locals.userLogin.id
+        idAccountCreated: res.locals.userLogin.id,
+        nameAccountCreated: res.locals.userLogin.fullName
     }
     if (createdBy) {
         req.body.createdBy = createdBy;
@@ -84,7 +81,33 @@ module.exports.createAccount = async (req, res) => {
 module.exports.changeStatus = async (req, res) => {
     try {
         const [id, statusChange] = req.params.inforChange.split(",");
+        const updatedBy = {
+            idAccountUpdated: res.locals.userLogin.id,
+            nameAccountUpdated: res.locals.userLogin.fullName,
+            dateUpdated: new Date()
+        }
+        const oldAccount = await Account.findOne(
+            {
+                _id: id,
+                deleted: false
+            }
+        ).select("-token -deleted -deletedBy -createdBy -updatedBy");
         await Account.updateOne({ _id: id }, { status: statusChange });
+        const newAccount = await Account.findOne(
+            {
+                _id: id,
+                deleted: false
+            }
+        ).select("-token -deleted -deletedBy -createdBy -updatedBy");
+        await Account.updateOne({ _id: id }, {
+            $push: {
+                updatedBy: {
+                    ...updatedBy,
+                    oldAccount: oldAccount,
+                    newAccount: newAccount
+                }
+            }
+        })
         req.flash("success", "Cập nhật trạng thái thành công!!");
         res.redirect("back");
     } catch (error) {
@@ -96,6 +119,7 @@ module.exports.deleteAccount = async (req, res) => {
     try {
         const deletedBy = {
             idAccountDeleted: res.locals.userLogin.id,
+            nameAccountDeleted: res.locals.userLogin.fullName,
             dateDeleted: new Date()
         }
         await Account.updateOne({ _id: req.params.id }, { $set: { deleted: true, deletedBy: deletedBy } })
@@ -110,13 +134,9 @@ module.exports.viewDetelAccount = async (req, res) => {
     const account = await Account.findOne({ _id: req.params.id });
     const roleAccount = await Role.findOne({ _id: account.idRole });
     account.role = roleAccount;
-    const createdAtNew = formatHelper.formatDate(String(account.createdAt));
-    const updatedAtNew = formatHelper.formatDate(String(account.updatedAt));
     res.render("admin/pages/account/detel.pug", {
         titlePage: "Chi tiết tài khoản ",
         account: account,
-        createdAtNew: createdAtNew,
-        updatedAtNew: updatedAtNew
     })
 }
 module.exports.viewEdit = async (req, res) => {
@@ -158,14 +178,41 @@ module.exports.editAccount = async (req, res) => {
         return;
     }
     try {
+        const updatedBy = {
+            idAccountUpdated: res.locals.userLogin.id,
+            nameAccountUpdated: res.locals.userLogin.fullName,
+            dateUpdated: new Date()
+        }
+        const oldAccount = await Account.findOne(
+            {
+                _id: req.params.id
+            }
+        ).select("-token -deleted -deletedBy -createdBy -updatedBy");
         await Account.updateOne(
             {
                 _id: req.params.id
             },
             req.body
         )
+        const newAccount = await Account.findOne(
+            {
+                _id: req.params.id
+            }
+        ).select("-token -deleted -deletedBy -createdBy -updatedBy");
+        await Account.updateOne(
+            { _id: req.params.id },
+            {
+                $push: {
+                    updatedBy: {
+                        ...updatedBy,
+                        oldAccount: oldAccount,
+                        newAccount: newAccount
+                    }
+                }
+            }
+        )
         req.flash("success", "Cập nhật thông tin thành công!");
-        res.redirect(`${systemConfig.prefixAdmin}/account`);
+        res.redirect("back");
     } catch (error) {
         req.flash("error", "Cập nhật thông tin thất bại!");
         res.redirect("back");

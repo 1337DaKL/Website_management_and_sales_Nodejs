@@ -4,6 +4,13 @@ module.exports.index = async (req, res) => {
         deleted: false
     }
     const roles = await Role.find(find);
+    for (let role of roles) {
+        const arrayUpdatedBy = role.updatedBy;
+        if (arrayUpdatedBy.length > 0) {
+            const lastUpdatedBy = arrayUpdatedBy[arrayUpdatedBy.length - 1];
+            role.lastUpdatedBy = lastUpdatedBy;
+        }
+    }
     res.render("admin/pages/role/index.pug", {
         titlePage: "Trang phân quyền",
         roles: roles
@@ -22,7 +29,8 @@ module.exports.createRole = async (req, res) => {
 
     }
     const createdBy = {
-        idAccountCreated: res.locals.userLogin.id
+        idAccountCreated: res.locals.userLogin.id,
+        nameAccountUpdated: res.locals.userLogin.fullName
     }
     if (createdBy) {
         req.body.createdBy = createdBy
@@ -40,20 +48,45 @@ module.exports.viewEditRole = async (req, res) => {
     })
 }
 module.exports.editRole = async (req, res) => {
-    console.log(req.body);
-    if (!req.body.title) {
-        req.flash("error", "Tiêu đề không được trống");
+    try {
+        console.log(req.body);
+        if (!req.body.title) {
+            req.flash("error", "Tiêu đề không được trống");
+            res.redirect("back");
+            return;
+        }
+        const updatedBy = {
+            idAccountUpdated: res.locals.userLogin.id,
+            nameAccountUpdated: res.locals.userLogin.fullName,
+            dateUpdated: new Date()
+        }
+        const oldRole = await Role.findOne({ _id: req.params.id, deleted: false }).select("title description permission");
+        await Role.updateOne({ _id: req.params.id }, req.body);
+        const newRole = await Role.findOne({ _id: req.params.id, deleted: false }).select("title description permission");
+        await Role.updateOne(
+            { _id: req.params.id },
+            {
+                $push: {
+                    updatedBy: {
+                        ...updatedBy,
+                        oldRole: oldRole,
+                        newRole: newRole
+                    }
+                }
+            }
+        )
+        req.flash("success", "Chỉnh sửa thành công");
         res.redirect("back");
-        return;
+    } catch (error) {
+        req.flash("error", "Chỉnh sửa không thành công");
+        res.redirect("back");
     }
-    await Role.updateOne({ _id: req.params.id }, req.body);
-    req.flash("success", "Chỉnh sửa thành công");
-    res.redirect("back");
     // res.send("ok");
 }
 module.exports.deleteRole = async (req, res) => {
     const deletedBy = {
         idAccountDeleted: res.locals.userLogin.id,
+        nameAccountUpdated: res.locals.userLogin.fullName,
         dateDeleted: new Date()
     }
     await Role.updateOne({ _id: req.params.id }, { $set: { deleted: true, deletedBy: deletedBy } });
@@ -69,6 +102,7 @@ module.exports.deleteMultiRole = async (req, res) => {
     }
     const deletedBy = {
         idAccountDeleted: res.locals.userLogin.id,
+        nameAccountUpdated: res.locals.userLogin.fullName,
         dateDeleted: new Date()
     }
     await Role.updateMany({ _id: idRoles }, { $set: { deleted: true, deletedBy: deletedBy } });
@@ -86,12 +120,61 @@ module.exports.viewPagePemission = async (req, res) => {
     })
 }
 module.exports.updatePermissionRole = async (req, res) => {
-    const permissionJson = JSON.parse(req.body.permission);
-    console.log(permissionJson);
-    for (let tmp in permissionJson) {
-        await Role.updateOne({ _id: permissionJson[tmp].id }, { permission: permissionJson[tmp].permission });
+    try {
+        const permissionJson = JSON.parse(req.body.permission);
+        const updatedBy = {
+            idAccountUpdated: res.locals.userLogin.id,
+            nameAccountUpdated: res.locals.userLogin.fullName,
+            dateUpdated: new Date()
+        }
+        for (let tmp in permissionJson) {
+            const oldRole = await Role.findOne(
+                {
+                    _id: permissionJson[tmp].id
+                }
+            ).select("title description permission");
+            await Role.updateOne({ _id: permissionJson[tmp].id }, { permission: permissionJson[tmp].permission });
+            const newRole = await Role.findOne(
+                {
+                    _id: permissionJson[tmp].id
+                }
+            ).select("title description permission");
+            await Role.updateOne(
+                {
+                    _id: permissionJson[tmp].id
+                },
+                {
+                    $push: {
+                        updatedBy: {
+                            ...updatedBy,
+                            oldRole: oldRole,
+                            newRole: newRole
+                        }
+                    }
+                }
+            )
+        }
+        // res.send("ok");
+        req.flash("success", "Cập nhật phân quyền thành công");
+        res.redirect("back");
+    } catch (error) {
+        req.flash("error", "Cập nhật phân quyền không thành công");
+        res.redirect("back");
     }
-    req.flash("success", "Cập nhật phân quyền thành công");
-    res.redirect("back");
-    // res.send("ok");
+}
+module.exports.viewLogUpdated = async (req, res) => {
+    const role = await Role.findOne(
+        {
+            _id: req.params.id,
+            deleted: false
+        }
+    );
+    let arrayUpdatedBy;
+    if (role.updatedBy.length > 0) {
+        arrayUpdatedBy = role.updatedBy;
+    }
+    res.render("admin/pages/role/log.pug", {
+        titlePage: "Lịch sử cập nhật quyền quản trị",
+        arrayUpdatedBy: arrayUpdatedBy
+    })
 }

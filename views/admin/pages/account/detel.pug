@@ -41,11 +41,8 @@ block main
               div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
                 span Thời gian tạo: 
                 span 
-                  b #{createdAtNew}
-              div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
-                span Thời gian cập nhật gần nhất: 
-                span 
-                  b #{updatedAtNew}
+                  -const date = moment(account.createdBy.dateCreated).format("HH:mm:ss DD/MM/YYYY");
+                  b #{date} bởi #{account.nameAccountCreated} 
               p(style="font-size: 18px; line-height: 1.8; color: #555; margin-bottom: 30px;") !{account.description}
               if roleLogin.permission.includes("account_edit")
                 a(href=`${frefixAdmin}/account/edit/${account.id}` style="display: inline-block; padding: 15px 30px; background-color: #28a745; color: #fff; text-decoration: none; font-size: 18px; font-weight: 600; border-radius: 6px; transition: background-color 0.3s ease;") Chỉnh sửa

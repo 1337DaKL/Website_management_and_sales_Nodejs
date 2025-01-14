@@ -19,10 +19,7 @@ module.exports.index = async (req, res) => {
     }
     //end search
     const roles = await Role.find(find).limit(ojectPagination.limitPage).skip(ojectPagination.skipPage);
-    roles.map((role) => {
-        role.dateDeletedNew = formatHelper.formatDate(String(role.dateDeleted));
-        return role;
-    })
+
     res.render("admin/pages/dustbinRole/index.pug", {
         titlePage: "Thùng rác quản trị",
         roles: roles,

@@ -110,8 +110,8 @@ block main
                             td 
                                 if item.createdBy
                                     - const date = moment(item.createdBy.dateCreated).format("DD/MM/YYYY HH:mm:ss")
-                                    if item.nameAccountCreated
-                                        p Người tạo: #{item.nameAccountCreated}
+                                    if item.createdBy.nameAccountCreated
+                                        p Người tạo: #{item.createdBy.nameAccountCreated}
                                     else 
                                         p Người tạo: Không có
                                     p #{date}

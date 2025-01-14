@@ -53,6 +53,7 @@ block main
                                     th.text-center(w-20) Tên quyền quản trị
                                     th.text-center(w-20) Mô tả
                                     th.text-center(w-20) Ngày xóa
+                                    th.text-center(w-20) Người xóa
                                     th.text-center(w-20) Hành động
                             tbody
                                 each item , index in roles
@@ -62,7 +63,11 @@ block main
                                         td.text-center #{index + 1}
                                         td.text-center #{item.title}
                                         td.text-center !{item.description}
-                                        td.text-center #{item.dateDeletedNew}
+                                        td.text-center 
+                                            -const date = moment(item.deletedBy.dateDeleted).format("HH:mm:ss DD/MM/YYYY")
+                                            p #{date}
+                                        td.text-center 
+                                            p #{item.deletedBy.nameAccountUpdated}-(#{item.deletedBy.idAccountDeleted})
                                         td.text-center
                                             if roleLogin.permission.includes("role_edit-dustbin")
                                                 button(

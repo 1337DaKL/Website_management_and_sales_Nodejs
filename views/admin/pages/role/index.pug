@@ -38,6 +38,8 @@ block main
                             th STT 
                             th Tiêu đề 
                             th Mô tả 
+                            th Ngày tạo
+                            th Thời gian cập nhật gần nhất
                             th Hành động 
                 tbody 
                     each item, index in roles 
@@ -48,10 +50,27 @@ block main
                             td #{item.title}
                             td !{item.description} 
                             td 
+                                if item.createdBy
+                                    -const date = moment(item.createdBy.dateCreated).format("HH:mm:ss DD/MM/YYYY")
+                                    p Người tạo: 
+                                        b 
+                                            i #{item.createdBy.nameAccountUpdated}
+                                    p #{date}
+                            td 
+                                if item.lastUpdatedBy
+                                    -const dateUpdated = moment(item.lastUpdatedBy.dateUpdated).format("HH:mm:ss DD/MM/YYYY")
+                                    p Người cập nhật:
+                                        b 
+                                            i #{item.lastUpdatedBy.nameAccountUpdated};
+                                    p #{dateUpdated}
+                                else 
+                                    p Chưa có cập nhật nào
+                            td 
                                 if roleLogin.permission.includes("role_edit")
                                     a.btn.btn-warning.btn-sm(href=`${frefixAdmin}/role/edit/${item.id}`) Sửa
                                 if roleLogin.permission.includes("role_delete")
-                                    button(class="btn btn-danger btn-sm ml-1" id-role=item.id button-delete) Xóa
+                                    button.btn.btn-danger.btn-sm.ml-1(id-role=item.id button-delete) Xóa
+                                a.btn.btn-success.btn-sm(href=`${frefixAdmin}/role/logUpdated/${item.id}`) Lịch sử  
             else 
                 .container.mt-5
                     .row.justify-content-center

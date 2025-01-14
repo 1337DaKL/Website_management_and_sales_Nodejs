@@ -1,0 +1,30 @@
+extends ../../layouts/defaut.pug
+block main 
+    h1 Thông tin cá nhân của #{userLogin.fullName}
+    if (userLogin.avartar)
+        img(src=userLogin.avartar width="150px" class="mb-3")
+    else
+        img(src="/admin/images/avatar.png" width="150px" class="mb-3")
+    
+    if (userLogin.fullName)
+        p Họ tên: 
+            b #{userLogin.fullName}
+    
+    if (userLogin.email)
+        p Email: 
+            b #{userLogin.email}
+    
+    if (userLogin.phone)
+        p Số điện thoại: 
+            b #{userLogin.phone}
+    
+    span Trạng thái:
+    span
+        b #{userLogin.status === "active" ? "Hoạt động" : "Dừng hoạt động"}
+    
+    if (roleLogin.title)
+        p Phân quyền: 
+            b #{roleLogin.title}
+    
+    a(href=`${frefixAdmin}/my-account/edit` class="btn btn-primary")
+        | Chỉnh sửa thông tin

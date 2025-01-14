@@ -6,10 +6,14 @@ header
                     a(href="/admin/" class="text-white font-weight-bold")
                         i.bi.bi-shield-lock 
                         | ADMIN
-            .col-8
+            .col-7
                 h5.text-center Quản lý hệ thống
-            .col-1.text-right
-                .inner-menu
-                    button(class="btn btn-light btn-sm text-success" button-logout path=frefixAdmin)
-                        i.bi.bi-arrow-left-circle 
-                        | Đăng xuất
+            .col-1 
+                div(class="circle-container")
+                    div(class="circle-frame")
+                        img(src=userLogin.avartar alt="no")
+                    a(class="circle-name" href=`${frefixAdmin}/my-account`) #{userLogin.fullName}
+            .col-1
+                button(class="btn btn-danger btn-sm" button-logout path=frefixAdmin)
+                    i.bi.bi-arrow-left-circle 
+                    | Đăng xuất
