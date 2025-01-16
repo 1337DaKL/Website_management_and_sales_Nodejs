@@ -1,0 +1,28 @@
+extends ../../layouts/defaut.pug
+include ../../mixins/product.pug
+include ../../mixins/box-head.pug
+block main
+    // Banner hoặc giới thiệu
+    .jumbotron.jumbotron-fluid.text-center.bg-light
+        .container
+            h1.display-4 Chào Mừng Đến Với Cửa Hàng Của Chúng Tôi
+            p.lead Nơi mua sắm sản phẩm chất lượng với giá tốt nhất.
+        .container.my-3
+            .container.mt-5#products
+                h2.text-center Sản Phẩm Mới Nhất
+                .row.mt-4
+                    +product(productsNew)
+
+    // Phần giới thiệu
+    .container.mt-5#about
+        h2.text-center Về Chúng Tôi
+        p.mt-4
+            | 1337_DaKL là một cửa hàng trực tuyến cung cấp các sản phẩm đa dạng, chất lượng với giá cả phải chăng. Chúng tôi tự hào mang đến cho khách hàng những trải nghiệm mua sắm tuyệt vời, dịch vụ giao hàng nhanh chóng và chất lượng sản phẩm tốt nhất.
+        .container.my-3
+            .container.mt-5#products
+                h2.text-center Những sản phẩm nổi bật 
+                .row.mt-4
+                    +product(productFeatured)
+    //- // Phần sản phẩm
+    
+    

@@ -4,7 +4,7 @@ if(buttonsRestore)
 {
     buttonsRestore.forEach((button) => {
         button.addEventListener("click" , () => {
-            const confirmRestore = confirm("Bạn có muốn KHÔI PHỤC lại sản phẩm không?");
+            const confirmRestore = confirm("Bạn có muốn KHÔI PHỤC lại danh mục sản phẩm không?");
             if(confirmRestore)
             {
                 const id = button.getAttribute("id-category");
@@ -25,7 +25,7 @@ if(buttonsDelete)
 {
     buttonsDelete.forEach((button) => {
         button.addEventListener("click" , () => {
-            const confirmDelete = confirm("Bạn có thực sự muốn XÓA VĨNH VIỄN sản phẩm này không?");
+            const confirmDelete = confirm("Bạn có thực sự muốn XÓA VĨNH VIỄN danh mục sản phẩm này không?");
             if(confirmDelete)
             {
                 const id = button.getAttribute("id-category");
@@ -73,7 +73,7 @@ formOption.addEventListener("submit" , (e) => {
     }
     else
     {
-        alert("Chưa sản phẩm nào được chọn!!")
+        alert("Chưa danh mục sản phẩm nào được chọn!!")
     }
 })
 //end option

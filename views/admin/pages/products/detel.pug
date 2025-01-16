@@ -25,13 +25,13 @@ block main
                 span Ngày tạo: 
                 span 
                   b #{date} bởi 
-                    i #{product.nameCreated}
+                    i #{product.createdBy.nameAccountCreated}
               div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
                 span Giảm giá hiện tại: 
                 span(style="color: #dc3545; font-weight: 600;") #{product.discount}%
               div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
                 span Giá bán: 
-                span(style="color:rgb(53, 220, 125); font-weight: 600;") #{priceString} vnd
+                span(style="color:rgb(53, 220, 125); font-weight: 600;") #{product.priceString} vnd
               div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
                 span Mô tả: 
                 p(style="font-size: 18px; line-height: 1.8; color: #555; margin-bottom: 30px;") !{product.description}

@@ -70,6 +70,6 @@ formOption.addEventListener("submit" , (e) => {
     }
     else
     {
-        alert("Chưa sản phẩm nào được chọn!!")
+        alert("Chưa quyền quản trị nào được chọn!!")
     }
 })

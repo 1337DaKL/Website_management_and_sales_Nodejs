@@ -203,3 +203,366 @@
 .sub-menu ul li:hover > ul {
     display: block;
 }
+
+.inner-featured {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ff6f61;  /* Màu đỏ tươi */
+    color: white;  /* Chữ màu trắng */
+    font-weight: bold;  /* In đậm chữ */
+    padding: 5px 15px;  /* Khoảng cách từ chữ đến viền */
+    border-radius: 15px;  /* Bo góc */
+    font-size: 14px;  /* Kích thước chữ */
+    text-transform: uppercase;  /* Chữ hoa */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);  /* Bóng đổ nhẹ */
+    z-index: 10;  /* Đảm bảo phần tử nổi trên các phần tử khác */
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;  /* Hiệu ứng chuyển động khi hover */
+}
+
+.inner-featured:hover {
+    transform: scale(1.1);  /* Phóng to khi hover */
+    background-color: #ff4d40;  /* Thay đổi màu nền khi hover */
+}
+
+
+
+/* Định dạng chung cho các nút hành động */
+.product-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px; /* Khoảng cách giữa các nút */
+  align-items: center;
+}
+
+/* Nút thêm vào giỏ hàng */
+.btn-add-to-cart {
+  background-color: #4CAF50; /* Màu xanh lá cây tự nhiên */
+  color: white;
+  border: 2px solid #4CAF50;
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 50px; /* Viền tròn */
+  cursor: pointer;
+  transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
+  width: 48%;
+  text-align: center;
+  display: inline-block;
+  box-sizing: border-box;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-add-to-cart:hover {
+  background-color: #45a049; /* Đổi màu khi hover */
+  border-color: #45a049;
+  transform: translateY(-4px); /* Nâng nút lên khi hover */
+  box-shadow: 0px 4px 20px rgba(72, 178, 89, 0.3); /* Thêm hiệu ứng bóng mờ */
+}
+
+.btn-add-to-cart:active {
+  transform: translateY(2px); /* Hiệu ứng khi nhấn */
+  box-shadow: none;
+}
+
+/* Nút chi tiết sản phẩm */
+.btn-detail {
+  background-color: transparent;
+  color: #007bff; /* Màu xanh dương nổi bật */
+  border: 2px solid #007bff;
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  width: 48%;
+  text-align: center;
+  display: inline-block;
+  box-sizing: border-box;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-detail:hover {
+  background-color: #007bff;
+  color: white;
+  border-color: #0056b3;
+  transform: translateY(-4px); /* Nâng nút lên khi hover */
+  box-shadow: 0px 4px 20px rgba(0, 123, 255, 0.3); /* Thêm hiệu ứng bóng mờ */
+}
+
+.btn-detail:active {
+  transform: translateY(2px); /* Hiệu ứng khi nhấn */
+  box-shadow: none;
+}
+/* Định dạng chung cho sản phẩm */
+.product-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    text-align: center;
+  }
+  
+  .product-item:hover {
+    transform: translateY(-5px); /* Hiệu ứng di chuyển lên nhẹ khi hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Bóng mờ tăng lên */
+  }
+  
+  /* Thêm hiệu ứng cho hình ảnh sản phẩm */
+  .inner-image {
+    position: relative;
+  }
+  
+  .inner-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .inner-image:hover img {
+    transform: scale(1.1); /* Phóng to hình ảnh khi hover */
+  }
+  
+  /* Nút "Nổi bật" */
+  .inner-featured {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ff6f61;
+    color: white;
+    padding: 5px 15px;
+    font-weight: bold;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  /* Tiêu đề sản phẩm */
+  .inner-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin: 15px 0;
+    text-transform: capitalize;
+  }
+  
+  /* Giá mới */
+  .inner-price-new {
+    color: #28a745;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  /* Giá cũ */
+  .inner-price-old {
+    color: #6c757d;
+    text-decoration: line-through;
+    font-size: 16px;
+    margin-top: 5px;
+  }
+  
+  /* Giảm giá */
+  .inner-discount {
+    color: #d9534f;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  /* Các nút hành động */
+  .product-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Nút "Thêm vào giỏ hàng" */
+  .product-actions button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .product-actions button:hover {
+    background-color: #218838;
+    transform: translateY(-4px);
+    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+  }
+  
+  /* Nút "Chi tiết" */
+  .product-actions a.btn-detail {
+    background-color: transparent;
+    color: #007bff;
+    border: 2px solid #007bff;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .product-actions a.btn-detail:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+    transform: translateY(-4px);
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+  }
+  
+  /* Icon trong nút */
+  .product-actions i {
+    font-size: 18px;
+  }
+  
+
+
+
+
+  /* DETEL */
+/* Tổng thể chi tiết sản phẩm */
+.product-detail {
+  padding: 20px 0;
+  background-color: #f9f9f9;
+}
+
+/* Cột ảnh và mô tả */
+.product-detail .inner-thumb {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.product-detail .inner-thumb img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Mô tả bên dưới chiếm toàn màn hình */
+.product-detail .inner-desc {
+  width: 100%; /* Chiều rộng toàn màn hình */
+  padding: 20px;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #444;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; /* Cách biệt với phần trên */
+}
+
+
+/* Cột thông tin bên phải */
+.product-detail .inner-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.product-detail .inner-category {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.product-detail .inner-category a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.product-detail .inner-category a:hover {
+  text-decoration: underline;
+}
+
+.product-detail .inner-price-new {
+  font-size: 24px;
+  font-weight: 600;
+  color: green;
+  margin-bottom: 10px;
+}
+
+.product-detail .inner-price-old {
+  font-size: 20px;
+  font-weight: 400;
+  color: #999;
+  text-decoration: line-through;
+  margin-bottom: 10px;
+}
+
+.product-detail .inner-percent {
+  font-size: 18px;
+  color: red;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.product-detail .inner-stock {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* Form tổng thể */
+/* Form tổng thể */
+.product-detail form {
+  display: flex;
+  flex-direction: column; /* Xếp các phần tử thành 2 hàng */
+  align-items: start; /* Canh trái */
+  gap: 10px; /* Khoảng cách giữa hai hàng */
+  margin-top: 20px;
+}
+
+/* Ô nhập số lượng */
+.product-detail form input[type="number"] {
+  width: 200px; /* Chiều rộng cố định */
+  height: 40px; /* Chiều cao đồng bộ */
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Nút thêm vào giỏ hàng */
+.product-detail form button {
+  width: 200px; /* Độ rộng bằng với ô nhập số lượng */
+  height: 40px; /* Chiều cao bằng nhau */
+  padding: 5px 10px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.product-detail form button:hover {
+  background-color: #218838;
+}
+
+

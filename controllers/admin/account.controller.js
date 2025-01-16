@@ -222,24 +222,89 @@ module.exports.changeMulti = async (req, res) => {
     try {
         const ids = req.body.ids.split(",");
         const type = req.body.type;
+        const updatedBy = {
+            idAccountUpdated: res.locals.userLogin.id,
+            nameAccountUpdated: res.locals.userLogin.fullName,
+            dateUpdated: new Date()
+        };
         switch (type) {
             case "active":
-                await Account.updateMany(
-                    {
-                        _id: { $in: ids }
-                    },
-                    { status: "active" }
-                )
+                for (let id of ids) {
+                    const oldAccount = await Account.findOne(
+                        {
+                            _id: id,
+                            deleted: false
+                        }
+                    ).select("-token -deleted -deletedBy -createdBy -updatedBy");
+                    await Account.updateOne(
+                        {
+                            _id: id
+                        },
+                        {
+                            status: "active"
+                        }
+                    );
+                    const newAccount = await Account.findOne(
+                        {
+                            _id: id,
+                            deleted: false
+                        }
+                    ).select("-token -deleted -deletedBy -createdBy -updatedBy");
+                    await Account.updateOne(
+                        {
+                            _id: id
+                        },
+                        {
+                            $push: {
+                                updatedBy: {
+                                    ...updatedBy,
+                                    oldAccount: oldAccount,
+                                    newAccount: newAccount
+                                }
+                            }
+                        }
+                    )
+                }
                 req.flash("success", "Thay đổi thành trạng thái hoạt động thành công !!")
                 res.redirect("back");
                 break;
             case "inactive":
-                await Account.updateMany(
-                    {
-                        _id: { $in: ids }
-                    },
-                    { status: "inactive" }
-                )
+                for (let id of ids) {
+                    const oldAccount = await Account.findOne(
+                        {
+                            _id: id,
+                            deleted: false
+                        }
+                    ).select("-token -deleted -deletedBy -createdBy -updatedBy");
+                    await Account.updateOne(
+                        {
+                            _id: id
+                        },
+                        {
+                            status: "inactive"
+                        }
+                    );
+                    const newAccount = await Account.findOne(
+                        {
+                            _id: id,
+                            deleted: false
+                        }
+                    ).select("-token -deleted -deletedBy -createdBy -updatedBy");
+                    await Account.updateOne(
+                        {
+                            _id: id
+                        },
+                        {
+                            $push: {
+                                updatedBy: {
+                                    ...updatedBy,
+                                    oldAccount: oldAccount,
+                                    newAccount: newAccount
+                                }
+                            }
+                        }
+                    )
+                }
                 req.flash("success", "Thay đổi thành trạng thái dừng hoạt động thành công !!")
                 res.redirect("back");
                 break;
@@ -264,4 +329,34 @@ module.exports.changeMulti = async (req, res) => {
         res.redirect("back");
         return;
     }
+}
+module.exports.viewLogUpdateAccount = async (req, res) => {
+    const account = await Account.findOne(
+        {
+            deleted: false,
+            _id: req.params.id
+        }
+    )
+    const logsUpdate = account.updatedBy;
+    for (let index in logsUpdate) {
+        const oldRole = await Role.findOne(
+            {
+                deleted: false,
+                _id: logsUpdate[index].oldAccount.idRole
+            }
+        )
+        const newRole = await Role.findOne(
+            {
+                deleted: false,
+                _id: logsUpdate[index].newAccount.idRole
+            }
+        )
+        logsUpdate[index].oldRole = oldRole;
+        logsUpdate[index].newRole = newRole;
+    }
+    console.log(logsUpdate)
+    res.render("admin/pages/account/logUpdate.pug", {
+        titlePage: "Lịch sử cập nhật tài khoản",
+        logs: logsUpdate
+    })
 }

@@ -12,6 +12,7 @@ const authRouter = require("./auth.router.js");
 const authMiddleware = require("../../middlewares/admin/auth.middleware.js");
 const myAccountRouter = require("./myAccount.router.js");
 const dustbinCategoryRouter = require("./dustbinCategory.router.js");
+const dustbinAccountRouter = require("./dustbinAccount.router.js");
 module.exports = (app) => {
     const PATH_ADMIN = systemConfig.prefixAdmin;
     app.use(PATH_ADMIN + "/dashboard", authMiddleware.requireAuth, dashboardRouter);
@@ -25,5 +26,6 @@ module.exports = (app) => {
     app.use(PATH_ADMIN + "/account", authMiddleware.requireAuth, accountRouter);
     app.use(PATH_ADMIN + "/auth", authRouter);
     app.use(PATH_ADMIN + "/my-account", authMiddleware.requireAuth, myAccountRouter);
-    app.use(PATH_ADMIN + "/dustbinCategory" , authMiddleware.requireAuth ,dustbinCategoryRouter )
+    app.use(PATH_ADMIN + "/dustbinCategory", authMiddleware.requireAuth, dustbinCategoryRouter);
+    app.use(PATH_ADMIN + "/dustbinAccount", authMiddleware.requireAuth, dustbinAccountRouter);
 };

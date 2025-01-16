@@ -23,6 +23,20 @@ block main
                                 td Tiêu đề
                                 td #{update.oldProduct.title}
                                 td #{update.newProduct.title}
+                        if update.oldProduct.featured != update.newProduct.featured
+                            tr 
+                                td Sản phẩm nổi bật
+                                
+                                td  
+                                    if update.oldProduct.featured == "1"
+                                        p Nổi bật
+                                    else 
+                                        p Không nổi bật
+                                td 
+                                    if update.newProduct.featured == "1"
+                                        p Nổi bật
+                                    else 
+                                        p Không nổi bật
                         if update.oldNameCategory != update.newNameCategory
                             tr 
                                 td Danh mục

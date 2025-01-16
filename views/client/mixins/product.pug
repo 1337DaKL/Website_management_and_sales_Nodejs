@@ -1,0 +1,19 @@
+mixin product(products)
+  each item in products
+    .col-4.mb-3
+      .product-item
+        .inner-image
+          img(src=item.thumbnail, alt="#")
+          if item.featured == "1"
+            .inner-featured Nổi bật
+        .inner-content
+          h3.inner-title #{item.title}
+          .inner-price-new Giá mới: #{item.newPrice} vnđ
+          .inner-price-old Giá cũ: #{item.priceString} vnđ
+          .inner-discount Sale: #{item.discount} %
+
+          // Nút thêm vào giỏ hàng và chi tiết
+          .product-actions
+            form(action="/cart/add/#{item.id}" method="POST")
+                button.bi.bi-cart-plus(type="submit") 
+            a(href=`/products/detel/${item.slug}` class="btn btn-detail") Chi tiết

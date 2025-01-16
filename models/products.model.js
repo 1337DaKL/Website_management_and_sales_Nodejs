@@ -11,18 +11,21 @@ const productSchema = new mongoose.Schema(
         status: String,
         description: String,
         stock: Number,
+        featured: String,
         slug: { type: String, slug: "title", unique: true },
         position: Number,
-        deleted : {
-            type : Boolean,
-            default : false
+        deleted: {
+            type: Boolean,
+            default: false
         },
         deletedBy: {
             idAccountDeleted: String,
+            nameAccountCreated: String,
             dateDeleted: Date
         },
         createdBy: {
             idAccountCreated: String,
+            nameAccountCreated: String,
             dateCreated: {
                 type: Date,
                 default: Date.now
@@ -31,12 +34,13 @@ const productSchema = new mongoose.Schema(
         updatedBy: [
             {
                 idAccountUpdated: String,
-                nameAccountUpdated : String,
+                nameAccountUpdated: String,
                 dateUpdated: Date,
                 oldProduct: {
                     title: String,
                     category: String,
-                    nameCategory : String,
+                    nameCategory: String,
+                    featured: String,
                     price: Number,
                     thumbnail: String,
                     discount: Number,
@@ -48,7 +52,8 @@ const productSchema = new mongoose.Schema(
                 newProduct: {
                     title: String,
                     category: String,
-                    nameCategory : String,
+                    nameCategory: String,
+                    featured: String,
                     price: Number,
                     thumbnail: String,
                     discount: Number,

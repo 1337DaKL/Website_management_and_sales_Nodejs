@@ -11,7 +11,20 @@ html
         link(rel="stylesheet" ,href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css")
     body
         include ../partials/header.pug 
-
+        -if(messages.error)
+            .messages.info
+                span(
+                    class="alert alert-danger" 
+                    show-alert 
+                    data-time= "5000"
+                ) #{messages.error} <button type="button" class="btn-close" aria-label="Close" button-close-alert></button>
+        -if(messages.success)
+            .messages.info
+                span(
+                    class="alert alert-success" 
+                    show-alert 
+                    data-time= "5000"
+                ) #{messages.success} <button type="button" class="btn-close" aria-label="Close" button-close-alert></button>
         block main
 
         include ../partials/footer.pug

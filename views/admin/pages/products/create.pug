@@ -19,6 +19,25 @@ block main
                     placeholder="Nhập tên sản phẩm"
                     required
                 )
+            div(class="form-group form-check form-check-inline")
+                label(for="featured" class="form-check-label" style="margin-right: 10px") Nổi bật
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="featured"
+                    name="featured"
+                    value="1"
+                )
+            div(class="form-group form-check form-check-inline")
+                label(for="nonFeatured" class="form-check-label" style="margin-right: 10px") Không    
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="nonFeatured"
+                    name="featured"
+                    value="0"
+                    checked
+                )
             div(class="form-group")
                 label(for="category") Chọn loại sản phẩm cha
                 br

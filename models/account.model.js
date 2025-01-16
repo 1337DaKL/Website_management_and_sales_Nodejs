@@ -43,7 +43,6 @@ const accountSchema = new mongoose.Schema(
                     email: String,
                     password: String,
                     idRole: String,
-                    nameRole: String,
                     telephone: String,
                     address: String,
                     status: String
@@ -54,7 +53,6 @@ const accountSchema = new mongoose.Schema(
                     email: String,
                     password: String,
                     idRole: String,
-                    nameRole: String,
                     telephone: String,
                     address: String,
                     status: String

@@ -3,6 +3,6 @@ mixin tree-category(categorys)
         ul
             each category in categorys
                 li
-                    a.nav-link(href=`products/${category.slug}`) #{category.title}
+                    a.nav-link(href=`/products/${category.slug}`) #{category.title}
                     if category.childen && category.childen.length > 0
                         +tree-category(category.childen)

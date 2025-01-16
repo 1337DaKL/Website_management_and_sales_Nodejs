@@ -198,6 +198,7 @@ module.exports.deleteProduct = async (req, res) => {
     const id = req.params.id;
     const deletedBy = {
         idAccountDeleted: res.locals.userLogin.id,
+        nameAccountCreated: res.locals.userLogin.fullName,
         dateDeleted: new Date()
     }
     await Product.updateOne({ _id: id }, { $set: { deleted: true, deletedBy: deletedBy } });
@@ -237,7 +238,8 @@ module.exports.createNewProduct = async (req, res) => {
         req.body.position = parseInt(req.body.position);
     }
     const createdBy = {
-        idAccountCreated: res.locals.userLogin.id
+        idAccountCreated: res.locals.userLogin.id,
+        nameAccountCreated: res.locals.userLogin.fullName
     }
     if (createdBy) {
         req.body.createdBy = createdBy
@@ -258,7 +260,9 @@ module.exports.editProduct = async (req, res) => {
             deleted: false
         }
         const productID = await Product.findOne(find);
-        productID.price = productID.price.toString().substring(0, productID.price.toString().length - 3);
+        if (productID.price) {
+            productID.price = productID.price.toString().substring(0, productID.price.toString().length - 3);
+        }
         const cate = await Category.findOne({ _id: productID.category });
         res.render("admin/pages/products/edit.pug", {
             titlePage: "Chỉnh sửa sản phẩm",
@@ -321,16 +325,17 @@ module.exports.detelProduct = async (req, res) => {
             _id: req.params.id,
             deleted: false
         }
-        const productDetel = await Product.findOne(find);
-        const nameCreated = await Account.findOne({ _id: productDetel.createdBy.idAccountCreated });
-        productDetel.nameCreated = nameCreated.fullName;
+        let productDetel = await Product.findOne(find);
+        if (productDetel.price) {
+            productDetel.priceString = priceString(productDetel.price);
+        }
         res.render("admin/pages/products/detel.pug", {
             title: `Chi tiết sản phầm ${productDetel.title}`,
-            product: productDetel,
-            priceString: priceString(productDetel.price),
+            product: productDetel
         })
     }
     catch (error) {
+        req.flash("error", "Lỗi lấy dữ liệu");
         res.redirect("back");
     }
 }
