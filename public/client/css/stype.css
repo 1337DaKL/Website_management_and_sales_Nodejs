@@ -351,6 +351,11 @@
     color: #333;
     margin: 15px 0;
     text-transform: capitalize;
+    white-space: nowrap; /* Không cho xuống dòng */
+    overflow: hidden; /* Ẩn phần vượt quá kích thước */
+    text-overflow: ellipsis; /* Thêm dấu "..." */
+    display: block;
+    max-width: 100%; /* Đặt kích thước tối đa phù hợp */
   }
   
   /* Giá mới */

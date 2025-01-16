@@ -2,11 +2,21 @@ const Product = require("../../models/products.model");
 const priceString = require("../../helper/chuanHoaGiaHang");
 const Category = require("../../models/category.model");
 module.exports.index = async (req, res) => {
-    const products = await Product.find({
+    let find = {
         status: "active",
         deleted: false
-    });
-
+    }
+    const pagination = {
+        limitPage: 12,
+        currentPage: 1
+    }
+    if (req.query.page) {
+        pagination.currentPage = parseInt(req.query.page);
+    }
+    pagination.skipPage = (pagination.currentPage - 1) * pagination.limitPage;
+    const countProducts = await Product.countDocuments(find);
+    pagination.totalPage = Math.ceil(countProducts / pagination.limitPage);
+    const products = await Product.find(find).limit(pagination.limitPage).skip(pagination.skipPage);
     const newProducts = products.map((test) => {
         test.newPrice = priceString((test.price - test.price * test.discount / 100).toFixed(0));
         test.priceString = priceString(test.price);
@@ -14,7 +24,8 @@ module.exports.index = async (req, res) => {
     });
     res.render("client/pages/products/index.pug", {
         titlePage: "Trang danh sach san pham",
-        products: newProducts
+        products: newProducts,
+        pagination: pagination
     });
 }
 module.exports.viewProductSlug = async (req, res) => {
@@ -41,21 +52,36 @@ module.exports.viewProductSlug = async (req, res) => {
     }
 
     const arrayCategory = await getChildCategory(categoryProduct.id);
-    const products = await Product.find({
+    let find = {
         status: "active",
         deleted: false,
         category: {
             $in: [categoryProduct.id, ...arrayCategory.map(c => c.id)]
         }
-    });
+    }
+    const pagination = {
+        limitPage: 12,
+        currentPage: 1
+    }
+    if (req.query.page) {
+        pagination.currentPage = parseInt(req.query.page);
+    }
+    pagination.skipPage = (pagination.currentPage - 1) * pagination.limitPage;
+    const countProducts = await Product.countDocuments(find);
+    pagination.totalPage = Math.ceil(countProducts / pagination.limitPage);
+    const products = await Product.find(find).limit(pagination.limitPage).skip(pagination.skipPage);
     const newProducts = products.map((test) => {
-        test.newPrice = priceString((test.price - test.price * test.discount / 100).toFixed(0));
-        test.priceString = priceString(test.price);
+        if(test.price)
+        {
+            test.newPrice = priceString((test.price - test.price * test.discount / 100).toFixed(0));
+            test.priceString = priceString(test.price);
+        }
         return test;
     });
     res.render("client/pages/products/index.pug", {
         titlePage: "Trang danh sach san pham",
-        products: newProducts
+        products: newProducts,
+        pagination : pagination
     });
 
 }
@@ -71,11 +97,15 @@ module.exports.viewDetel = async (req, res) => {
         product.newPrice = priceString((product.price - product.price * product.discount / 100).toFixed(0));
         product.priceString = priceString(product.price);
     }
-    const category = await Category.findOne({
-        deleted: false,
-        status: "active",
-        _id: product.category
-    })
+    let category = "No";
+    if(product.category)
+    {
+        category = await Category.findOne({
+            deleted: false,
+            status: "active",
+            _id: product.category
+        })
+    }
     res.render("client/pages/products/detel.pug",
         {
             titlePage: "Chi tiết sản phẩm",

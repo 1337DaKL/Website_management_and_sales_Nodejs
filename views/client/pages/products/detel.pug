@@ -11,7 +11,7 @@ block main
             if product.featured == "1"
               .inner-featured Nổi bật
         .col-8
-          h1(class="inner-title") #{product.title}
+          h1 #{product.title}
           if category
             .inner-category
               span Danh mục 
@@ -27,7 +27,9 @@ block main
             .inner-percent Giảm tới <span>#{product.discount}%</span>
 
           if product.stock
-            .inner-stock Còn lại <span>#{product.stock}</span> sản phẩm.
+            .inner-stock Còn lại 
+              b 
+                <span>#{product.stock}</span> sản phẩm.
 
           form(
             action="cart/add/${product.id}"

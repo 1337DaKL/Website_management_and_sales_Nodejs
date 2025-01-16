@@ -1,0 +1,51 @@
+mixin pagination(pagination)
+    nav
+        ul(class="pagination")
+            li(class="page-item")
+                if(pagination.currentPage > 1)
+                    button(
+                        class="page-link"
+                        button-pagination=1
+                        ) Trang đầu
+            li(class="page-item")
+                if(pagination.currentPage > 1)
+                    button(
+                        class="page-link"
+                        button-pagination=pagination.currentPage - 1
+                        ) <<
+            if(pagination.currentPage >= 1)
+                if (pagination.currentPage == 1)
+                    -for (let i = 1 ; i <= pagination.totalPage ; i++)
+                        if(i <= 3)
+                            li(class="page-item")
+                                button(
+                                    class=`page-link ${pagination.currentPage == i ? "active" : ""}`
+                                    button-pagination=i
+                                    ) #{i}
+                else if (pagination.currentPage == pagination.totalPage)
+                    -for (let i = pagination.totalPage - 2 ; i <= pagination.totalPage ; i++)
+                        if(i >=  1)
+                            li(class="page-item")
+                                button(
+                                    class=`page-link ${pagination.currentPage == i ? "active" : ""}`
+                                    button-pagination=i
+                                    ) #{i}
+                else 
+                    -for (let i = pagination.currentPage - 1 ; i <= pagination.currentPage + 1 ; i++)
+                        li(class="page-item")
+                            button(
+                                class=`page-link ${pagination.currentPage == i ? "active" : ""}`
+                                button-pagination=i
+                                ) #{i}
+            li(class="page-item")
+                if (pagination.currentPage < pagination.totalPage)
+                    button(
+                        class="page-link"
+                        button-pagination=pagination.currentPage + 1
+                        ) >>
+            li(class="page-item")
+                if (pagination.currentPage < pagination.totalPage)
+                    button(
+                        class="page-link"
+                        button-pagination=pagination.totalPage
+                        ) Trang cuối
