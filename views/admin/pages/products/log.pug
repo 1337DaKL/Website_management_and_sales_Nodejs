@@ -1,92 +1,95 @@
 extends ../../layouts/defaut.pug
 block main 
     h3 Lịch sử thay đổi sản phẩm 
-    div.history-container
-        each update , index in updatedBy.reverse()
-            div.history-item
-                h1  
-                    b 
-                        i Số thứ tự : #{index + 1}
-                h3 Thay đổi bởi: #{update.nameAccountUpdated} (ID: #{update.idAccountUpdated})
-                - const date = moment(update.dateUpdated).format("DD/MM/YYYY HH:mm:ss")
-                p Thời gian thay đổi: #{date}
-                h3 Thông tin thay đổi gồm : 
-                table
-                    thead 
-                        tr 
-                            th Nội dung
-                            th Thông tin cũ 
-                            th Thông tin mới
-                    tbody 
-                        if update.oldProduct.title != update.newProduct.title
+    if roleLogin.permission.includes("products_view-log-updated")
+        div.history-container
+            each update , index in updatedBy.reverse()
+                div.history-item
+                    h1  
+                        b 
+                            i Số thứ tự : #{index + 1}
+                    h3 Thay đổi bởi: #{update.nameAccountUpdated} (ID: #{update.idAccountUpdated})
+                    - const date = moment(update.dateUpdated).format("DD/MM/YYYY HH:mm:ss")
+                    p Thời gian thay đổi: #{date}
+                    h3 Thông tin thay đổi gồm : 
+                    table
+                        thead 
                             tr 
-                                td Tiêu đề
-                                td #{update.oldProduct.title}
-                                td #{update.newProduct.title}
-                        if update.oldProduct.featured != update.newProduct.featured
-                            tr 
-                                td Sản phẩm nổi bật
-                                
-                                td  
-                                    if update.oldProduct.featured == "1"
-                                        p Nổi bật
-                                    else 
-                                        p Không nổi bật
-                                td 
-                                    if update.newProduct.featured == "1"
-                                        p Nổi bật
-                                    else 
-                                        p Không nổi bật
-                        if update.oldNameCategory != update.newNameCategory
-                            tr 
-                                td Danh mục
-                                td #{update.oldNameCategory}
-                                td #{update.newNameCategory}
-                        if update.oldProduct.price != update.newProduct.price
-                            tr 
-                                td Giá
-                                td #{update.oldProduct.price}
-                                td #{update.newProduct.price}
-                        if update.oldProduct.thumbnail != update.newProduct.thumbnail
-                            tr 
-                                td Hình ảnh
-                                td 
-                                    img(src=update.oldProduct.thumbnail, alt="New Thumbnail", style="max-width: 150px;")
-                                td 
-                                    img(src=update.newProduct.thumbnail, alt="New Thumbnail", style="max-width: 150px;")
-                        if update.oldProduct.discount != update.newProduct.discount
-                            tr 
-                                td Giảm giá
-                                td #{update.oldProduct.discount}
-                                td #{update.newProduct.discount}
-                        if update.oldProduct.status != update.newProduct.status
-                            tr 
-                                td Trạng thái
-                                
-                                td  
-                                    if update.oldProduct.status == "active"
-                                        p Hoạt động
-                                    else 
-                                        p Không hoạt động
-                                td 
-                                    if update.newProduct.status == "active"
-                                        p Hoạt động
-                                    else 
-                                        p Không hoạt động
-                        if update.oldProduct.stock != update.newProduct.stock
-                            tr 
-                                td Số lượng còn lại
-                                td #{update.oldProduct.stock}
-                                td #{update.newProduct.stock}
-                        if update.oldProduct.position != update.newProduct.position
-                            tr 
-                                td Vị trí
-                                td #{update.oldProduct.position}
-                                td #{update.newProduct.position}
-                        if update.oldProduct.description != update.newProduct.description
-                            tr 
-                                td Mô tả
-                                td !{update.oldProduct.description}
-                                td !{update.newProduct.description}
+                                th Nội dung
+                                th Thông tin cũ 
+                                th Thông tin mới
+                        tbody 
+                            if update.oldProduct.title != update.newProduct.title
+                                tr 
+                                    td Tiêu đề
+                                    td #{update.oldProduct.title}
+                                    td #{update.newProduct.title}
+                            if update.oldProduct.featured != update.newProduct.featured
+                                tr 
+                                    td Sản phẩm nổi bật
+                                    
+                                    td  
+                                        if update.oldProduct.featured == "1"
+                                            p Nổi bật
+                                        else 
+                                            p Không nổi bật
+                                    td 
+                                        if update.newProduct.featured == "1"
+                                            p Nổi bật
+                                        else 
+                                            p Không nổi bật
+                            if update.oldNameCategory != update.newNameCategory
+                                tr 
+                                    td Danh mục
+                                    td #{update.oldNameCategory}
+                                    td #{update.newNameCategory}
+                            if update.oldProduct.price != update.newProduct.price
+                                tr 
+                                    td Giá
+                                    td #{update.oldProduct.price}
+                                    td #{update.newProduct.price}
+                            if update.oldProduct.thumbnail != update.newProduct.thumbnail
+                                tr 
+                                    td Hình ảnh
+                                    td 
+                                        img(src=update.oldProduct.thumbnail, alt="New Thumbnail", style="max-width: 150px;")
+                                    td 
+                                        img(src=update.newProduct.thumbnail, alt="New Thumbnail", style="max-width: 150px;")
+                            if update.oldProduct.discount != update.newProduct.discount
+                                tr 
+                                    td Giảm giá
+                                    td #{update.oldProduct.discount}
+                                    td #{update.newProduct.discount}
+                            if update.oldProduct.status != update.newProduct.status
+                                tr 
+                                    td Trạng thái
+                                    
+                                    td  
+                                        if update.oldProduct.status == "active"
+                                            p Hoạt động
+                                        else 
+                                            p Không hoạt động
+                                    td 
+                                        if update.newProduct.status == "active"
+                                            p Hoạt động
+                                        else 
+                                            p Không hoạt động
+                            if update.oldProduct.stock != update.newProduct.stock
+                                tr 
+                                    td Số lượng còn lại
+                                    td #{update.oldProduct.stock}
+                                    td #{update.newProduct.stock}
+                            if update.oldProduct.position != update.newProduct.position
+                                tr 
+                                    td Vị trí
+                                    td #{update.oldProduct.position}
+                                    td #{update.newProduct.position}
+                            if update.oldProduct.description != update.newProduct.description
+                                tr 
+                                    td Mô tả
+                                    td !{update.oldProduct.description}
+                                    td !{update.newProduct.description}
+    else 
+        h2 Bạn không có quyền truy cập vào trang này
       
 

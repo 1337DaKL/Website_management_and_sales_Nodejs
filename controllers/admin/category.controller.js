@@ -61,146 +61,158 @@ module.exports.index = async (req, res) => {
     })
 }
 module.exports.changeStatus = async (req, res) => {
-    try {
-        const status = req.params.status;
-        const id = req.params.id;
-        const updatedBy = {
-            idAccountUpdated: res.locals.userLogin.id,
-            nameAccountUpdated: res.locals.userLogin.fullName,
-            dateUpdated: new Date()
-        };
-        const oldCategory = await Category.findOne({ _id: id }).select("-deleted -deletedBy -createdBy -slug -updatedBy");
-        await Category.updateOne({ _id: id }, { status: status });
-        const newCategory = await Category.findOne({ _id: id }).select("-deleted -deletedBy -createdBy -slug -updatedBy");
-        await Category.updateOne({ _id: id }, {
-            $push: {
-                updatedBy: {
-                    ...updatedBy,
-                    oldCategory: oldCategory,
-                    newCategory: newCategory
+    if (res.locals.roleLogin.permission.includes("products-category_edit")) {
+        try {
+            const status = req.params.status;
+            const id = req.params.id;
+            const updatedBy = {
+                idAccountUpdated: res.locals.userLogin.id,
+                nameAccountUpdated: res.locals.userLogin.fullName,
+                dateUpdated: new Date()
+            };
+            const oldCategory = await Category.findOne({ _id: id }).select("-deleted -deletedBy -createdBy -slug -updatedBy");
+            await Category.updateOne({ _id: id }, { status: status });
+            const newCategory = await Category.findOne({ _id: id }).select("-deleted -deletedBy -createdBy -slug -updatedBy");
+            await Category.updateOne({ _id: id }, {
+                $push: {
+                    updatedBy: {
+                        ...updatedBy,
+                        oldCategory: oldCategory,
+                        newCategory: newCategory
+                    }
                 }
-            }
-        })
-        req.flash("success", "Đổi trạng thái sản phẩm thành công!!");
-        res.redirect("back");
-    } catch (error) {
-        req.flash("error", "Đổi trạng thái sản phẩm thất bại!");
-        res.redirect("back");
+            })
+            req.flash("success", "Đổi trạng thái sản phẩm thành công!!");
+            res.redirect("back");
+        } catch (error) {
+            req.flash("error", "Đổi trạng thái sản phẩm thất bại!");
+            res.redirect("back");
+        }
     }
+    else {
+        res.send("Hack faild");
+    }
+
 }
 module.exports.changeMulti = async (req, res) => {
-    const ids = req.body.ids.split(",");
-    const type = req.body.type;
-    switch (type) {
-        case "active":
-            try {
-                const updatedBy = {
-                    idAccountUpdated: res.locals.userLogin.id,
-                    nameAccountUpdated: res.locals.userLogin.fullName,
-                    dateUpdated: new Date()
-                }
-                for (let i = 0; i < ids.length; i++) {
-                    const oldCategory = await Category.findOne({ _id: ids[i] }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
-                    await Category.updateOne({ _id: ids[i] }, { status: "active" });
-                    const newCategory = await Category.findOne({ _id: ids[i] }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
-                    await Category.updateOne({ _id: ids[i] }, {
-                        $push: {
-                            updatedBy: {
-                                ...updatedBy,
-                                oldCategory: oldCategory,
-                                newCategory: newCategory
-                            }
-                        }
-                    })
-                }
-                req.flash("success", "Đổi trạng thái tất cả sản phẩm đã chọn thành công!!");
-                break;
-            } catch (error) {
-                req.flash("error", "Đổi trạng thái tất cả sản phẩm đã chọn không thành công!!");
-                break;
-            }
-        case "inactive":
-            try {
-                const updatedBy = {
-                    idAccountUpdated: res.locals.userLogin.id,
-                    nameAccountUpdated: res.locals.userLogin.fullName,
-                    dateUpdated: new Date()
-                }
-                for (let i = 0; i < ids.length; i++) {
-                    const oldCategory = await Category.findOne({ _id: ids[i] }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
-                    await Category.updateOne({ _id: ids[i] }, { status: "inactive" });
-                    const newCategory = await Category.findOne({ _id: ids[i] }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
-                    await Category.updateOne({ _id: ids[i] }, {
-                        $push: {
-                            updatedBy: {
-                                ...updatedBy,
-                                oldCategory: oldCategory,
-                                newCategory: newCategory
-                            }
-                        }
-                    })
-                }
-                req.flash("success", "Đổi trạng thái tất cả sản phẩm đã chọn thành công!!");
-                break;
-            } catch (error) {
-                req.flash("error", "Đổi trạng thái tất cả sản phẩm đã chọn không thành công!!");
-                break;
-            }
-        case "delete":
-            try {
-                const deletedBy = {
-                    idAccountDeleted: res.locals.userLogin.id,
-                    nameAccountCreated: res.locals.userLogin.fullName,
-                    dateDeleted: new Date()
-                }
-                await Category.updateMany(
-                    {
-                        _id: { $in: ids }
-                    },
-                    {
-                        $set: {
-                            deleted: true,
-                            deletedBy: deletedBy
-                        }
+    if (res.locals.roleLogin.permission.includes("products-category_edit")) {
+        const ids = req.body.ids.split(",");
+        const type = req.body.type;
+        switch (type) {
+            case "active":
+                try {
+                    const updatedBy = {
+                        idAccountUpdated: res.locals.userLogin.id,
+                        nameAccountUpdated: res.locals.userLogin.fullName,
+                        dateUpdated: new Date()
                     }
-                )
-                req.flash("success", "Xóa sản phẩm thành công!!");
-                break;
-            } catch (error) {
-                req.flash("error", "Xóa sản phẩm không thành công!!");
-                break;
-            }
-        case "change-position":
-            try {
-                const updatedBy = {
-                    idAccountUpdated: res.locals.userLogin.id,
-                    nameAccountUpdated: res.locals.userLogin.fullName,
-                    dateUpdated: new Date()
+                    for (let i = 0; i < ids.length; i++) {
+                        const oldCategory = await Category.findOne({ _id: ids[i] }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                        await Category.updateOne({ _id: ids[i] }, { status: "active" });
+                        const newCategory = await Category.findOne({ _id: ids[i] }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                        await Category.updateOne({ _id: ids[i] }, {
+                            $push: {
+                                updatedBy: {
+                                    ...updatedBy,
+                                    oldCategory: oldCategory,
+                                    newCategory: newCategory
+                                }
+                            }
+                        })
+                    }
+                    req.flash("success", "Đổi trạng thái tất cả sản phẩm đã chọn thành công!!");
+                    break;
+                } catch (error) {
+                    req.flash("error", "Đổi trạng thái tất cả sản phẩm đã chọn không thành công!!");
+                    break;
                 }
-                for (const tmp of ids) {
-                    const [id, position] = tmp.split("-");
-                    const parsedPosition = parseInt(position);
-                    const oldCategory = await Category.findOne({ _id: id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
-                    await Category.updateOne({ _id: id }, { position: parsedPosition });
-                    const newCategory = await Category.findOne({ _id: id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
-                    await Category.updateOne({ _id: id }, {
-                        $push: {
-                            updatedBy: {
-                                ...updatedBy,
-                                oldCategory: oldCategory,
-                                newCategory: newCategory
+            case "inactive":
+                try {
+                    const updatedBy = {
+                        idAccountUpdated: res.locals.userLogin.id,
+                        nameAccountUpdated: res.locals.userLogin.fullName,
+                        dateUpdated: new Date()
+                    }
+                    for (let i = 0; i < ids.length; i++) {
+                        const oldCategory = await Category.findOne({ _id: ids[i] }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                        await Category.updateOne({ _id: ids[i] }, { status: "inactive" });
+                        const newCategory = await Category.findOne({ _id: ids[i] }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                        await Category.updateOne({ _id: ids[i] }, {
+                            $push: {
+                                updatedBy: {
+                                    ...updatedBy,
+                                    oldCategory: oldCategory,
+                                    newCategory: newCategory
+                                }
+                            }
+                        })
+                    }
+                    req.flash("success", "Đổi trạng thái tất cả sản phẩm đã chọn thành công!!");
+                    break;
+                } catch (error) {
+                    req.flash("error", "Đổi trạng thái tất cả sản phẩm đã chọn không thành công!!");
+                    break;
+                }
+            case "delete":
+                try {
+                    const deletedBy = {
+                        idAccountDeleted: res.locals.userLogin.id,
+                        nameAccountCreated: res.locals.userLogin.fullName,
+                        dateDeleted: new Date()
+                    }
+                    await Category.updateMany(
+                        {
+                            _id: { $in: ids }
+                        },
+                        {
+                            $set: {
+                                deleted: true,
+                                deletedBy: deletedBy
                             }
                         }
-                    })
+                    )
+                    req.flash("success", "Xóa sản phẩm thành công!!");
+                    break;
+                } catch (error) {
+                    req.flash("error", "Xóa sản phẩm không thành công!!");
+                    break;
                 }
-                req.flash("success", "Đổi vị trí tất cả sản phẩm đã chọn thành công!!");
-                break;
-            } catch (error) {
-                req.flash("error", "Đổi vị trí tất cả sản phẩm đã chọn không thành công!!");
-                break;
-            }
+            case "change-position":
+                try {
+                    const updatedBy = {
+                        idAccountUpdated: res.locals.userLogin.id,
+                        nameAccountUpdated: res.locals.userLogin.fullName,
+                        dateUpdated: new Date()
+                    }
+                    for (const tmp of ids) {
+                        const [id, position] = tmp.split("-");
+                        const parsedPosition = parseInt(position);
+                        const oldCategory = await Category.findOne({ _id: id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                        await Category.updateOne({ _id: id }, { position: parsedPosition });
+                        const newCategory = await Category.findOne({ _id: id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+                        await Category.updateOne({ _id: id }, {
+                            $push: {
+                                updatedBy: {
+                                    ...updatedBy,
+                                    oldCategory: oldCategory,
+                                    newCategory: newCategory
+                                }
+                            }
+                        })
+                    }
+                    req.flash("success", "Đổi vị trí tất cả sản phẩm đã chọn thành công!!");
+                    break;
+                } catch (error) {
+                    req.flash("error", "Đổi vị trí tất cả sản phẩm đã chọn không thành công!!");
+                    break;
+                }
+        }
+        res.redirect("back");
     }
-    res.redirect("back");
+    else {
+        res.send("Hack faild");
+    }
+
 }
 module.exports.createCategory = async (req, res) => {
     let find = {
@@ -214,61 +226,73 @@ module.exports.createCategory = async (req, res) => {
     })
 }
 module.exports.createNewCategory = async (req, res) => {
-    try {
-        if (!req.body.title) {
-            req.flash("error", "Tên loại sản phẩm không được để trống!!");
+    if (res.locals.roleLogin.permission.includes("products-category_create")) {
+        try {
+            if (!req.body.title) {
+                req.flash("error", "Tên loại sản phẩm không được để trống!!");
+                res.redirect("back");
+                return;
+            }
+            if (!req.body.category) {
+                req.body.category = "";
+            }
+            if (!req.body.position) {
+                const count = await Category.countDocuments();
+                req.body.position = count + 1;
+            }
+            if (!req.body.idParent) {
+                req.body.idParent = "";
+            }
+            const createdBy = {
+                idAccountCreated: res.locals.userLogin.id,
+                nameAccountCreated: res.locals.userLogin.fullName
+            }
+            if (createdBy) {
+                req.body.createdBy = createdBy
+            }
+            const category = new Category(req.body);
+            category.save();
+            req.flash("success", "Tạo mới loại sản phẩm thành công");
             res.redirect("back");
-            return;
+        } catch (error) {
+            req.flash("error", "Tạo mới loại sản phẩm không thành công");
+            res.redirect("back");
         }
-        if (!req.body.category) {
-            req.body.category = "";
-        }
-        if (!req.body.position) {
-            const count = await Category.countDocuments();
-            req.body.position = count + 1;
-        }
-        if (!req.body.idParent) {
-            req.body.idParent = "";
-        }
-        const createdBy = {
-            idAccountCreated: res.locals.userLogin.id,
-            nameAccountCreated: res.locals.userLogin.fullName
-        }
-        if (createdBy) {
-            req.body.createdBy = createdBy
-        }
-        const category = new Category(req.body);
-        category.save();
-        req.flash("success", "Tạo mới loại sản phẩm thành công");
-        res.redirect("back");
-    } catch (error) {
-        req.flash("error", "Tạo mới loại sản phẩm không thành công");
-        res.redirect("back");
     }
+    else {
+        res.send("Hack faild");
+    }
+
 }
 module.exports.deleteCategory = async (req, res) => {
-    try {
-        const deletedBy = {
-            idAccountDeleted: res.locals.userLogin.id,
-            nameAccountDeleted: res.locals.userLogin.fullName,
-            dateDeleted: new Date()
+    if (res.locals.roleLogin.permission.includes("products-category_delete")) {
+        try {
+            const deletedBy = {
+                idAccountDeleted: res.locals.userLogin.id,
+                nameAccountDeleted: res.locals.userLogin.fullName,
+                dateDeleted: new Date()
+            }
+            await Category.updateOne(
+                {
+                    _id: req.params.id
+                }
+                ,
+                {
+                    deleted: true,
+                    deletedBy: deletedBy
+                }
+            )
+            req.flash("success", "Xóa sản phẩm thành công!!");
+            res.redirect("back");
+        } catch (error) {
+            req.flash("error", "Xóa sản phẩm không thành công!!");
+            res.redirect("back");
         }
-        await Category.updateOne(
-            {
-                _id: req.params.id
-            }
-            ,
-            {
-                deleted: true,
-                deletedBy: deletedBy
-            }
-        )
-        req.flash("success", "Xóa sản phẩm thành công!!");
-        res.redirect("back");
-    } catch (error) {
-        req.flash("error", "Xóa sản phẩm không thành công!!");
-        res.redirect("back");
     }
+    else {
+        res.send("Hack faild");
+    }
+
 }
 module.exports.viewEdit = async (req, res) => {
     try {
@@ -299,35 +323,41 @@ module.exports.viewEdit = async (req, res) => {
     }
 }
 module.exports.editCategory = async (req, res) => {
-    if (!req.body.title) {
-        req.flash("error", "Phải có tên của loại sản phẩm!!");
-        res.redirect("back");
-        return;
-    }
-    try {
-        const updatedBy = {
-            idAccountUpdated: res.locals.userLogin.id,
-            nameAccountUpdated: res.locals.userLogin.fullName,
-            dateUpdated: new Date()
+    if (res.locals.roleLogin.permission.includes("products-category_edit")) {
+        if (!req.body.title) {
+            req.flash("error", "Phải có tên của loại sản phẩm!!");
+            res.redirect("back");
+            return;
         }
-        let oldCategory = await Category.findOne({ _id: req.params.id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
-        await Category.updateOne({ _id: req.params.id }, req.body);
-        let newCategory = await Category.findOne({ _id: req.params.id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
-        await Category.updateOne({ _id: req.params.id }, {
-            $push: {
-                updatedBy: {
-                    ...updatedBy,
-                    oldCategory: oldCategory,
-                    newCategory: newCategory
-                }
+        try {
+            const updatedBy = {
+                idAccountUpdated: res.locals.userLogin.id,
+                nameAccountUpdated: res.locals.userLogin.fullName,
+                dateUpdated: new Date()
             }
-        })
-        req.flash("success", "Chỉnh sửa thành công");
-        res.redirect("back");
-    } catch (error) {
-        req.flash("error", "Chỉnh sửa thất bại");
-        res.redirect("back");
+            let oldCategory = await Category.findOne({ _id: req.params.id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+            await Category.updateOne({ _id: req.params.id }, req.body);
+            let newCategory = await Category.findOne({ _id: req.params.id }).select("-slug -deleted -deletedBy -createdBy -updatedBy");
+            await Category.updateOne({ _id: req.params.id }, {
+                $push: {
+                    updatedBy: {
+                        ...updatedBy,
+                        oldCategory: oldCategory,
+                        newCategory: newCategory
+                    }
+                }
+            })
+            req.flash("success", "Chỉnh sửa thành công");
+            res.redirect("back");
+        } catch (error) {
+            req.flash("error", "Chỉnh sửa thất bại");
+            res.redirect("back");
+        }
     }
+    else {
+        res.send("Hack faild");
+    }
+
 }
 module.exports.viewDetelCategory = async (req, res) => {
     const category = await Category.findOne({ _id: req.params.id });

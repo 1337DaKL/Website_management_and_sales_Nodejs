@@ -33,69 +33,87 @@ module.exports.viewMess = async (req, res) => {
     });
 }
 module.exports.deleteMess = async (req, res) => {
-    const deletedBy = {
-        idAccountDeleted: res.locals.userLogin.id,
-        dateDeleted: new Date()
-    }
-    await Messenger.updateOne({ _id: req.params.id }, {
-        $set: {
-            deleted: true,
-            deletedBy: deletedBy
+    if (res.locals.roleLogin.permission.includes("messenger_delete")) {
+        const deletedBy = {
+            idAccountDeleted: res.locals.userLogin.id,
+            dateDeleted: new Date()
         }
-    });
-    req.flash("success", "Xóa tin nhắn thành công !!");
-    res.redirect("back");
-}
-module.exports.replyMess = async (req, res) => {
-    const mess = await Messenger.findOne({ _id: req.params.id });
-    if (!req.body.titleRep || !req.body.contentRep) {
-        req.flash("error", "Tiêu đề hoặc nội dung gửi mail không được bỏ trống");
-        res.redirect("back");
-        return;
-    }
-    const mailOptions = {
-        from: 'luongtrinh2k3ndad@gmail.com',
-        to: mess.email,
-        subject: req.body.titleRep,
-        text: req.body.contentRep
-    };
-    transporter.sendMail(mailOptions, async (error, info) => {
-        if (error) {
-            if (error.response && error.response.includes('550 5.1.1')) {
-                req.flash("error", 'Email người nhận không tồn tại!');
-                res.redirect("back");
-            }
-            else {
-                req.flash("error", error)
-                res.redirect("back");
-            }
-        } else {
-            req.flash("success", "Gửi tin nhắn thành công !!");
-            res.redirect("back");
-        }
-    });
-}
-module.exports.deleteMulti = async (req, res) => {
-    if (req.query["multi-id"] === "") {
-        req.flash("error", "Bạn chưa chọn tin nhắn nào!!");
-        res.redirect("back");
-        return;
-    }
-    const arrayId = req.query["multi-id"].split(",");
-    const deletedBy = {
-        idAccountDeleted: res.locals.userLogin.id,
-        dateDeleted: new Date()
-    }
-    await Messenger.updateMany(
-        {
-            _id: { $in: arrayId }
-        },
-        {
+        await Messenger.updateOne({ _id: req.params.id }, {
             $set: {
                 deleted: true,
                 deletedBy: deletedBy
             }
         });
-    req.flash("success", "Xóa tất cả  tin nhắn thành công!!");
-    res.redirect("back");
+        req.flash("success", "Xóa tin nhắn thành công !!");
+        res.redirect("back");
+    }
+    else {
+        res.send("Hack faild");
+    }
+
+}
+module.exports.replyMess = async (req, res) => {
+    if (res.locals.roleLogin.permission.includes("messenger_reply")) {
+        const mess = await Messenger.findOne({ _id: req.params.id });
+        if (!req.body.titleRep || !req.body.contentRep) {
+            req.flash("error", "Tiêu đề hoặc nội dung gửi mail không được bỏ trống");
+            res.redirect("back");
+            return;
+        }
+        const mailOptions = {
+            from: 'luongtrinh2k3ndad@gmail.com',
+            to: mess.email,
+            subject: req.body.titleRep,
+            text: req.body.contentRep
+        };
+        transporter.sendMail(mailOptions, async (error, info) => {
+            if (error) {
+                if (error.response && error.response.includes('550 5.1.1')) {
+                    req.flash("error", 'Email người nhận không tồn tại!');
+                    res.redirect("back");
+                }
+                else {
+                    req.flash("error", error)
+                    res.redirect("back");
+                }
+            } else {
+                req.flash("success", "Gửi tin nhắn thành công !!");
+                res.redirect("back");
+            }
+        });
+    }
+    else {
+        res.send("Hack faild");
+    }
+
+}
+module.exports.deleteMulti = async (req, res) => {
+    if (res.locals.roleLogin.permission.includes("messenger_delete")) {
+        if (req.query["multi-id"] === "") {
+            req.flash("error", "Bạn chưa chọn tin nhắn nào!!");
+            res.redirect("back");
+            return;
+        }
+        const arrayId = req.query["multi-id"].split(",");
+        const deletedBy = {
+            idAccountDeleted: res.locals.userLogin.id,
+            dateDeleted: new Date()
+        }
+        await Messenger.updateMany(
+            {
+                _id: { $in: arrayId }
+            },
+            {
+                $set: {
+                    deleted: true,
+                    deletedBy: deletedBy
+                }
+            });
+        req.flash("success", "Xóa tất cả  tin nhắn thành công!!");
+        res.redirect("back");
+    }
+    else {
+        res.send("Hack faild");
+    }
+
 }

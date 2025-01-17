@@ -36,48 +36,66 @@ module.exports.index = async (req, res) => {
     )
 }
 module.exports.restoreAccount = async (req, res) => {
-    console.log(req.params.id);
-    await Account.updateOne(
-        {
-            _id: req.params.id
-        },
-        {
-            deleted: false
-        }
-    )
-    req.flash("success", "Khôi phục tài khoản thành công!!");
-    res.redirect("back");
+    if (res.locals.roleLogin.permission.includes("account_edit-dustbin")) {
+        console.log(req.params.id);
+        await Account.updateOne(
+            {
+                _id: req.params.id
+            },
+            {
+                deleted: false
+            }
+        )
+        req.flash("success", "Khôi phục tài khoản thành công!!");
+        res.redirect("back");
+    }
+    else {
+        res.send("Hack faild");
+    }
+
 }
 module.exports.deleteAccount = async (req, res) => {
-    const id = req.params.id;
-    await Account.deleteOne({ _id: id });
-    req.flash("success", "Xóa vĩnh viễn tài khoản thành công!!");
-    res.redirect("back");
+    if (res.locals.roleLogin.permission.includes("account_edit-dustbin")) {
+        const id = req.params.id;
+        await Account.deleteOne({ _id: id });
+        req.flash("success", "Xóa vĩnh viễn tài khoản thành công!!");
+        res.redirect("back");
+    }
+    else {
+        res.send("Hack faild");
+    }
+
 }
 
 module.exports.changeMulti = async (req, res) => {
-    const ids = req.body.ids.split(",");
-    const type = req.body.type;
-    switch (type) {
-        case "restore":
-            await Account.updateMany(
-                {
-                    _id: { $in: ids }
-                },
-                { deleted: false }
-            )
-            req.flash("success", "Khôi phục tài khoản thành công!!");
-            break;
-        case "delete":
-            await Account.deleteMany(
-                {
-                    _id: { $in: ids }
-                }
-            )
-            req.flash("success", "Xóa vĩnh viễn tài khoăn thành công!!");
-            break;
-        default:
-            break;
+    if (res.locals.roleLogin.permission.includes("account_edit-dustbin")) {
+        const ids = req.body.ids.split(",");
+        const type = req.body.type;
+        switch (type) {
+            case "restore":
+                await Account.updateMany(
+                    {
+                        _id: { $in: ids }
+                    },
+                    { deleted: false }
+                )
+                req.flash("success", "Khôi phục tài khoản thành công!!");
+                break;
+            case "delete":
+                await Account.deleteMany(
+                    {
+                        _id: { $in: ids }
+                    }
+                )
+                req.flash("success", "Xóa vĩnh viễn tài khoăn thành công!!");
+                break;
+            default:
+                break;
+        }
+        res.redirect("back");
     }
-    res.redirect("back");
+    else {
+        res.send("Hack faild");
+    }
+
 }

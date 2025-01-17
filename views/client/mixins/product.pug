@@ -8,9 +8,16 @@ mixin product(products)
             .inner-featured Nổi bật
         .inner-content
           h3.inner-title #{item.title}
-          .inner-price-new Giá mới: #{item.newPrice} vnđ
-          .inner-price-old Giá cũ: #{item.priceString} vnđ
-          .inner-discount Sale: #{item.discount} %
+          if item.discount != null
+            .inner-price-new Giá mới: #{item.newPrice} vnđ
+            .inner-price-old Giá cũ: #{item.priceString} vnđ   
+          else 
+            .inner-price-new Giá : #{item.priceString} vnđ
+            .inner-price-old(style=" opacity: 0;") Giá cũ: #{item.priceString} vnđ 
+          if item.discount != null
+            .inner-discount Giảm giá: #{item.discount} %
+          else 
+            .inner-discount(style ="visibility: hidden;") ddd
 
           // Nút thêm vào giỏ hàng và chi tiết
           .product-actions

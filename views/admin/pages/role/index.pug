@@ -70,7 +70,8 @@ block main
                                     a.btn.btn-warning.btn-sm(href=`${frefixAdmin}/role/edit/${item.id}`) Sửa
                                 if roleLogin.permission.includes("role_delete")
                                     button.btn.btn-danger.btn-sm.ml-1(id-role=item.id button-delete) Xóa
-                                a.btn.btn-success.btn-sm(href=`${frefixAdmin}/role/logUpdated/${item.id}`) Lịch sử  
+                                if roleLogin.permission.includes("role_view-log-updated")
+                                    a.btn.btn-success.btn-sm(href=`${frefixAdmin}/role/logUpdated/${item.id}`) Lịch sử  
             else 
                 .container.mt-5
                     .row.justify-content-center

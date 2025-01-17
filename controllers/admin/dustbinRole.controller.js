@@ -28,54 +28,71 @@ module.exports.index = async (req, res) => {
     })
 }
 module.exports.restoreRole = async (req, res) => {
-
-    try {
-        await Role.updateOne({ _id: req.params.id }, { deleted: false });
-        req.flash("success", "Khôi phục thành công!!");
-        res.redirect("back");
-    } catch (error) {
-        req.flash("error", "Khôi phục thất bại!!");
-        res.redirect("back");
+    if (res.locals.roleLogin.permission.includes("role_edit-dustbin")) {
+        try {
+            await Role.updateOne({ _id: req.params.id }, { deleted: false });
+            req.flash("success", "Khôi phục thành công!!");
+            res.redirect("back");
+        } catch (error) {
+            req.flash("error", "Khôi phục thất bại!!");
+            res.redirect("back");
+        }
     }
+    else {
+        res.send("Hack faild");
+    }
+
 }
 module.exports.deleteRole = async (req, res) => {
-    try {
-        await Role.deleteOne({ _id: req.params.id });
-        req.flash("success", "Xóa thành công!!");
-        res.redirect("back");
-    } catch (error) {
-        req.flash("error", "Xóa thất bại");
-        res.redirect("back");
+    if (res.locals.roleLogin.permission.includes("role_edit-dustbin")) {
+        try {
+            await Role.deleteOne({ _id: req.params.id });
+            req.flash("success", "Xóa thành công!!");
+            res.redirect("back");
+        } catch (error) {
+            req.flash("error", "Xóa thất bại");
+            res.redirect("back");
+        }
     }
+    else {
+        res.send("Hack faild");
+    }
+
 }
 module.exports.changeMulti = async (req, res) => {
-    const ids = req.body.ids.split(",");
-    const type = req.body.type;
-    switch (type) {
-        case "restore":
-            try {
-                await Role.updateMany({ _id: ids }, { deleted: false });
-                req.flash("success", "Khôi phục thành công");
-                res.redirect("back");
-                return;
-            } catch (error) {
-                req.flash("error", "Khôi phục thất bại do một số lỗi ");
-                res.redirect("back");
-            }
-        case "delete":
-            try {
-                await Role.deleteMany({ _id: ids });
-                req.flash("success", "Xóa thành công");
-                res.redirect("back");
-                return;
-            } catch (error) {
-                req.flash("error", "Xóa thất bại do một số lỗi ");
-                res.redirect("back");
-            }
-        default:
-            break;
+    if (res.locals.roleLogin.permission.includes("role_edit-dustbin")) {
+        const ids = req.body.ids.split(",");
+        const type = req.body.type;
+        switch (type) {
+            case "restore":
+                try {
+                    await Role.updateMany({ _id: ids }, { deleted: false });
+                    req.flash("success", "Khôi phục thành công");
+                    res.redirect("back");
+                    return;
+                } catch (error) {
+                    req.flash("error", "Khôi phục thất bại do một số lỗi ");
+                    res.redirect("back");
+                }
+            case "delete":
+                try {
+                    await Role.deleteMany({ _id: ids });
+                    req.flash("success", "Xóa thành công");
+                    res.redirect("back");
+                    return;
+                } catch (error) {
+                    req.flash("error", "Xóa thất bại do một số lỗi ");
+                    res.redirect("back");
+                }
+            default:
+                break;
+        }
+        res.redirect("back");
     }
-    res.redirect("back");
+    else {
+        res.send("Hack faild");
+    }
+
 }
 
 

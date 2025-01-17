@@ -1,72 +1,75 @@
 extends ../../layouts/defaut.pug
 block main 
     h3 Lịch sử thay đổi danh mục sản phẩm
-    div.history-container
-        each update , index in logs.reverse()
-            div.history-item
-                h1  
-                    b 
-                        i Số thứ tự : #{index + 1}
-                h3 Thay đổi bởi: #{update.nameAccountUpdated} (ID: #{update.idAccountUpdated})
-                - const date = moment(update.dateUpdated).format("DD/MM/YYYY HH:mm:ss")
-                p Thời gian thay đổi: #{date}
-                h3 Thông tin thay đổi gồm : 
-                table
-                    thead 
-                        tr 
-                            th Nội dung
-                            th Thông tin cũ 
-                            th Thông tin mới
-                    tbody 
-                        if update.oldAccount.fullName != update.newAccount.fullName
+    if roleLogin.permission.includes("account_view-log-updated")
+        div.history-container
+            each update , index in logs.reverse()
+                div.history-item
+                    h1  
+                        b 
+                            i Số thứ tự : #{index + 1}
+                    h3 Thay đổi bởi: #{update.nameAccountUpdated} (ID: #{update.idAccountUpdated})
+                    - const date = moment(update.dateUpdated).format("DD/MM/YYYY HH:mm:ss")
+                    p Thời gian thay đổi: #{date}
+                    h3 Thông tin thay đổi gồm : 
+                    table
+                        thead 
                             tr 
-                                td Họ và tên
-                                td #{update.oldAccount.fullName}
-                                td #{update.newAccount.fullName}
-                        if update.oldAccount.avartar != update.newAccount.avartar
-                            tr 
-                                td Ảnh đại diện
-                                td 
-                                    img(src=update.oldAccount.avartar, alt="old avartar", style="max-width: 150px;")
-                                td 
-                                    img(src=update.newAccount.avartar, alt="New avartar", style="max-width: 150px;")
-                        if update.oldAccount.email != update.newAccount.email
-                            tr 
-                                td Email
-                                td #{update.oldAccount.email}
-                                td #{update.newAccount.email}
-                        if update.oldRole && update.newRole
-                            if update.oldRole.id != update.newRole.id
+                                th Nội dung
+                                th Thông tin cũ 
+                                th Thông tin mới
+                        tbody 
+                            if update.oldAccount.fullName != update.newAccount.fullName
                                 tr 
-                                    td Quyền quản trị
-                                    td #{update.oldRole.title}
-                                    td #{update.newRole.title}
-                        if update.oldAccount.address != update.newAccount.address
-                            tr 
-                                td Địa chỉ
-                                td #{update.oldAccount.address}
-                                td #{update.newAccount.address}
-                        if update.oldAccount.telephone != update.newAccount.telephone
-                            tr 
-                                td Số điện thoại
-                                td #{update.oldAccount.telephone}
-                                td #{update.newAccount.telephone}
-                        if update.oldAccount.status != update.newAccount.status
-                            tr 
-                                td Trạng thái
-                                
-                                td  
-                                    if update.oldAccount.status == "active"
-                                        p Hoạt động
-                                    else 
-                                        p Không hoạt động
-                                td 
-                                    if update.newAccount.status == "active"
-                                        p Hoạt động
-                                    else 
-                                        p Không hoạt động
-                    if update.oldAccount.password != update.newAccount.password
-                        h3 Thay đổi mật khẩu 
+                                    td Họ và tên
+                                    td #{update.oldAccount.fullName}
+                                    td #{update.newAccount.fullName}
+                            if update.oldAccount.avartar != update.newAccount.avartar
+                                tr 
+                                    td Ảnh đại diện
+                                    td 
+                                        img(src=update.oldAccount.avartar, alt="old avartar", style="max-width: 150px;")
+                                    td 
+                                        img(src=update.newAccount.avartar, alt="New avartar", style="max-width: 150px;")
+                            if update.oldAccount.email != update.newAccount.email
+                                tr 
+                                    td Email
+                                    td #{update.oldAccount.email}
+                                    td #{update.newAccount.email}
+                            if update.oldRole && update.newRole
+                                if update.oldRole.id != update.newRole.id
+                                    tr 
+                                        td Quyền quản trị
+                                        td #{update.oldRole.title}
+                                        td #{update.newRole.title}
+                            if update.oldAccount.address != update.newAccount.address
+                                tr 
+                                    td Địa chỉ
+                                    td #{update.oldAccount.address}
+                                    td #{update.newAccount.address}
+                            if update.oldAccount.telephone != update.newAccount.telephone
+                                tr 
+                                    td Số điện thoại
+                                    td #{update.oldAccount.telephone}
+                                    td #{update.newAccount.telephone}
+                            if update.oldAccount.status != update.newAccount.status
+                                tr 
+                                    td Trạng thái
+                                    
+                                    td  
+                                        if update.oldAccount.status == "active"
+                                            p Hoạt động
+                                        else 
+                                            p Không hoạt động
+                                    td 
+                                        if update.newAccount.status == "active"
+                                            p Hoạt động
+                                        else 
+                                            p Không hoạt động
+                        if update.oldAccount.password != update.newAccount.password
+                            h3 Thay đổi mật khẩu 
+    else 
+        h2 Bạn không có quyền truy cập vào trang này
 
                             
       

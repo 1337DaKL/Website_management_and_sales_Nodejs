@@ -14,22 +14,34 @@ module.exports.index = async (req, res) => {
     })
 }
 module.exports.deleteMulti = async (req, res) => {
-    const ids = req.body.ids.split(",");
-    await Messenger.deleteMany({
-        _id: {
-            $in: ids
-        }
-    })
-    req.flash("success", "Xóa tin nhắn thành công");
-    res.redirect("back");
+    if (res.locals.roleLogin.permission.includes("messenger_edit-dustbin")) {
+        const ids = req.body.ids.split(",");
+        await Messenger.deleteMany({
+            _id: {
+                $in: ids
+            }
+        })
+        req.flash("success", "Xóa tin nhắn thành công");
+        res.redirect("back");
+    }
+    else {
+        res.send("Hack faild");
+    }
 }
+
 module.exports.deleteMessenger = async (req, res) => {
-    const id = req.params.id;
-    await Messenger.deleteOne(
-        {
-            _id: id
-        }
-    )
-    req.flash("success", "Xóa tin nhắn thành công!");
-    res.redirect("back");
+    if (res.locals.roleLogin.permission.includes("messenger_edit-dustbin")) {
+        const id = req.params.id;
+        await Messenger.deleteOne(
+            {
+                _id: id
+            }
+        )
+        req.flash("success", "Xóa tin nhắn thành công!");
+        res.redirect("back");
+    }
+    else {
+        res.send("Hack faild");
+    }
+
 }

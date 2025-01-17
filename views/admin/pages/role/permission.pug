@@ -52,7 +52,18 @@ block main
                         th(class="text-center") 
                             input(type="checkbox")
                 tr(data-name="products-category_edit-dustbin")
-                    td Khôi phục hoặc xóa vĩnh viễn sản phẩm
+                    td Khôi phục hoặc xóa vĩnh viễn 
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="products-category_view-log-updated")
+
+                    td Xem lịch sử thay đổi 
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="products-category_delete-log-updated")
+                    td Xóa lịch sử thay đổi 
                     each role in roles
                         th(class="text-center") 
                             input(type="checkbox")
@@ -87,6 +98,16 @@ block main
                             input(type="checkbox")
                 tr(data-name="products_edit-dustbin")
                     td Khôi phục hoặc xóa vĩnh viễn
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="products_view-log-updated")
+                    td Xem lịch sử thay đổi 
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="products_delete-log-updated")
+                    td Xóa lịch sử thay đổi 
                     each role in roles
                         th(class="text-center") 
                             input(type="checkbox")
@@ -125,6 +146,16 @@ block main
                     each role in roles
                         th(class="text-center") 
                             input(type="checkbox")
+                tr(data-name="account_view-log-updated")
+                    td Xem lịch sử thay đổi 
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="account_delete-log-updated")
+                    td Xóa lịch sử thay đổi 
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
                 //- Quản lí tin nhắn 
                 tr
                     td(colspan=roles.length + 1)
@@ -136,6 +167,11 @@ block main
                             input(type="checkbox")
                 tr(data-name="messenger_delete")
                     td Xóa
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="messenger_reply")
+                    td Phản hồi tin nhắn
                     each role in roles
                         th(class="text-center") 
                             input(type="checkbox")
@@ -185,6 +221,109 @@ block main
                             input(type="checkbox")
                 tr(data-name="role_permission")
                     td Phân quyền
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="role_view-log-updated")
+                    td Xem lịch sử thay đổi 
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="role_delete-log-updated")
+                    td Xóa lịch sử thay đổi 
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+
+                //-Quản lí danh mục bài viết
+
+                tr
+                    td(colspan=roles.length + 1)
+                        b Quản lí danh mục bài viết
+                tr(data-name="post-category_view")
+                    td Xem
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="post-category_create")
+                    td Thêm mới
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="post-category_edit")
+                    td Chỉnh sửa
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="post-category_delete")
+                    td Xóa
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="post-category_view-dustbin")
+                    td Xem thùng rác
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="post-category_edit-dustbin")
+                    td Khôi phục hoặc xóa vĩnh viễn
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="post-category_view-log-updated")
+                    td Xem lịch sử thay đổi 
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="post-category_delete-log-updated")
+                    td Xóa lịch sử thay đổi 
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                
+
+                //-Quản lí bài viết
+
+                tr
+                    td(colspan=roles.length + 1)
+                        b Quản lí danh mục bài viết
+                tr(data-name="post_view")
+                    td Xem
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="post_create")
+                    td Thêm mới
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="post_edit")
+                    td Chỉnh sửa
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="post_delete")
+                    td Xóa
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="post_view-dustbin")
+                    td Xem thùng rác
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="post_edit-dustbin")
+                    td Khôi phục hoặc xóa vĩnh viễn
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="post_view-log-updated")
+                    td Xem lịch sử thay đổi 
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="post_delete-log-updated")
+                    td Xóa lịch sử thay đổi 
                     each role in roles
                         th(class="text-center") 
                             input(type="checkbox")

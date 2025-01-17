@@ -1,69 +1,72 @@
 extends ../../layouts/defaut.pug
 block main 
     h3 Lịch sử thay đổi danh mục sản phẩm
-    div.history-container
-        each update , index in logsUpdated.reverse()
-            div.history-item
-                h1  
-                    b 
-                        i Số thứ tự : #{index + 1}
-                h3 Thay đổi bởi: #{update.nameAccountUpdated} (ID: #{update.idAccountUpdated})
-                - const date = moment(update.dateUpdated).format("DD/MM/YYYY HH:mm:ss")
-                p Thời gian thay đổi: #{date}
-                h3 Thông tin thay đổi gồm : 
-                table
-                    thead 
-                        tr 
-                            th Nội dung
-                            th Thông tin cũ 
-                            th Thông tin mới
-                    tbody 
-                        if update.oldCategory.title != update.newCategory.title
+    if roleLogin.permission.includes("products-category_view-log-updated")
+        div.history-container
+            each update , index in logsUpdated.reverse()
+                div.history-item
+                    h1  
+                        b 
+                            i Số thứ tự : #{index + 1}
+                    h3 Thay đổi bởi: #{update.nameAccountUpdated} (ID: #{update.idAccountUpdated})
+                    - const date = moment(update.dateUpdated).format("DD/MM/YYYY HH:mm:ss")
+                    p Thời gian thay đổi: #{date}
+                    h3 Thông tin thay đổi gồm : 
+                    table
+                        thead 
                             tr 
-                                td Tiêu đề
-                                td #{update.oldCategory.title}
-                                td #{update.newCategory.title}
-                        if update.nameNewParent != update.nameOldParent
-                            tr 
-                                td Danh mục cha
-                                if update.nameOldParent
-                                    td #{update.nameOldParent}
-                                else 
-                                    td Không có danh mục cha
-                                if update.nameNewParent
-                                    td #{update.nameNewParent}
-                                else 
-                                    td Không có danh mục cha
-                        if update.oldCategory.thumbnail != update.newCategory.thumbnail
-                            tr 
-                                td Hình ảnh
-                                td 
-                                    img(src=update.oldCategory.thumbnail, alt="New Thumbnail", style="max-width: 150px;")
-                                td 
-                                    img(src=update.newCategory.thumbnail, alt="New Thumbnail", style="max-width: 150px;")
-                        if update.oldCategory.status != update.newCategory.status
-                            tr 
-                                td Trạng thái
-                                
-                                td  
-                                    if update.oldCategory.status == "active"
-                                        p Hoạt động
+                                th Nội dung
+                                th Thông tin cũ 
+                                th Thông tin mới
+                        tbody 
+                            if update.oldCategory.title != update.newCategory.title
+                                tr 
+                                    td Tiêu đề
+                                    td #{update.oldCategory.title}
+                                    td #{update.newCategory.title}
+                            if update.nameNewParent != update.nameOldParent
+                                tr 
+                                    td Danh mục cha
+                                    if update.nameOldParent
+                                        td #{update.nameOldParent}
                                     else 
-                                        p Không hoạt động
-                                td 
-                                    if update.newCategory.status == "active"
-                                        p Hoạt động
+                                        td Không có danh mục cha
+                                    if update.nameNewParent
+                                        td #{update.nameNewParent}
                                     else 
-                                        p Không hoạt động
-                        if update.oldCategory.position != update.newCategory.position
-                            tr 
-                                td Vị trí
-                                td #{update.oldCategory.position}
-                                td #{update.newCategory.position}
-                        if update.oldCategory.description != update.newCategory.description
-                            tr 
-                                td Mô tả
-                                td !{update.oldCategory.description}
-                                td !{update.newCategory.description}
+                                        td Không có danh mục cha
+                            if update.oldCategory.thumbnail != update.newCategory.thumbnail
+                                tr 
+                                    td Hình ảnh
+                                    td 
+                                        img(src=update.oldCategory.thumbnail, alt="New Thumbnail", style="max-width: 150px;")
+                                    td 
+                                        img(src=update.newCategory.thumbnail, alt="New Thumbnail", style="max-width: 150px;")
+                            if update.oldCategory.status != update.newCategory.status
+                                tr 
+                                    td Trạng thái
+                                    
+                                    td  
+                                        if update.oldCategory.status == "active"
+                                            p Hoạt động
+                                        else 
+                                            p Không hoạt động
+                                    td 
+                                        if update.newCategory.status == "active"
+                                            p Hoạt động
+                                        else 
+                                            p Không hoạt động
+                            if update.oldCategory.position != update.newCategory.position
+                                tr 
+                                    td Vị trí
+                                    td #{update.oldCategory.position}
+                                    td #{update.newCategory.position}
+                            if update.oldCategory.description != update.newCategory.description
+                                tr 
+                                    td Mô tả
+                                    td !{update.oldCategory.description}
+                                    td !{update.newCategory.description}
+    else 
+        h2 Bạn không có quyền truy cập vào trang này
       
 

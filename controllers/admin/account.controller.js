@@ -35,6 +35,7 @@ module.exports.index = async (req, res) => {
         pagination: ojectPagination,
         filtersStatus: filtersStatus
     })
+
 }
 module.exports.viewCreateAccount = async (req, res) => {
     const roles = await Role.find({
@@ -44,91 +45,110 @@ module.exports.viewCreateAccount = async (req, res) => {
         titlePage: "Tạo tài khoản",
         roles: roles
     })
+
 }
 module.exports.createAccount = async (req, res) => {
-    if (!req.body.fullName || !req.body.email || !req.body.password) {
-        req.flash("error", "Bạn phải điền đầy đủ thông tin tên, email, mật khẩu");
-        res.redirect("back");
-        return;
+    if (res.locals.roleLogin.permission.includes("account_create")) {
+        if (!req.body.fullName || !req.body.email || !req.body.password) {
+            req.flash("error", "Bạn phải điền đầy đủ thông tin tên, email, mật khẩu");
+            res.redirect("back");
+            return;
+        }
+        req.body.password = md5(req.body.password);
+        if (!req.body.idRole) {
+            req.flash("error", "Phải chọn quyền quản trị!!");
+            res.redirect("back");
+            return;
+        }
+        const accountFindEqual = await Account.findOne({
+            email: req.body.email
+        })
+        if (accountFindEqual) {
+            req.flash("error", "Email đã tồn tại =((");
+            res.redirect("back");
+            return;
+        }
+        const createdBy = {
+            idAccountCreated: res.locals.userLogin.id,
+            nameAccountCreated: res.locals.userLogin.fullName
+        }
+        if (createdBy) {
+            req.body.createdBy = createdBy;
+        }
+
+        const account = new Account(req.body);
+        account.save();
+        req.flash("success", "Tạo tài khoản thành công =))");
+        res.redirect(`${systemConfig.prefixAdmin}/account`);
     }
-    req.body.password = md5(req.body.password);
-    if (!req.body.idRole) {
-        req.flash("error", "Phải chọn quyền quản trị!!");
-        res.redirect("back");
-        return;
-    }
-    const accountFindEqual = await Account.findOne({
-        email: req.body.email
-    })
-    if (accountFindEqual) {
-        req.flash("error", "Email đã tồn tại =((");
-        res.redirect("back");
-        return;
-    }
-    const createdBy = {
-        idAccountCreated: res.locals.userLogin.id,
-        nameAccountCreated: res.locals.userLogin.fullName
-    }
-    if (createdBy) {
-        req.body.createdBy = createdBy;
+    else {
+        res.send("hack faild");
     }
 
-    const account = new Account(req.body);
-    account.save();
-    req.flash("success", "Tạo tài khoản thành công =))");
-    res.redirect(`${systemConfig.prefixAdmin}/account`);
 }
 module.exports.changeStatus = async (req, res) => {
-    try {
-        const [id, statusChange] = req.params.inforChange.split(",");
-        const updatedBy = {
-            idAccountUpdated: res.locals.userLogin.id,
-            nameAccountUpdated: res.locals.userLogin.fullName,
-            dateUpdated: new Date()
-        }
-        const oldAccount = await Account.findOne(
-            {
-                _id: id,
-                deleted: false
+    if (res.locals.roleLogin.permission.includes("account_edit")) {
+        try {
+            const [id, statusChange] = req.params.inforChange.split(",");
+            const updatedBy = {
+                idAccountUpdated: res.locals.userLogin.id,
+                nameAccountUpdated: res.locals.userLogin.fullName,
+                dateUpdated: new Date()
             }
-        ).select("-token -deleted -deletedBy -createdBy -updatedBy");
-        await Account.updateOne({ _id: id }, { status: statusChange });
-        const newAccount = await Account.findOne(
-            {
-                _id: id,
-                deleted: false
-            }
-        ).select("-token -deleted -deletedBy -createdBy -updatedBy");
-        await Account.updateOne({ _id: id }, {
-            $push: {
-                updatedBy: {
-                    ...updatedBy,
-                    oldAccount: oldAccount,
-                    newAccount: newAccount
+            const oldAccount = await Account.findOne(
+                {
+                    _id: id,
+                    deleted: false
                 }
-            }
-        })
-        req.flash("success", "Cập nhật trạng thái thành công!!");
-        res.redirect("back");
-    } catch (error) {
-        req.flash("error", "Cập nhật trạng thái thất bại =((");
-        res.redirect("back");
+            ).select("-token -deleted -deletedBy -createdBy -updatedBy");
+            await Account.updateOne({ _id: id }, { status: statusChange });
+            const newAccount = await Account.findOne(
+                {
+                    _id: id,
+                    deleted: false
+                }
+            ).select("-token -deleted -deletedBy -createdBy -updatedBy");
+            await Account.updateOne({ _id: id }, {
+                $push: {
+                    updatedBy: {
+                        ...updatedBy,
+                        oldAccount: oldAccount,
+                        newAccount: newAccount
+                    }
+                }
+            })
+            req.flash("success", "Cập nhật trạng thái thành công!!");
+            res.redirect("back");
+        } catch (error) {
+            req.flash("error", "Cập nhật trạng thái thất bại =((");
+            res.redirect("back");
+        }
     }
+    else {
+        res.send("hack faild");
+    }
+
 }
 module.exports.deleteAccount = async (req, res) => {
-    try {
-        const deletedBy = {
-            idAccountDeleted: res.locals.userLogin.id,
-            nameAccountDeleted: res.locals.userLogin.fullName,
-            dateDeleted: new Date()
+    if (res.locals.roleLogin.permission.includes("account_delete")) {
+        try {
+            const deletedBy = {
+                idAccountDeleted: res.locals.userLogin.id,
+                nameAccountDeleted: res.locals.userLogin.fullName,
+                dateDeleted: new Date()
+            }
+            await Account.updateOne({ _id: req.params.id }, { $set: { deleted: true, deletedBy: deletedBy } })
+            req.flash("success", "Chuyển tài khoản vào thùng rác thành công :3");
+            res.redirect("back");
+        } catch (error) {
+            req.flash("error", "Chuyển tài khoản vào thùng rác thất bại =((");
+            res.redirect("back");
         }
-        await Account.updateOne({ _id: req.params.id }, { $set: { deleted: true, deletedBy: deletedBy } })
-        req.flash("success", "Chuyển tài khoản vào thùng rác thành công :3");
-        res.redirect("back");
-    } catch (error) {
-        req.flash("error", "Chuyển tài khoản vào thùng rác thất bại =((");
-        res.redirect("back");
     }
+    else {
+        res.send("hack faild");
+    }
+
 }
 module.exports.viewDetelAccount = async (req, res) => {
     const account = await Account.findOne({ _id: req.params.id });
@@ -138,6 +158,7 @@ module.exports.viewDetelAccount = async (req, res) => {
         titlePage: "Chi tiết tài khoản ",
         account: account,
     })
+
 }
 module.exports.viewEdit = async (req, res) => {
     const account = await Account.findOne({ _id: req.params.id });
@@ -154,181 +175,194 @@ module.exports.viewEdit = async (req, res) => {
         account: account,
         roles: roles
     })
+
 }
 module.exports.editAccount = async (req, res) => {
-    if (!req.body.fullName || !req.body.email) {
-        req.flash("error", "Tên và email không được bỏ trống!!");
-        res.redirect("back");
-        return;
-    }
-    if (!req.body.password) {
-        delete req.body.password
-    }
-    else {
-        req.body.password = md5(req.body.password);
-    }
-    const emailEq = await Account.findOne({
-        _id: { $ne: req.params.id },
-        deleted: false,
-        email: req.body.email
-    });
-    if (emailEq) {
-        req.flash("error", "Email đã tồn tại vui lòng đổi email khác!");
-        res.redirect("back");
-        return;
-    }
-    try {
-        const updatedBy = {
-            idAccountUpdated: res.locals.userLogin.id,
-            nameAccountUpdated: res.locals.userLogin.fullName,
-            dateUpdated: new Date()
+    if (res.locals.roleLogin.permission.includes("account_edit")) {
+        if (!req.body.fullName || !req.body.email) {
+            req.flash("error", "Tên và email không được bỏ trống!!");
+            res.redirect("back");
+            return;
         }
-        const oldAccount = await Account.findOne(
-            {
-                _id: req.params.id
+        if (!req.body.password) {
+            delete req.body.password
+        }
+        else {
+            req.body.password = md5(req.body.password);
+        }
+        const emailEq = await Account.findOne({
+            _id: { $ne: req.params.id },
+            deleted: false,
+            email: req.body.email
+        });
+        if (emailEq) {
+            req.flash("error", "Email đã tồn tại vui lòng đổi email khác!");
+            res.redirect("back");
+            return;
+        }
+        try {
+            const updatedBy = {
+                idAccountUpdated: res.locals.userLogin.id,
+                nameAccountUpdated: res.locals.userLogin.fullName,
+                dateUpdated: new Date()
             }
-        ).select("-token -deleted -deletedBy -createdBy -updatedBy");
-        await Account.updateOne(
-            {
-                _id: req.params.id
-            },
-            req.body
-        )
-        const newAccount = await Account.findOne(
-            {
-                _id: req.params.id
-            }
-        ).select("-token -deleted -deletedBy -createdBy -updatedBy");
-        await Account.updateOne(
-            { _id: req.params.id },
-            {
-                $push: {
-                    updatedBy: {
-                        ...updatedBy,
-                        oldAccount: oldAccount,
-                        newAccount: newAccount
+            const oldAccount = await Account.findOne(
+                {
+                    _id: req.params.id
+                }
+            ).select("-token -deleted -deletedBy -createdBy -updatedBy");
+            await Account.updateOne(
+                {
+                    _id: req.params.id
+                },
+                req.body
+            )
+            const newAccount = await Account.findOne(
+                {
+                    _id: req.params.id
+                }
+            ).select("-token -deleted -deletedBy -createdBy -updatedBy");
+            await Account.updateOne(
+                { _id: req.params.id },
+                {
+                    $push: {
+                        updatedBy: {
+                            ...updatedBy,
+                            oldAccount: oldAccount,
+                            newAccount: newAccount
+                        }
                     }
                 }
-            }
-        )
-        req.flash("success", "Cập nhật thông tin thành công!");
-        res.redirect("back");
-    } catch (error) {
-        req.flash("error", "Cập nhật thông tin thất bại!");
-        res.redirect("back");
+            )
+            req.flash("success", "Cập nhật thông tin thành công!");
+            res.redirect("back");
+        } catch (error) {
+            req.flash("error", "Cập nhật thông tin thất bại!");
+            res.redirect("back");
+        }
     }
+    else {
+        res.send("hack faild");
+    }
+
 }
 module.exports.changeMulti = async (req, res) => {
-    try {
-        const ids = req.body.ids.split(",");
-        const type = req.body.type;
-        const updatedBy = {
-            idAccountUpdated: res.locals.userLogin.id,
-            nameAccountUpdated: res.locals.userLogin.fullName,
-            dateUpdated: new Date()
-        };
-        switch (type) {
-            case "active":
-                for (let id of ids) {
-                    const oldAccount = await Account.findOne(
-                        {
-                            _id: id,
-                            deleted: false
-                        }
-                    ).select("-token -deleted -deletedBy -createdBy -updatedBy");
-                    await Account.updateOne(
-                        {
-                            _id: id
-                        },
-                        {
-                            status: "active"
-                        }
-                    );
-                    const newAccount = await Account.findOne(
-                        {
-                            _id: id,
-                            deleted: false
-                        }
-                    ).select("-token -deleted -deletedBy -createdBy -updatedBy");
-                    await Account.updateOne(
-                        {
-                            _id: id
-                        },
-                        {
-                            $push: {
-                                updatedBy: {
-                                    ...updatedBy,
-                                    oldAccount: oldAccount,
-                                    newAccount: newAccount
+    if (res.locals.roleLogin.permission.includes("account_edit")) {
+        try {
+            const ids = req.body.ids.split(",");
+            const type = req.body.type;
+            const updatedBy = {
+                idAccountUpdated: res.locals.userLogin.id,
+                nameAccountUpdated: res.locals.userLogin.fullName,
+                dateUpdated: new Date()
+            };
+            switch (type) {
+                case "active":
+                    for (let id of ids) {
+                        const oldAccount = await Account.findOne(
+                            {
+                                _id: id,
+                                deleted: false
+                            }
+                        ).select("-token -deleted -deletedBy -createdBy -updatedBy");
+                        await Account.updateOne(
+                            {
+                                _id: id
+                            },
+                            {
+                                status: "active"
+                            }
+                        );
+                        const newAccount = await Account.findOne(
+                            {
+                                _id: id,
+                                deleted: false
+                            }
+                        ).select("-token -deleted -deletedBy -createdBy -updatedBy");
+                        await Account.updateOne(
+                            {
+                                _id: id
+                            },
+                            {
+                                $push: {
+                                    updatedBy: {
+                                        ...updatedBy,
+                                        oldAccount: oldAccount,
+                                        newAccount: newAccount
+                                    }
                                 }
                             }
-                        }
-                    )
-                }
-                req.flash("success", "Thay đổi thành trạng thái hoạt động thành công !!")
-                res.redirect("back");
-                break;
-            case "inactive":
-                for (let id of ids) {
-                    const oldAccount = await Account.findOne(
-                        {
-                            _id: id,
-                            deleted: false
-                        }
-                    ).select("-token -deleted -deletedBy -createdBy -updatedBy");
-                    await Account.updateOne(
-                        {
-                            _id: id
-                        },
-                        {
-                            status: "inactive"
-                        }
-                    );
-                    const newAccount = await Account.findOne(
-                        {
-                            _id: id,
-                            deleted: false
-                        }
-                    ).select("-token -deleted -deletedBy -createdBy -updatedBy");
-                    await Account.updateOne(
-                        {
-                            _id: id
-                        },
-                        {
-                            $push: {
-                                updatedBy: {
-                                    ...updatedBy,
-                                    oldAccount: oldAccount,
-                                    newAccount: newAccount
+                        )
+                    }
+                    req.flash("success", "Thay đổi thành trạng thái hoạt động thành công !!")
+                    res.redirect("back");
+                    break;
+                case "inactive":
+                    for (let id of ids) {
+                        const oldAccount = await Account.findOne(
+                            {
+                                _id: id,
+                                deleted: false
+                            }
+                        ).select("-token -deleted -deletedBy -createdBy -updatedBy");
+                        await Account.updateOne(
+                            {
+                                _id: id
+                            },
+                            {
+                                status: "inactive"
+                            }
+                        );
+                        const newAccount = await Account.findOne(
+                            {
+                                _id: id,
+                                deleted: false
+                            }
+                        ).select("-token -deleted -deletedBy -createdBy -updatedBy");
+                        await Account.updateOne(
+                            {
+                                _id: id
+                            },
+                            {
+                                $push: {
+                                    updatedBy: {
+                                        ...updatedBy,
+                                        oldAccount: oldAccount,
+                                        newAccount: newAccount
+                                    }
                                 }
                             }
-                        }
+                        )
+                    }
+                    req.flash("success", "Thay đổi thành trạng thái dừng hoạt động thành công !!")
+                    res.redirect("back");
+                    break;
+                case "delete":
+                    const deletedBy = {
+                        idAccountDeleted: res.locals.userLogin.id,
+                        dateDeleted: new Date()
+                    }
+                    await Account.deleteMany({
+                        _id: { $in: ids }
+                    },
+                        { $set: { deleted: true, deletedBy: deletedBy } }
                     )
-                }
-                req.flash("success", "Thay đổi thành trạng thái dừng hoạt động thành công !!")
-                res.redirect("back");
-                break;
-            case "delete":
-                const deletedBy = {
-                    idAccountDeleted: res.locals.userLogin.id,
-                    dateDeleted: new Date()
-                }
-                await Account.deleteMany({
-                    _id: { $in: ids }
-                },
-                    { $set: { deleted: true, deletedBy: deletedBy } }
-                )
-                req.flash("success", "Xóa thành công !!")
-                res.redirect("back");
-                break;
-            default:
-                break;
+                    req.flash("success", "Xóa thành công !!")
+                    res.redirect("back");
+                    break;
+                default:
+                    break;
+            }
+        } catch (error) {
+            req.flash("error", "Thực hiện hành động thất bại!!!");
+            res.redirect("back");
+            return;
         }
-    } catch (error) {
-        req.flash("error", "Thực hiện hành động thất bại!!!");
-        res.redirect("back");
-        return;
     }
+    else {
+        res.send("hack faild");
+    }
+
 }
 module.exports.viewLogUpdateAccount = async (req, res) => {
     const account = await Account.findOne(

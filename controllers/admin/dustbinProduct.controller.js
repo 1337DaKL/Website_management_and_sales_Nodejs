@@ -44,42 +44,60 @@ module.exports.index = async (req, res) => {
     })
 }
 module.exports.restoreProduct = async (req, res) => {
-    const id = req.params.id;
-    await Product.updateOne({ _id: id }, { deleted: false });
-    req.flash("success", "Khôi phục sản phẩm thành công!!");
-    res.redirect("back");
+    if (res.locals.roleLogin.permission.includes("products_edit-dustbin")) {
+        const id = req.params.id;
+        await Product.updateOne({ _id: id }, { deleted: false });
+        req.flash("success", "Khôi phục sản phẩm thành công!!");
+        res.redirect("back");
+    }
+    else {
+        res.send("Hack faild");
+    }
+
 }
 module.exports.deleteProduct = async (req, res) => {
-    const id = req.params.id;
-    await Product.deleteOne({ _id: id });
-    req.flash("success", "Xóa sản phẩm thành công!!");
-    res.redirect("back");
+    if (res.locals.roleLogin.permission.includes("products_edit-dustbin")) {
+        const id = req.params.id;
+        await Product.deleteOne({ _id: id });
+        req.flash("success", "Xóa sản phẩm thành công!!");
+        res.redirect("back");
+    }
+    else {
+        res.send("Hack faild");
+    }
+
 }
 
 module.exports.changeMulti = async (req, res) => {
-    const ids = req.body.ids.split(",");
-    const type = req.body.type;
-    switch (type) {
-        case "restore":
-            await Product.updateMany(
-                {
-                    _id: { $in: ids }
-                },
-                { deleted: false }
-            )
-            req.flash("success", "Khôi phục sản phẩm thành công!!");
-            break;
-        case "delete":
-            await Product.deleteMany(
-                {
-                    _id: { $in: ids }
-                }
-            )
-            req.flash("success", "Xóa sản phẩm thành công!!");
-            break;
-        default:
-            break;
+    if (res.locals.roleLogin.permission.includes("products_edit-dustbin")) {
+        const ids = req.body.ids.split(",");
+        const type = req.body.type;
+        switch (type) {
+            case "restore":
+                await Product.updateMany(
+                    {
+                        _id: { $in: ids }
+                    },
+                    { deleted: false }
+                )
+                req.flash("success", "Khôi phục sản phẩm thành công!!");
+                break;
+            case "delete":
+                await Product.deleteMany(
+                    {
+                        _id: { $in: ids }
+                    }
+                )
+                req.flash("success", "Xóa sản phẩm thành công!!");
+                break;
+            default:
+                break;
+        }
+        res.redirect("back");
     }
-    res.redirect("back");
+    else {
+        res.send("Hack faild");
+    }
+
 }
 
