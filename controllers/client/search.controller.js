@@ -35,7 +35,8 @@ module.exports.index = async (req, res) => {
     res.render("client/pages/search/index.pug", {
         titlePage: "Kết quả tìm kiếm",
         products: products,
-        pagination : pagination,
-        countProduct : countProduct
+        pagination: pagination,
+        countProduct: countProduct,
+        keyword: req.query.keyword
     })
 }

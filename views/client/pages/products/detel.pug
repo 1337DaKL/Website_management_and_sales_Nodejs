@@ -32,7 +32,7 @@ block main
                 <span>#{product.stock}</span> sản phẩm.
 
           form(
-            action="cart/add/${product.id}"
+            action=`/cart/add/${product.id}`
             method="POST"
           )
             input(
