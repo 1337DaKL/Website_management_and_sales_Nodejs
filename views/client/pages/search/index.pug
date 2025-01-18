@@ -1,0 +1,29 @@
+extends ../../layouts/defaut.pug
+include ../../mixins/box-head.pug
+include ../../mixins/product.pug
+include ../../mixins/pagination.pug
+block main 
+    
+    if products.length > 0
+        .container.my-3
+            .row
+                .col-12 
+                    
+                    +box-head("Kết quả tìm kiếm...")
+                    h6 Tìm được 
+                        b 
+                            i #{countProduct} 
+                        |kết quả phù hợp            
+            .row
+                +product(products)
+            .row
+            +pagination(pagination)
+        script(src="/client/js/product.js") 
+    else 
+        .container.mt-5
+                    .row.justify-content-center
+                        .col-md-6
+                            .alert.alert-warning.text-center
+                                i.bi.bi-exclamation-triangle-fill 
+                                | Không tìm thấy sản phẩm nào phù hợp.
+                                | Vui lòng tìm kiếm với từ khóa khác!!

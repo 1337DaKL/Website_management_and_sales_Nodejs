@@ -233,9 +233,6 @@ module.exports.createNewCategory = async (req, res) => {
                 res.redirect("back");
                 return;
             }
-            if (!req.body.category) {
-                req.body.category = "";
-            }
             if (!req.body.position) {
                 const count = await Category.countDocuments();
                 req.body.position = count + 1;
@@ -251,7 +248,7 @@ module.exports.createNewCategory = async (req, res) => {
                 req.body.createdBy = createdBy
             }
             const category = new Category(req.body);
-            category.save();
+            await category.save();
             req.flash("success", "Tạo mới loại sản phẩm thành công");
             res.redirect("back");
         } catch (error) {

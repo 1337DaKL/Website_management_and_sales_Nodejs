@@ -81,3 +81,19 @@
                             li.nav-item
                                 a.nav-link.text-dark.font-weight-bold(href=`${frefixAdmin}/dustbin-mess`) 
                                     | Thùng rác tin nhắn
+        if roleLogin.permission.includes("post-category_view") ||  roleLogin.permission.includes("post-category_view-dustbin")
+            li.nav-item
+                a.nav-link.text-white.font-weight-bold(data-bs-toggle="collapse", href="#postCategoryMenu", role="button") 
+                    i.bi.bi-box-seam
+                        b 
+                            |  Quản lý danh mục bài viết
+                .collapse#postCategoryMenu
+                    ul.nav.flex-column
+                        if roleLogin.permission.includes("post-category_view")
+                            li.nav-item
+                                a.nav-link.text-dark.font-weight-bold(href=`${frefixAdmin}/postCategory`) 
+                                    | Danh mục bài viết
+                        if roleLogin.permission.includes("post-category_view-dustbin")
+                            li.nav-item
+                                a.nav-link.text-dark.font-weight-bold(href=`${frefixAdmin}/dustbinPostCategory`) 
+                                    | Thùng rác danh mục bài viết

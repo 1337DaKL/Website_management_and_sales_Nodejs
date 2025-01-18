@@ -1,12 +1,30 @@
 include ../mixins/tree-category.pug
 header.header
-    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark       
-        a(href="/")
-            img(src="https://th.bing.com/th?q=1337+Transparent+Logo&w=120&h=120&c=1&rs=1&qlt=90&cb=1&dpr=1.3&pid=InlineBlock&mkt=en-WW&cc=VN&setlang=en&adlt=strict&t=1&mw=247", alt="logo" height="50px" style="margin-right: 20px")
-        h1 Cửa hàng 1337_DaKL
-    
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark     
+        .col-6
+            div(class="d-flex align-items-center")
+                a(href="/")
+                    img(src="https://th.bing.com/th?q=1337+Transparent+Logo&w=120&h=120&c=1&rs=1&qlt=90&cb=1&dpr=1.3&pid=InlineBlock&mkt=en-WW&cc=VN&setlang=en&adlt=strict&t=1&mw=247", alt="logo", height="50px")
+                h1.mb-0.ms-2 Cửa hàng 1337_DaKL
 
-        .collapse.navbar-collapse#navbarNav
+        form(id="form-search" action="/search" method="GET")  
+            .input-group
+                .col-9
+                    .input-group
+                        input.form-control(
+                            type="text"
+                            placeholder="Nhập từ khóa"
+                            name="keyword"
+                        )
+                        button.btn.btn-light.btn-no-border(type="button" id="button-clear" style="background-color: white;")
+                            i(class="fa fa-times" style="color: black;")
+
+                .input-group-append
+                    button(
+                        class="btn"
+                        type="submit"
+                    )   
+                       i.bi.bi-search(style="color: white;")
         ul.navbar-nav.ml-auto
             li.nav-item
                 a.nav-link(href="/") Trang Chủ

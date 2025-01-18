@@ -1,0 +1,10 @@
+const express = require("express");
+const router = express.Router();
+const controller = require("../../controllers/admin/postCategory.controller");
+const cloud = require("../../middlewares/admin/cloud.middlewares");
+var multer = require('multer');
+var upload = multer();
+router.get("/", controller.index);
+router.get("/create" , controller.viewCreatePostCategory);
+router.post("/create", upload.single('thumbnail'), cloud.clouldMiddlewares, controller.createPostCategory);
+module.exports = router;

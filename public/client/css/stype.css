@@ -571,3 +571,14 @@
 }
 
 
+
+
+.btn-no-border {
+  border: none; /* Xóa viền */
+  box-shadow: none; /* Xóa đổ bóng (nếu có) */
+}
+.alert-warning {
+  background-color: #f8d7da; /* Màu nền nhạt */
+  color: #721c24; /* Màu chữ đỏ */
+  border-color: #f5c6cb; /* Màu viền */
+}
