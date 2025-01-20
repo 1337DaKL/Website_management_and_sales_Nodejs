@@ -12,7 +12,10 @@ mixin product(products)
             .inner-price-new Giá mới: #{item.newPrice} vnđ
             .inner-price-old Giá cũ: #{item.priceString} vnđ   
           else 
-            .inner-price-new Giá : #{item.priceString} vnđ
+            if !item.priceString
+              .inner-price-new Giá : 0 vnđ
+            else 
+              .inner-price-new Giá : #{item.priceString} vnđ
             .inner-price-old(style=" opacity: 0;") Giá cũ: #{item.priceString} vnđ 
           if item.discount != null
             .inner-discount Giảm giá: #{item.discount} %
@@ -21,7 +24,7 @@ mixin product(products)
 
           // Nút thêm vào giỏ hàng và chi tiết
           .product-actions
-            form(action="/cart/add/#{item.id}" method="POST")
+            form(action=`/cart/addFast/${item.id}` method="POST")
                 button.bi.bi-cart-plus(type="submit") 
             a(href=`/products/detel/${item.slug}` class="btn btn-detail") Chi tiết
 

@@ -95,16 +95,16 @@ module.exports.changeStatus = async (req, res) => {
 }
 
 module.exports.changeMulti = async (req, res) => {
-    if (res.locals.roleLogin.permission.includes("products_edit")) {
-        const ids = req.body.ids.split(",");
-        const type = req.body.type;
-        const updatedBy = {
-            idAccountUpdated: res.locals.userLogin.id,
-            nameAccountUpdated: res.locals.userLogin.fullName,
-            dateUpdated: new Date()
-        }
-        switch (type) {
-            case "active":
+    const ids = req.body.ids.split(",");
+    const type = req.body.type;
+    const updatedBy = {
+        idAccountUpdated: res.locals.userLogin.id,
+        nameAccountUpdated: res.locals.userLogin.fullName,
+        dateUpdated: new Date()
+    }
+    switch (type) {
+        case "active":
+            if (res.locals.roleLogin.permission.includes("products_edit")) {
                 try {
                     for (let i = 0; i < ids.length; i++) {
                         const id = ids[i];
@@ -127,7 +127,13 @@ module.exports.changeMulti = async (req, res) => {
                     req.flash("error", "Đổi trạng thái tất cả sản phẩm đã chọn thất bại!!");
                     break;
                 }
-            case "inactive":
+            }
+            else {
+                res.send("Hack faild");
+            }
+
+        case "inactive":
+            if (res.locals.roleLogin.permission.includes("products_edit")) {
                 try {
                     for (let i = 0; i < ids.length; i++) {
                         const id = ids[i];
@@ -150,7 +156,14 @@ module.exports.changeMulti = async (req, res) => {
                     req.flash("error", "Đổi trạng thái tất cả sản phẩm đã chọn thất bại!!");
                     break;
                 }
-            case "delete":
+            }
+            else {
+                res.send("Hack faild");
+            }
+
+
+        case "delete":
+            if (res.locals.roleLogin.permission.includes("products_delete")) {
                 try {
                     const deletedBy = {
                         idAccountDeleted: res.locals.userLogin.id,
@@ -173,7 +186,13 @@ module.exports.changeMulti = async (req, res) => {
                     req.flash("error", "Xóa tất cả sản phẩm thất bại!!");
                     break;
                 }
-            case "change-position":
+            }
+            else {
+                res.send("Hack faild");
+            }
+
+        case "change-position":
+            if (res.locals.roleLogin.permission.includes("products_edit")) {
                 try {
                     for (const tmp of ids) {
                         const [id, position] = tmp.split("-");
@@ -197,13 +216,13 @@ module.exports.changeMulti = async (req, res) => {
                     req.flash("error", "Đổi vị trí tất cả sản phẩm đã chọn thất bại!!");
                     break;
                 }
-        }
-        res.redirect("back");
-    }
-    else {
-        res.send("Hack faild");
-    }
+            }
+            else {
+                res.send("Hack faild");
+            }
 
+    }
+    res.redirect("back");
 }
 
 module.exports.deleteProduct = async (req, res) => {

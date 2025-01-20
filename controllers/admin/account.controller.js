@@ -247,17 +247,17 @@ module.exports.editAccount = async (req, res) => {
 
 }
 module.exports.changeMulti = async (req, res) => {
-    if (res.locals.roleLogin.permission.includes("account_edit")) {
-        try {
-            const ids = req.body.ids.split(",");
-            const type = req.body.type;
-            const updatedBy = {
-                idAccountUpdated: res.locals.userLogin.id,
-                nameAccountUpdated: res.locals.userLogin.fullName,
-                dateUpdated: new Date()
-            };
-            switch (type) {
-                case "active":
+    try {
+        const ids = req.body.ids.split(",");
+        const type = req.body.type;
+        const updatedBy = {
+            idAccountUpdated: res.locals.userLogin.id,
+            nameAccountUpdated: res.locals.userLogin.fullName,
+            dateUpdated: new Date()
+        };
+        switch (type) {
+            case "active":
+                if (res.locals.roleLogin.permission.includes("account_edit")) {
                     for (let id of ids) {
                         const oldAccount = await Account.findOne(
                             {
@@ -296,8 +296,14 @@ module.exports.changeMulti = async (req, res) => {
                     }
                     req.flash("success", "Thay đổi thành trạng thái hoạt động thành công !!")
                     res.redirect("back");
-                    break;
-                case "inactive":
+                }
+                else {
+                    res.send("Hack faild")
+                }
+                
+                break;
+            case "inactive":
+                if (res.locals.roleLogin.permission.includes("account_edit")) {
                     for (let id of ids) {
                         const oldAccount = await Account.findOne(
                             {
@@ -336,8 +342,14 @@ module.exports.changeMulti = async (req, res) => {
                     }
                     req.flash("success", "Thay đổi thành trạng thái dừng hoạt động thành công !!")
                     res.redirect("back");
-                    break;
-                case "delete":
+                }
+                else {
+                    res.send("Hack faild")
+                }
+                
+                break;
+            case "delete":
+                if (res.locals.roleLogin.permission.includes("account_delete")) {
                     const deletedBy = {
                         idAccountDeleted: res.locals.userLogin.id,
                         dateDeleted: new Date()
@@ -350,19 +362,19 @@ module.exports.changeMulti = async (req, res) => {
                     req.flash("success", "Xóa thành công !!")
                     res.redirect("back");
                     break;
-                default:
-                    break;
-            }
-        } catch (error) {
-            req.flash("error", "Thực hiện hành động thất bại!!!");
-            res.redirect("back");
-            return;
+                }
+                else {
+                    res.send("Hack faild")
+                }
+                
+            default:
+                break;
         }
+    } catch (error) {
+        req.flash("error", "Thực hiện hành động thất bại!!!");
+        res.redirect("back");
+        return;
     }
-    else {
-        res.send("hack faild");
-    }
-
 }
 module.exports.viewLogUpdateAccount = async (req, res) => {
     const account = await Account.findOne(

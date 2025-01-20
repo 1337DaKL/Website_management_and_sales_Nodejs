@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const controller = require("../../controllers/admin/dustbinAccount.controller.js");
-const cloud = require("../../middlewares/admin/cloud.middlewares.js")
-var multer = require('multer');
-var upload = multer();
 
 
 router.get("/", controller.index);

@@ -95,11 +95,11 @@ module.exports.changeStatus = async (req, res) => {
 
 }
 module.exports.changeMulti = async (req, res) => {
-    if (res.locals.roleLogin.permission.includes("products-category_edit")) {
-        const ids = req.body.ids.split(",");
-        const type = req.body.type;
-        switch (type) {
-            case "active":
+    const ids = req.body.ids.split(",");
+    const type = req.body.type;
+    switch (type) {
+        case "active":
+            if (res.locals.roleLogin.permission.includes("products-category_edit")) {
                 try {
                     const updatedBy = {
                         idAccountUpdated: res.locals.userLogin.id,
@@ -126,7 +126,13 @@ module.exports.changeMulti = async (req, res) => {
                     req.flash("error", "Đổi trạng thái tất cả sản phẩm đã chọn không thành công!!");
                     break;
                 }
-            case "inactive":
+            }
+            else {
+                res.send("Hack faild");
+            }
+
+        case "inactive":
+            if (res.locals.roleLogin.permission.includes("products-category_edit")) {
                 try {
                     const updatedBy = {
                         idAccountUpdated: res.locals.userLogin.id,
@@ -153,7 +159,13 @@ module.exports.changeMulti = async (req, res) => {
                     req.flash("error", "Đổi trạng thái tất cả sản phẩm đã chọn không thành công!!");
                     break;
                 }
-            case "delete":
+            }
+            else {
+                res.send("Hack faild");
+            }
+
+        case "delete":
+            if (res.locals.roleLogin.permission.includes("products-category_delete")) {
                 try {
                     const deletedBy = {
                         idAccountDeleted: res.locals.userLogin.id,
@@ -177,7 +189,13 @@ module.exports.changeMulti = async (req, res) => {
                     req.flash("error", "Xóa sản phẩm không thành công!!");
                     break;
                 }
-            case "change-position":
+            }
+            else {
+                res.send("Hack faild");
+            }
+
+        case "change-position":
+            if (res.locals.roleLogin.permission.includes("products-category_edit")) {
                 try {
                     const updatedBy = {
                         idAccountUpdated: res.locals.userLogin.id,
@@ -206,12 +224,12 @@ module.exports.changeMulti = async (req, res) => {
                     req.flash("error", "Đổi vị trí tất cả sản phẩm đã chọn không thành công!!");
                     break;
                 }
-        }
-        res.redirect("back");
+            }
+            else {
+                res.send("Hack faild");
+            }
     }
-    else {
-        res.send("Hack faild");
-    }
+    res.redirect("back");
 
 }
 module.exports.createCategory = async (req, res) => {

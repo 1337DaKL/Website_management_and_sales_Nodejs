@@ -2,6 +2,7 @@ const Messenger = require("../../models/messenger.model");
 const Product = require("../../models/products.model");
 const { model } = require("mongoose");
 const nodemailer = require('nodemailer');
+const priceHelper = require("../../helper/chuanHoaGiaHang");
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -23,10 +24,20 @@ module.exports.index = async (req, res) => {
         status: "active",
         featured: "1"
     }).sort({ position: "desc" }).limit(6);
+    const newProductNew = productsNew.map((tmp) => {
+        tmp.newPrice = priceHelper((tmp.price - tmp.price * tmp.discount / 100).toFixed(0));
+        tmp.priceString = priceHelper(tmp.price);
+        return tmp;
+    })
+    const newProductFeatured = productFeatured.map((tmp) => {
+        tmp.newPrice = priceHelper((tmp.price - tmp.price * tmp.discount / 100).toFixed(0));
+        tmp.priceString = priceHelper(tmp.price);
+        return tmp;
+    })
     res.render("client/pages/home/index.pug", {
         titlePage: "Trang chu",
-        productsNew: productsNew,
-        productFeatured: productFeatured
+        productsNew: newProductNew,
+        productFeatured: newProductFeatured
     });
 }
 module.exports.contact = async (req, res) => {

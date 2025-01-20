@@ -7,11 +7,14 @@ mixin change-status-multi()
         .d-flex.align-items-start
             .form-group.mr-2
                 select.form-control(name="type" select-option)
-                    option(disabled selected) --Chọn hành động--
-                    option(value="active") Hoạt động 
+                    if roleLogin.permission.includes("product_edit")
+                        option(disabled selected) --Chọn hành động--
+                        option(value="active") Hoạt động 
                     option(value="inactive") Dừng hoạt động 
-                    option(value="delete") Xóa
-                    option(value="change-position") Đổi vị trí  
+                    if roleLogin.permission.includes("product_delete")
+                        option(value="delete") Xóa
+                    if roleLogin.permission.includes("product_edit")
+                        option(value="change-position") Đổi vị trí  
             .form-group.mr-2
                 input.form-control.d-none(
                     type="text"

@@ -1,0 +1,35 @@
+extends ../../layouts/defaut.pug
+
+
+block main 
+    h3 Chi tiết danh mục bài viết 
+        b #{postCategory.title}
+    if roleLogin.permission.includes("post-category_view")
+      div.container(style="max-width: 1400px; margin: 0 auto; padding: 40px;")
+        div.product-card(style="margin-top: 60px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); overflow: hidden;")
+          div(style="display: flex; gap: 30px;")
+            div.image-section(style="flex: 1; display: flex; align-items: center; justify-content: center; background-color: #f1f1f1;")
+              img(src=postCategory.thumbnail alt="Product Image" style="max-width: 100%; max-height: 100%; object-fit: cover;")
+            div.details-section(style="flex: 2; padding: 30px;")
+              h1(style="font-size: 36px; font-weight: 800; margin-bottom: 20px;") #{postCategory.title}
+              div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
+                span Trạng thái: 
+                if(postCategory.status == "active")
+                  span(style="color: #28a745; font-weight: 600;") Đang hoạt động
+                else 
+                  span(style="color: #dc3545; font-weight: 600;") Không hoạt động
+              div(style="font-size: 18px; color: #6c757d; margin-bottom: 15px;")
+                - const date = moment(postCategory.createdBy.dateCreated).format("HH:mm:ss DD/MM/YYYY")
+                span Ngày tạo: 
+                span 
+                  b #{date} bởi #{postCategory.createdBy.nameAccountCreated}
+              p(style="font-size: 18px; line-height: 1.8; color: #555; margin-bottom: 30px;") !{postCategory.description}
+              if roleLogin.permission.includes("post-category_edit")
+                a(href=`${frefixAdmin}/postCategory/edit/${postCategory.id}` style="display: inline-block; padding: 15px 30px; background-color: #28a745; color: #fff; text-decoration: none; font-size: 18px; font-weight: 600; border-radius: 6px; transition: background-color 0.3s ease;margin-right: 20px;") Chỉnh sửa
+              if roleLogin.permission.includes("post-category_view-log-updated")
+                a(href=`${frefixAdmin}/postCategory/logUpdate/${postCategory.id}` style="display: inline-block; padding: 15px 30px; background-color:rgb(136, 179, 20); color: #fff; text-decoration: none; font-size: 18px; font-weight: 600; border-radius: 6px; transition: background-color 0.3s ease;") Lịch sử cập nhập danh mục
+    else 
+      h2 Bạn không có quyền truy cập vào trang này
+
+      
+

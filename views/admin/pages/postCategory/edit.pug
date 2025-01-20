@@ -1,41 +1,42 @@
 extends ../../layouts/defaut.pug
 include ../../mixins/level-tree.pug
 block main  
-    h1(class="mb-4") Thêm mới danh mục bài viết
-    if roleLogin.permission.includes("post-category_create")
+    h1(class="mb-4") Chỉnh sửa danh mục sản phẩm
+    if roleLogin.permission.includes("post-category_edit")
         form(
-            action=""
-            id="form-create"
+            action=`${frefixAdmin}/postCategory/edit/${postCategory.id}?_method=PATCH`
+            id="form-edit"
             method="POST"
             enctype="multipart/form-data"
         )
             div(class="form-group")
-                label(for="title") Tiêu đề
+                label(for="title") Tiêu đề
                 input(
                     type="text"
                     class="form-control"
                     id="title"
                     name="title"
-                    placeholder="Nhập danh mục bài viết"
+                    placeholder="Nhập tên sản phẩm"
                     required
+                    value = postCategory.title
                 )
-            div(class="form-group")
-                label(for="idPostCategoryParent") Chọn danh mục sản phẩm cha
+            div(clas="form-group")
+                label(for="parent") Danh mục cha
                 br
-                select(
-                    id="idPostCategoryParent"
-                    name="idPostCategoryParent"
-                ) 
-                    option(value="" ) --Sản phẩm không có cha--
+                select(name="idParent")
+                    option(value=postCategory.idPostCategoryParent)  #{nameParent}
+                    option(value="") Không có danh mục cha
                     +level-tree(treePostCateory)
-            div(class="form-group") 
+
+            div(class="form-group")
                 label(for="description") Mô tả
                 textarea(
                     class="form-control"
                     id="description"
                     name="description"
                     rows="5"
-                ) 
+                    
+                ) #{postCategory.description}
             div(class="form-group" upload-image)
                 label(for="thumbnail") Tải ảnh 
                 input(
@@ -44,11 +45,19 @@ block main
                     type="file"
                     class="form-control-file"
                     accept=".jpg, .png"
+                    value = postCategory.thumbnail
                     input-image
                 )
                 button(type="button" id="clearUpload" clear-upload) X
                 br
-                <img id="blah" src="#" alt="Ảnh bạn đã tải lên" img-image weith = "200px" height = "200px"/>
+                img(
+                    id="blah" 
+                    src=postCategory.thumbnail 
+                    alt="Ảnh bạn đã tải lên" 
+                    img-image 
+                    width="200px" 
+                    height="200px"
+                )
             div(class="form-group")
                 label(for="position") Vị trí
                 input(
@@ -58,6 +67,7 @@ block main
                     class="form-control"
                     min="1"
                     placeholder="Không nhập thì vị trí tự động tăng"
+                    value = postCategory.position
                 )
             div(class="form-group form-check form-check-inline")
                 label(for="statusActive" class="form-check-label" style="margin-right: 10px") Hoạt động
@@ -67,7 +77,7 @@ block main
                     id="statusActive"
                     name="status"
                     value="active"
-                    checked
+                    checked=postCategory.status == "active" ? true : false
                 )
             div(class="form-group form-check form-check-inline")
                 label(for="statusInactive" class="form-check-label" style="margin-right: 10px") Dừng hoạt động    
@@ -77,12 +87,13 @@ block main
                     id="statusInactive"
                     name="status"
                     value="inactive"
+                    checked=postCategory.status == "inactive" ? true : false
                 )
             div(class="form-group")
                 button(
                     type="submit"
                     class="btn btn-primary"
-                ) Tạo mới 
+                ) Sửa
         script(src="/admin/js/create.js") 
     else 
-        h2 Bạn không có quyền truy cập vào trang này
+        h2  Bạn không có quyền truy cập vào trang này

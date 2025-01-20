@@ -24,28 +24,29 @@ block main
                                 class="btn btn-outline-success"
                             ) +Thêm mới tài khoản
                 .row
-                    if roleLogin.permission.includes("account_edit")
-                        form.form-change-multi(
-                            action=`${frefixAdmin}/account/change-multi?_method=PATCH`, 
-                            method="POST"
-                            form-change-multi
-                        )
-                            .d-flex.align-items-start
-                                .form-group.mr-2
-                                    select.form-control(name="type" select-option)
-                                        option(disabled selected) --Chọn hành động--
+                    form.form-change-multi(
+                        action=`${frefixAdmin}/account/change-multi?_method=PATCH`, 
+                        method="POST"
+                        form-change-multi
+                    )
+                        .d-flex.align-items-start
+                            .form-group.mr-2
+                                select.form-control(name="type" select-option)
+                                    option(disabled selected) --Chọn hành động--
+                                    if roleLogin.permission.includes("account_edit")
                                         option(value="active") Hoạt động 
                                         option(value="inactive") Dừng hoạt động 
+                                    if roleLogin.permission.includes("account_delete")
                                         option(value="delete") Xóa 
-                                .form-group.mr-2
-                                    input.form-control.d-none(
-                                        type="text"
-                                        name="ids"
-                                        value=""
-                                        placeholder="San pham ap dung"
-                                        input-ids
-                                    )
-                                button.btn.btn-primary(type="submit") Áp dụng
+                            .form-group.mr-2
+                                input.form-control.d-none(
+                                    type="text"
+                                    name="ids"
+                                    value=""
+                                    placeholder="San pham ap dung"
+                                    input-ids
+                                )
+                            button.btn.btn-primary(type="submit") Áp dụng
         table(
             class="table table-hover table-sm"
             change-status-multi

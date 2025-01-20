@@ -1,0 +1,72 @@
+extends ../../layouts/defaut.pug
+block main 
+    h3 Lịch sử thay đổi danh mục bài viết
+    if roleLogin.permission.includes("post-category_view-log-updated")
+        div.history-container
+            each update , index in logsUpdated.reverse()
+                div.history-item
+                    h1  
+                        b 
+                            i Số thứ tự : #{index + 1}
+                    h3 Thay đổi bởi: #{update.nameAccountUpdated} (ID: #{update.idAccountUpdated})
+                    - const date = moment(update.dateUpdated).format("HH:mm:ss DD/MM/YYYY")
+                    p Thời gian thay đổi: #{date}
+                    h3 Thông tin thay đổi gồm : 
+                    table
+                        thead 
+                            tr 
+                                th Nội dung
+                                th Thông tin cũ 
+                                th Thông tin mới
+                        tbody 
+                            if update.oldPostCategory.title != update.newPostCategory.title
+                                tr 
+                                    td Tiêu đề
+                                    td #{update.oldPostCategory.title}
+                                    td #{update.newPostCategory.title}
+                            if update.nameNewParent != update.nameOldParent
+                                tr 
+                                    td Danh mục cha
+                                    if update.nameOldParent
+                                        td #{update.nameOldParent}
+                                    else 
+                                        td Không có danh mục cha
+                                    if update.nameNewParent
+                                        td #{update.nameNewParent}
+                                    else 
+                                        td Không có danh mục cha
+                            if update.oldPostCategory.thumbnail != update.newPostCategory.thumbnail
+                                tr 
+                                    td Hình ảnh
+                                    td 
+                                        img(src=update.oldCategory.thumbnail, alt="New Thumbnail", style="max-width: 150px;")
+                                    td 
+                                        img(src=update.newPostCategory.thumbnail, alt="New Thumbnail", style="max-width: 150px;")
+                            if update.oldPostCategory.status != update.newPostCategory.status
+                                tr 
+                                    td Trạng thái
+                                    
+                                    td  
+                                        if update.oldPostCategory.status == "active"
+                                            p Hoạt động
+                                        else 
+                                            p Không hoạt động
+                                    td 
+                                        if update.newPostCategory.status == "active"
+                                            p Hoạt động
+                                        else 
+                                            p Không hoạt động
+                            if update.oldPostCategory.position != update.newPostCategory.position
+                                tr 
+                                    td Vị trí
+                                    td #{update.oldPostCategory.position}
+                                    td #{update.newPostCategory.position}
+                            if update.oldPostCategory.description != update.newPostCategory.description
+                                tr 
+                                    td Mô tả
+                                    td !{update.oldPostCategory.description}
+                                    td !{update.newPostCategory.description}
+    else 
+        h2 Bạn không có quyền truy cập vào trang này
+      
+

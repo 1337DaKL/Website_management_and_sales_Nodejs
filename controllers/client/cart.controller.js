@@ -43,3 +43,42 @@ module.exports.addProduct = async (req, res) => {
         res.redirect("back");
     }
 }
+module.exports.addFastProduct = async (req, res) => {
+    try {
+        const idProduct = req.params.id;
+        const idCart = req.cookies.cartId;
+        const cart = await Cart.findOne({ _id: idCart });
+        const exitsProductInCart = cart.product.find(tmp => tmp.productId == idProduct);
+        if (exitsProductInCart) {
+            const newQuantity = exitsProductInCart.quantity + 1;
+            await Cart.updateOne(
+                {
+                    'product.productId': idProduct
+                },
+                {
+                    '$set': {
+                        'product.$.quantity': newQuantity
+                    }
+                }
+            )
+        }
+        else {
+            await Cart.updateOne(
+                { _id: idCart },
+                {
+                    $push: {
+                        product: {
+                            productId: idProduct,
+                            quantity: 1
+                        }
+                    }
+                }
+            )
+        }
+        req.flash("success", "Thêm nhanh sản phẩm vào trong giỏ hành thành công!");
+        res.redirect("back");
+    } catch (error) {
+        req.flash("error", "Thêm nhanh sản phẩm vào giỏ hàng thất bại");
+        res.redirect("back");
+    }
+}
