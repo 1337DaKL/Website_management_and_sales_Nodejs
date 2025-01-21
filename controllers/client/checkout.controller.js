@@ -96,8 +96,15 @@ module.exports.order = async (req, res) => {
         }
         const orderProducts = new Order(order);
         await orderProducts.save();
-        req.flash("success", "Đặt hàng thành công!!");
-        res.redirect("back");
+        await Cart.updateOne(
+            {
+                _id: cartId
+            },
+            {
+                product: []
+            }
+        )
+        res.redirect(`/checkout/success/${orderProducts.id}`);
     } catch (error) {
         req.flash("error", "Đặt hàng không thành công!!");
         res.redirect("back");

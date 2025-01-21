@@ -152,6 +152,16 @@ module.exports.changeQuantity = async (req, res) => {
             res.redirect("back");
             return;
         }
+        const product = await Product.findOne(
+            {
+                _id: id
+            }
+        )
+        if (quantity > product.stock) {
+            req.flash("error", `Xin lỗi trong kho chỉ còn ${product.stock} sản phẩm`);
+            res.redirect("back");
+            return;
+        }
         await Cart.updateMany(
             {
                 "product.productId": id

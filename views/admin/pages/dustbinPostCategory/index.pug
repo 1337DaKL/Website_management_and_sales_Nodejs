@@ -25,7 +25,7 @@ block main
                                     | Tìm kiếm
                     // Chọn và nút áp dụng
                     if roleLogin.permission.includes("post-category_edit-dustbin")   
-                        form(action=`${frefixAdmin}/dustbinCategory/change-multi?_method=PATCH` method="post" form-option)
+                        form(action=`${frefixAdmin}/dustbinPostCategory/change-multi?_method=PATCH` method="post" form-option)
                             .input-group
                                 select.form-control(name="type" select-option)
                                     option(disabled selected) --Chọn hành động--
@@ -97,7 +97,7 @@ block main
 
             form(action=""  method="POST" id="form-restore" path=`${frefixAdmin}/dustbinPostCategory/restore`)
             form(action=""  method="POST" id="form-delete" path=`${frefixAdmin}/dustbinPostCategory/delete`)
-            //- +pagination(pagination)
+            +pagination(pagination)
         script(src="/admin/js/dustbinPostCategory.js") 
     else 
         h2 Bạn không có quyền truy cập vào trang này

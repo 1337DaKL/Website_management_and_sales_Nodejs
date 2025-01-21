@@ -97,3 +97,19 @@
                             li.nav-item
                                 a.nav-link.text-dark.font-weight-bold(href=`${frefixAdmin}/dustbinPostCategory`) 
                                     | Thùng rác danh mục bài viết
+        if roleLogin.permission.includes("post_view") ||  roleLogin.permission.includes("post_view-dustbin")
+            li.nav-item
+                a.nav-link.text-white.font-weight-bold(data-bs-toggle="collapse", href="#postMenu", role="button") 
+                    i.bi.bi-journal-text
+                        b 
+                            |  Quản lý bài viết
+                .collapse#postMenu
+                    ul.nav.flex-column
+                        if roleLogin.permission.includes("post_view")
+                            li.nav-item
+                                a.nav-link.text-dark.font-weight-bold(href=`${frefixAdmin}/post`) 
+                                    | Bài viết
+                        if roleLogin.permission.includes("post_view-dustbin")
+                            li.nav-item
+                                a.nav-link.text-dark.font-weight-bold(href=`${frefixAdmin}/dustbinPost`) 
+                                    | Thùng rác bài viết

@@ -4,6 +4,7 @@ const controller = require("../../controllers/admin/dustbinPostCategory.controll
 
 
 router.get("/", controller.index);
-router.patch("/restore/:id" , controller.restorePostCategory);
-router.delete("/delete/:id" , controller.deletePostCategory);
+router.patch("/restore/:id", controller.restorePostCategory);
+router.delete("/delete/:id", controller.deletePostCategory);
+router.patch("/change-multi", controller.changeMulti);
 module.exports = router;
