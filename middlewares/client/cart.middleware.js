@@ -9,5 +9,13 @@ module.exports.createCart = async (req, res, next) => {
     else {
         console.log("Đã có giỏ hàng!!");
     }
+    const cartId = req.cookies.cartId;
+    const cartHeader = await Cart.findOne({
+        _id: cartId
+    });
+    const countProductInCart = cartHeader.product.reduce((cnt, tmp) => {
+        return tmp.quantity + cnt;
+    }, 0);
+    res.locals.countProductInCart = countProductInCart;
     next();
 }

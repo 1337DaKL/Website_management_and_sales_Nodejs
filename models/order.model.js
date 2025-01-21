@@ -1,0 +1,32 @@
+const mongoose = require("mongoose");
+var slug = require('mongoose-slug-updater');
+mongoose.plugin(slug);
+const orderSchema = new mongoose.Schema(
+    {
+        cart_id: String,
+        userInfor: {
+            fullName: String,
+            email: String,
+            telephone: String,
+            address: String
+        },
+        products: [
+            {
+                product_id: String,
+                price: Number,
+                discount: Number,
+                quantity: Number
+            }
+        ],
+        dateOrder: {
+            type: Date,
+            default: Date.now
+        }
+    }
+);
+
+
+const Order = mongoose.model('Order', orderSchema, "order");
+
+
+module.exports = Order;

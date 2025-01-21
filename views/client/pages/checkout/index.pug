@@ -1,0 +1,62 @@
+extends ../../layouts/defaut.pug
+include ../../mixins/box-head.pug
+block main
+    .container.my-3
+        .row
+            .col-12
+                +box-head("Đặt hàng")
+        if product.length > 0     
+            .row 
+                .col-12
+                    table(class="table table-bordered")
+                        thead 
+                            tr 
+                                th STT 
+                                th Ảnh 
+                                th Tên 
+                                th Giá
+                                th Số lượng 
+                                th Tổng tiền 
+                        tbody 
+                            each item , index in product
+                                tr 
+                                    td #{index + 1}
+                                    td 
+                                        img(src=item.product.thumbnail, alt="Anh san pham" width="100px" height="100px")
+                                    td 
+                                        a(href=`products/detel/${item.product.slug}`) #{item.product.title}
+                                    if item.priceString
+                                        td #{item.priceString} vnđ
+                                    else    
+                                        td Lỗi
+                                    td #{item.quantity}
+                                    if item.totalPriceString
+                                        td #{item.totalPriceString} vnđ
+                                    else 
+                                        td Lỗi
+                    h3(class="text-right") Tổng đơn hàng: #{totalCart} vnđ
+            .row
+                .col-12
+                    .card.p-4.my-4
+                        form(action="/checkout/order" method="POST")
+                            .form-group
+                                label(for="fullName") Họ tên*
+                                input#fullName.form-control(type="text" name="fullName" required)
+                            .form-group
+                                label(for="phone") Số điện thoại*
+                                input#phone.form-control(type="text" name="telephone" required)
+                            .form-group
+                                label(for="email") Email*
+                                input#email.form-control(type="text" name="email" required)
+                            .form-group
+                                label(for="address") Địa chỉ*
+                                input#address.form-control(type="text" name="address" required)
+                            div(class="text-right mt-3")
+                                button(type="submit" action="" class="btn btn-success") THANH TOÁN 
+        else 
+            .container.mt-5
+                        .row.justify-content-center
+                            .col-md-6
+                                .alert.alert-warning.text-center
+                                    i.bi.bi-exclamation-triangle-fill 
+                                    | Giỏ hàng trống!!

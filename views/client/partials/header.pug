@@ -36,3 +36,6 @@ header.header
                 +tree-category(categoryTree)
             li.nav-item
                 a.nav-link(href="/contact") Liên Hệ
+            li.nav-item
+                a.nav-link(href="/cart") Giỏ hàng 
+                    b(style="color:red;") (#{countProductInCart ? countProductInCart : "0"})

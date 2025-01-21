@@ -1,4 +1,6 @@
 const Cart = require("../../models/cart.model");
+const Product = require("../../models/products.model");
+const priceHelper = require("../../helper/chuanHoaGiaHang");
 module.exports.addProduct = async (req, res) => {
     try {
         const productId = req.params.id;
@@ -80,5 +82,89 @@ module.exports.addFastProduct = async (req, res) => {
     } catch (error) {
         req.flash("error", "Thêm nhanh sản phẩm vào giỏ hàng thất bại");
         res.redirect("back");
+    }
+}
+
+module.exports.index = async (req, res) => {
+    const cart = await Cart.findOne(
+        {
+            _id: req.cookies.cartId
+        }
+    )
+    const product = cart.product;
+    let totalCart = 0;
+    for (let item of product) {
+        const id = item.productId;
+        const product = await Product.findOne({
+            deleted: false,
+            _id: id
+        });
+        item.product = product;
+        if (product.price) {
+            const priceNew = (product.price - product.price * product.discount / 100).toFixed(0);
+            item.totalPrice = priceNew * item.quantity;
+            totalCart += item.totalPrice;
+            if (item.totalPrice) {
+                item.totalPriceString = priceHelper(item.totalPrice);
+            }
+
+            item.priceString = priceHelper(priceNew);
+        }
+
+    }
+    const totalCartString = priceHelper(totalCart);
+    res.render("client/pages/cart/index.pug", {
+        titlePage: "Giỏ hàng",
+        product: product,
+        totalCart: totalCartString
+    })
+}
+
+module.exports.deleteProductInCart = async (req, res) => {
+    try {
+        const cartId = req.cookies.cartId;
+        const productId = req.params.id;
+        await Cart.updateOne(
+            {
+                _id: cartId
+            },
+            {
+                "$pull": {
+                    product: {
+                        "productId": productId
+                    }
+                }
+            }
+        )
+        req.flash("success", "Xóa sản phẩm ra giỏ hàng thành công");
+        res.redirect("back");
+    } catch (error) {
+        req.flash("error", "Xóa sản phẩm ra giỏ hàng không thành công");
+        res.redirect("back");
+    }
+}
+module.exports.changeQuantity = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const quantity = parseInt(req.params.quantity);
+        if (quantity <= 0) {
+            req.flash("error", "Xin lỗi!! Phải có ít nhất 1 sản phẩm !!");
+            res.redirect("back");
+            return;
+        }
+        await Cart.updateMany(
+            {
+                "product.productId": id
+            },
+            {
+                '$set': {
+                    'product.$.quantity': quantity
+                }
+            }
+        )
+        req.flash("success", "Đổi số lượng sản phẩm thành công");
+        res.redirect("back");
+    } catch (error) {
+
     }
 }
