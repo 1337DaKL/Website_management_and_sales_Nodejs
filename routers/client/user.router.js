@@ -1,0 +1,15 @@
+const express = require("express");
+const router = express.Router();
+const controller = require("../../controllers/client/user.controller");
+router.get("/login", controller.loginUser);
+router.get("/register", controller.register);
+router.post("/register", controller.registerPost);
+router.post("/login", controller.loginPost);
+router.get("/logout", controller.logoutPost);
+router.get("/password/forgot", controller.viewForgotPassword);
+router.post("/password/forgot", controller.forgotPassword);
+router.get("/password/otp", controller.viewOtp);
+router.post("/password/otp", controller.otp);
+router.get("/password/reset", controller.viewResetPassword);
+router.post("/password/reset" , controller.resetPassword);
+module.exports = router;

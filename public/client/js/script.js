@@ -24,3 +24,16 @@ if (buttonClearSearch) {
     })
 }
 //end clear seach
+
+
+//logout
+const buttonLogout = document.querySelector("[button-logout]");
+if (buttonLogout) {
+    buttonLogout.addEventListener("click", () => {
+        const confirmLogout = confirm("Bạn có muốn đăng xuất không?");
+        if (confirmLogout) {
+            window.location.href = "/user/logout";
+        }
+    })
+}
+//end logout

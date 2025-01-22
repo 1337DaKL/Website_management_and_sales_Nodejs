@@ -51,7 +51,10 @@ module.exports.viewProductSlug = async (req, res) => {
         return arrayChild;
     }
 
-    const arrayCategory = await getChildCategory(categoryProduct.id);
+    let arrayCategory;
+    if (categoryProduct.id) {
+        arrayCategory = await getChildCategory(categoryProduct.id);
+    }
     let find = {
         status: "active",
         deleted: false,
@@ -71,8 +74,7 @@ module.exports.viewProductSlug = async (req, res) => {
     pagination.totalPage = Math.ceil(countProducts / pagination.limitPage);
     const products = await Product.find(find).limit(pagination.limitPage).skip(pagination.skipPage);
     const newProducts = products.map((test) => {
-        if(test.price)
-        {
+        if (test.price) {
             test.newPrice = priceString((test.price - test.price * test.discount / 100).toFixed(0));
             test.priceString = priceString(test.price);
         }
@@ -81,7 +83,7 @@ module.exports.viewProductSlug = async (req, res) => {
     res.render("client/pages/products/index.pug", {
         titlePage: "Trang danh sach san pham",
         products: newProducts,
-        pagination : pagination
+        pagination: pagination
     });
 
 }
@@ -98,8 +100,7 @@ module.exports.viewDetel = async (req, res) => {
         product.priceString = priceString(product.price);
     }
     let category = "No";
-    if(product.category)
-    {
+    if (product.category) {
         category = await Category.findOne({
             deleted: false,
             status: "active",

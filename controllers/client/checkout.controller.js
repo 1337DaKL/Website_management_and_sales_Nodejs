@@ -110,3 +110,31 @@ module.exports.order = async (req, res) => {
         res.redirect("back");
     }
 }
+module.exports.checkoutSuccess = async (req, res) => {
+    const id = req.params.id;
+    const order = await Order.findOne(
+        {
+            _id: id
+        }
+    )
+    for (let item of order.products) {
+        const product = await Product.findOne(
+            {
+                _id: item.product_id,
+            }
+        ).select("thumbnail title slug")
+        item.productInfor = product;
+        const priceNew = (item.price - item.price * item.discount / 100).toFixed(0);
+        item.priceString = priceHelper(priceNew);
+        item.total = priceNew * item.quantity;
+        item.totalString = priceHelper(item.total);
+    }
+    const totalCart = priceHelper(order.products.reduce((cnt, tmp) => {
+        return cnt + tmp.total;
+    }, 0))
+    res.render("client/pages/checkout/success.pug", {
+        titlePage: "Thanh toán thành công",
+        order: order,
+        totalCart: totalCart
+    })
+}
