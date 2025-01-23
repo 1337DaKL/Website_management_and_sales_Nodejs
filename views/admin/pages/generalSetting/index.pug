@@ -1,0 +1,83 @@
+extends ../../layouts/defaut.pug
+block main
+    h1 Cài đặt chung
+    form(
+            action=""
+            id="form-create"
+            method="POST"
+            enctype="multipart/form-data"
+        )
+            div(class="form-group" upload-image)
+                label(for="logo") Ảnh logo website*
+                input(
+                    id="logo"
+                    name="logo"
+                    type="file"
+                    class="form-control-file"
+                    accept=".jpg, .png"
+                    input-image
+                    value=generalSetting.logo
+                )
+                button(type="button" id="clearUpload" clear-upload) X
+                br
+                img(id="blah" src=generalSetting.logo alt="Ảnh bạn đã tải lên" img-image weith = "200px" height = "200px")
+            div(class="form-group")
+                label(for="name") Tên website*
+                input(
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    placeholder="Nhập tên"
+                    value=generalSetting.name
+                    required
+                )
+            div(class="form-group")
+                label(for="email") Email*
+                input(
+                    type="text"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    placeholder="Nhập email ..."
+                    value=generalSetting.email
+                    required
+                ) 
+
+            div(class="form-group")
+                label(for="address") Địa chỉ
+                input(
+                    id="address"
+                    name="address"
+                    type="text"
+                    class="form-control"
+                    placeholder="Nhập địa chỉ"
+                    value=generalSetting.address
+                )
+            div(class="form-group") 
+                label(for="telephone") Số điện thoại
+                input(
+                    id="telephone"
+                    name="telephone"
+                    type="text"
+                    placeholder="Nhập số điện thoại ..."
+                    class="form-control"
+                    value=generalSetting.telephone
+                )   
+            div(class="form-group") 
+                label(for="footer") Footer*
+                input(
+                    id="footer"
+                    name="footer"
+                    type="text"
+                    placeholder=""
+                    class="form-control"
+                    value=generalSetting.footer
+                    required
+                )  
+            div(class="form-group")
+                button(
+                    type="submit"
+                    class="btn btn-primary"
+                ) Cập nhật
+            script(src="/admin/js/create.js") 

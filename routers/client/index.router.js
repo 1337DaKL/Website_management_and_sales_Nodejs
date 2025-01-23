@@ -10,9 +10,11 @@ const cartRouter = require("./cart.router.js");
 const checkoutRouter = require("./checkout.router.js");
 const userRouter = require("./user.router.js");
 const userMiddleware = require("../../middlewares/client/user.middleware.js");
+const settingMiddleware = require("../../middlewares/client/setting.middleware.js");
 module.exports = (app) => {
     // trang chu
     app.use(categoryMiddleware.requireCategory);
+    app.use(settingMiddleware.general);
     app.use(cartMiddleware.createCart)
     app.use(userMiddleware.userInfor);
     app.use("/", homeRouters);
