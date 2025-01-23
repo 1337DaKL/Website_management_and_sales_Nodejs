@@ -1,0 +1,27 @@
+extends ../../layouts/defaut.pug
+block main
+    .container
+      .card
+        .card-header.text-center
+          h2 Thông tin cá nhân
+        .card-body
+          .row
+            .col-md-4
+              img(src=user.avartar alt="Chưa có avartar" class="img-fluid rounded-circle")
+            .col-md-8
+              h4= user.fullName
+              p Email: #{user.email}
+              if user.telephone
+                p Điện thoại: #{user.telephone}
+              else 
+                p Điện thoại: Chưa cập nhật.
+              if user.address          
+                p Địa chỉ: #{user.address}
+              else 
+                p Địa chỉ: Chưa cập nhật.
+              
+          hr
+          .text-center
+            a(href=`/user/change-infor`) Thay đổi thông tin
+            |  |
+            a(href="/user/password/reset") Đổi mật khẩu

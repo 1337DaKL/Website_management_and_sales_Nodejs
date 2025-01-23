@@ -2,6 +2,7 @@ var md5 = require('md5');
 const User = require("../../models/user.model");
 const ForgotPassword = require("../../models/forgotPassword.model");
 const nodemailer = require('nodemailer');
+const Cart = require('../../models/cart.model');
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -95,6 +96,16 @@ module.exports.loginPost = async (req, res) => {
             return;
         }
         res.cookie("tokenUser", exitsUser.tokenUser);
+        if (req.cookies.cartId) {
+            await Cart.updateOne(
+                {
+                    _id: req.cookies.cartId
+                },
+                {
+                    userId: exitsUser.id
+                }
+            )
+        }
         req.flash("success", "Đăng nhập thành công!");
         res.redirect("/");
     } catch (error) {
@@ -293,4 +304,71 @@ module.exports.resetPassword = async (req, res) => {
         req.flash("error", "Đổi mật khẩu không thành công!!");
         res.redirect("back");
     }
+}
+module.exports.viewInforUser = async (req, res) => {
+    if (req.cookies.tokenUser) {
+        const user = await User.findOne({
+            tokenUser: req.cookies.tokenUser
+        }).select("-password");
+        res.render("client/pages/user/infor.pug", {
+            titlePage: "Thông tin",
+            user: user
+        })
+    }
+    else {
+        req.flash("error", "Bạn cần phải đăng nhập để vào trang này!!");
+        res.redirect("/user/login");
+    }
+}
+module.exports.viewChangeInfor = async (req, res) => {
+    if (req.cookies.tokenUser) {
+        const user = await User.findOne(
+            {
+                tokenUser: req.cookies.tokenUser
+            }
+        ).select("-password");
+        res.render("client/pages/user/change-infor.pug", {
+            titlePage: "Thay đổi thông tin",
+            user: user
+        })
+    }
+    else {
+        req.flash("error", "Bạn cần phải đăng nhập để vào trang này!!");
+        res.redirect("/user/login");
+    }
+}
+module.exports.changeInfor = async (req, res) => {
+    if (!req.cookies.tokenUser) {
+        req.flash("error", "Bạn cần đăng nhập trước khi muốn đổi thông tin!");
+        res.redirect("/user/login");
+        return;
+    }
+    if (!req.body.fullName) {
+        req.flash("error", "Tên không được để trống!");
+        res.redirect("back");
+        return;
+    }
+    if (!req.body.email) {
+        req.flash("error", "Email không được bỏ trông!!");
+        res.redirect("back");
+        return;
+    }
+    const user = await User.findOne(
+        {
+            tokenUser: req.cookies.tokenUser
+        }
+    )
+    if (!user) {
+        req.flash("error", "Bạn cần đăng nhập trước khi muốn đổi thông tin!");
+        res.redirect("/user/login");
+        return;
+    }
+    await User.updateOne(
+        {
+            tokenUser: req.cookies.tokenUser
+        },
+        req.body
+    )
+    req.flash("success", "Cập nhật thông tin thành công!!");
+    res.redirect("/user/infor");
 }

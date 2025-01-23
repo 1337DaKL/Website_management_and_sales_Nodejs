@@ -13,9 +13,13 @@ module.exports.createCart = async (req, res, next) => {
     const cartHeader = await Cart.findOne({
         _id: cartId
     });
-    const countProductInCart = cartHeader.product.reduce((cnt, tmp) => {
-        return tmp.quantity + cnt;
-    }, 0);
+    let countProductInCart = 0;
+    if (cartHeader) {
+        countProductInCart = cartHeader.product.reduce((cnt, tmp) => {
+            return tmp.quantity + cnt;
+        }, 0);
+    }
+
     res.locals.countProductInCart = countProductInCart;
     next();
 }

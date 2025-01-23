@@ -582,3 +582,66 @@
   color: #721c24; /* Màu chữ đỏ */
   border-color: #f5c6cb; /* Màu viền */
 }
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.name {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.email, .phone {
+  color: #555;
+}
+
+.profile-body h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.bio {
+  line-height: 1.5;
+}
+
+.social-links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.social-links li a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+

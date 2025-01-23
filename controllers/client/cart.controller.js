@@ -86,12 +86,14 @@ module.exports.addFastProduct = async (req, res) => {
 }
 
 module.exports.index = async (req, res) => {
+
     const cart = await Cart.findOne(
         {
             _id: req.cookies.cartId
         }
     )
     const product = cart.product;
+
     let totalCart = 0;
     for (let item of product) {
         const id = item.productId;

@@ -2,6 +2,7 @@ const Cart = require("../../models/cart.model");
 const Product = require("../../models/products.model");
 const priceHelper = require("../../helper/chuanHoaGiaHang");
 const Order = require("../../models/order.model");
+const User = require("../../models/user.model");
 module.exports.index = async (req, res) => {
     const cart = await Cart.findOne(
         {
@@ -94,6 +95,14 @@ module.exports.order = async (req, res) => {
             userInfor: userInfor,
             products: products
         }
+        if (req.cookies.tokenUser) {
+            const user = await User.findOne(
+                {
+                    tokenUser: req.cookies.tokenUser
+                }
+            )
+            order.user_id = user.id;
+        }
         const orderProducts = new Order(order);
         await orderProducts.save();
         await Cart.updateOne(
@@ -112,29 +121,34 @@ module.exports.order = async (req, res) => {
 }
 module.exports.checkoutSuccess = async (req, res) => {
     const id = req.params.id;
+
     const order = await Order.findOne(
         {
             _id: id
         }
     )
-    for (let item of order.products) {
-        const product = await Product.findOne(
-            {
-                _id: item.product_id,
-            }
-        ).select("thumbnail title slug")
-        item.productInfor = product;
-        const priceNew = (item.price - item.price * item.discount / 100).toFixed(0);
-        item.priceString = priceHelper(priceNew);
-        item.total = priceNew * item.quantity;
-        item.totalString = priceHelper(item.total);
+    let totalCart = 0;
+    if (order) {
+        for (let item of order.products) {
+            const product = await Product.findOne(
+                {
+                    _id: item.product_id,
+                }
+            ).select("thumbnail title slug")
+            item.productInfor = product;
+            const priceNew = (item.price - item.price * item.discount / 100).toFixed(0);
+            item.priceString = priceHelper(priceNew);
+            item.total = priceNew * item.quantity;
+            item.totalString = priceHelper(item.total);
+        }
+        totalCart = order.products.reduce((cnt, tmp) => {
+            return cnt + tmp.total;
+        }, 0)
     }
-    const totalCart = priceHelper(order.products.reduce((cnt, tmp) => {
-        return cnt + tmp.total;
-    }, 0))
+    const totalCartString = priceHelper(totalCart);
     res.render("client/pages/checkout/success.pug", {
         titlePage: "Thanh toán thành công",
         order: order,
-        totalCart: totalCart
+        totalCart: totalCartString
     })
 }
