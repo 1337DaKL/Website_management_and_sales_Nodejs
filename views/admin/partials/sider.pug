@@ -118,19 +118,19 @@
                             li.nav-item
                                 a.nav-link.text-dark.font-weight-bold(href=`${frefixAdmin}/dustbinPost`) 
                                     | Thùng rác bài viết
-        if roleLogin.permission.includes("post_view") ||  roleLogin.permission.includes("post_view-dustbin")
+        if roleLogin.permission.includes("order_view") ||  roleLogin.permission.includes("order_view-dustbin")
             li.nav-item
-                a.nav-link.text-white.font-weight-bold(data-bs-toggle="collapse", href="#postMenu", role="button") 
+                a.nav-link.text-white.font-weight-bold(data-bs-toggle="collapse", href="#orderMenu", role="button") 
                     i.bi.bi-journal-text
                         b 
                             |  Quản lí đơn hàng
-                .collapse#postMenu
+                .collapse#orderMenu
                     ul.nav.flex-column
-                        if roleLogin.permission.includes("post_view")
+                        if roleLogin.permission.includes("order_view")
                             li.nav-item
-                                a.nav-link.text-dark.font-weight-bold(href=`${frefixAdmin}/post`) 
+                                a.nav-link.text-dark.font-weight-bold(href=`${frefixAdmin}/order`) 
                                     | Đơn hàng
-                        if roleLogin.permission.includes("post_view-dustbin")
+                        if roleLogin.permission.includes("order_view-dustbin")
                             li.nav-item
                                 a.nav-link.text-dark.font-weight-bold(href=`${frefixAdmin}/dustbinPost`) 
                                     | Thùng rác đơn hàng

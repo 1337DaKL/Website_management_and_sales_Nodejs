@@ -327,6 +327,47 @@ block main
                     each role in roles
                         th(class="text-center") 
                             input(type="checkbox")
+                //-Quản lí đơn hàng
+                //-Quản lí bài viết
+
+                tr
+                    td(colspan=roles.length + 1)
+                        b Quản lí đơn hàng
+                tr(data-name="order_view")
+                    td Xem
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="order_edit")
+                    td Chỉnh sửa
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="order_delete")
+                    td Xóa
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="order_view-dustbin")
+                    td Xem thùng rác
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="order_edit-dustbin")
+                    td Khôi phục hoặc xóa vĩnh viễn
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="order_view-log-updated")
+                    td Xem lịch sử thay đổi 
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
+                tr(data-name="order_delete-log-updated")
+                    td Xóa lịch sử thay đổi 
+                    each role in roles
+                        th(class="text-center") 
+                            input(type="checkbox")
 
         form(action=`${frefixAdmin}/role/update-permission?_method=PATCH` method="post" form-permission class="d-none") 
             input(type="text" value name="permission" input-permission)

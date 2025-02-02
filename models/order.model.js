@@ -22,6 +22,14 @@ const orderSchema = new mongoose.Schema(
         dateOrder: {
             type: Date,
             default: Date.now
+        },
+        status: {
+            type: String,
+            default: "pending"
+        },
+        deleted : {
+            type : Boolean,
+            default : false
         }
     }
 );

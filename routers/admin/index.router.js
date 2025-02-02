@@ -16,6 +16,7 @@ const dustbinAccountRouter = require("./dustbinAccount.router.js");
 const postCategoryRouter = require("./postCategory.router.js");
 const dustbinPOstCategoryRouter = require("./dustbinPostCategory.router.js");
 const generalSettingRouter = require("./generalSetting.router.js");
+const orderRouter = require("./order.router.js");
 module.exports = (app) => {
     const PATH_ADMIN = systemConfig.prefixAdmin;
     app.use(PATH_ADMIN + "/dashboard", authMiddleware.requireAuth, dashboardRouter);
@@ -34,4 +35,5 @@ module.exports = (app) => {
     app.use(PATH_ADMIN + "/postCategory", authMiddleware.requireAuth, postCategoryRouter);
     app.use(PATH_ADMIN + "/dustbinPostCategory", authMiddleware.requireAuth, dustbinPOstCategoryRouter);
     app.use(PATH_ADMIN + "/general-setting", authMiddleware.requireAuth, generalSettingRouter);
+    app.use(PATH_ADMIN + "/order", authMiddleware.requireAuth, orderRouter);
 };
