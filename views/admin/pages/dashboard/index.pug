@@ -6,9 +6,9 @@ block main
                 .col-md-2
                 .col-md-6
                     div
-                        h4 Họ và tên: 
-                        h4 Quyền quản trị:
-            h1 Dashboard Thống Kê
+                        h4 Họ và tên: #{userLogin.fullName}
+                        h4 Quyền quản trị: #{roleLogin.title}
+            h1 Tổng quan thống Kê
             .row
                 .col-md-6
                     h2 Tài khoản
@@ -20,13 +20,30 @@ block main
                         tbody
                             tr
                                 td Tổng
-                                td 10
+                                td #{account.countObject}
                             tr
                                 td Đang hoạt động
-                                td 2
+                                td #{account.countActive}
                             tr
                                 td Dừng hoạt động
-                                td 2
+                                td #{account.countInactive}
+                .col-md-6
+                    h2 Đơn hàng
+                    table.table.table-bordered
+                        thead
+                            tr
+                                th Thống kê
+                                th Số lượng
+                        tbody
+                            tr
+                                td Tổng
+                                td #{account.countObject}
+                            tr
+                                td Đang hoạt động
+                                td #{account.countActive}
+                            tr
+                                td Dừng hoạt động
+                                td #{account.countInactive}
             .row
                 .col-md-6
                     h2 Danh mục sản phẩm
@@ -38,13 +55,13 @@ block main
                         tbody
                             tr
                                 td Tổng
-                                td 10
+                                td #{productCategory.countObject}
                             tr
                                 td Đang hoạt động
-                                td 2
+                                td #{productCategory.countActive}
                             tr
                                 td Dừng hoạt động
-                                td 2
+                                td #{productCategory.countInactive}
                 .col-md-6
                     h2 Sản phẩm
                     table.table.table-bordered
@@ -55,13 +72,13 @@ block main
                         tbody
                             tr
                                 td Tổng
-                                td 10
+                                td #{product.countObject}
                             tr
                                 td Đang hoạt động
-                                td 2
+                                td #{product.countActive}
                             tr
                                 td Dừng hoạt động
-                                td 2
+                                td #{product.countInactive}
             .row
                 .col-md-6
                     h2 Danh mục bài viết
@@ -73,13 +90,13 @@ block main
                         tbody
                             tr
                                 td Tổng
-                                td 10
+                                td #{postCategory.countObject}
                             tr
                                 td Đang hoạt động
-                                td 2
+                                td #{postCategory.countActive}
                             tr
                                 td Dừng hoạt động
-                                td 2
+                                td #{postCategory.countInactive}
                 .col-md-6
                     h2 Bài viết
                     table.table.table-bordered
@@ -108,13 +125,13 @@ block main
                         tbody
                             tr
                                 td Tổng
-                                td 10
+                                td #{messenger.countObject}
                             tr
-                                td Đang hoạt động
-                                td 2
+                                td Đã xem
+                                td #{messenger.countSeen}
                             tr
-                                td Dừng hoạt động
-                                td 2
+                                td Chưa xem
+                                td #{messenger.countNotSeen}
                 .col-md-6
                     h2 Quyền quản trị
                     table.table.table-bordered
@@ -125,15 +142,10 @@ block main
                         tbody
                             tr
                                 td Tổng
-                                td 10
+                                td #{role.countObject}
                             tr
                                 td Đang hoạt động
-                                td 2
+                                td #{role.countActive}
                             tr
                                 td Dừng hoạt động
-                                td 2
-
-            .row
-                .col-md-12
-                    h2 Biểu Đồ
-                    p Biểu đồ sẽ được hiển thị ở đây
+                                td #{role.countInactive}

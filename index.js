@@ -23,7 +23,7 @@ const passwordcookieParser = process.env.PASSWORLD;
 app.use(cookieParser(passwordcookieParser));
 const expressSession = require('express-session'); // Đổi tên khai báo
 app.use(expressSession({
-    secret: process.env.PASSWORLD, // Thay bằng khóa bí mật của bạn
+    secret: process.env.PASSWORLD, 
     resave: false,
     saveUninitialized: true,
     cookie: {
