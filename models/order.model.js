@@ -27,10 +27,50 @@ const orderSchema = new mongoose.Schema(
             type: String,
             default: "pending"
         },
-        deleted : {
-            type : Boolean,
-            default : false
-        }
+        updatedBy: [
+            {
+                idAccountUpdated: String,
+                nameAccountUpdated: String,
+                dateUpdated: Date,
+                oldOrder: {
+                    userInfor: {
+                        fullName: String,
+                        email: String,
+                        telephone: String,
+                        address: String
+                    },
+                    products: [
+                        {
+                            quantity: Number
+                        }
+                    ],
+                    status: String
+                },
+                newOrder: {
+                    userInfor: {
+                        fullName: String,
+                        email: String,
+                        telephone: String,
+                        address: String
+                    },
+                    products: [
+                        {
+                            quantity: Number
+                        }
+                    ],
+                    status: String
+                },
+            }
+        ],
+        deleted: {
+            type: Boolean,
+            default: false
+        },
+        deletedBy: {
+            idAccountDeleted: String,
+            nameAccountDeleted: String,
+            dateDeleted: Date
+        },
     }
 );
 

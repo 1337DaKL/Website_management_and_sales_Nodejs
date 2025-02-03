@@ -1,0 +1,90 @@
+extends ../../layouts/defaut.pug
+block main
+    h1 Chi tiết đơn hàng
+    .container.my-3
+        .row 
+            .col-12 
+                h4(class="mb-2") Thông tin đơn hàng
+                table(class="table table-bordered")
+                    tbody
+                        tr
+                            td Tài khoản
+                            if(order.user)
+                                td 
+                                    b #{order.user.fullName} 
+                            else 
+                                td Khách vãng lai 
+                        tr 
+                            td Email 
+                            if(order.user)
+                                td 
+                                    b #{order.user.email} 
+                            else 
+                                td Khách vãng lai
+                        tr
+                            td Ngày đặt hàng
+                            td 
+                                -const date = moment(order.dateOrder).format("HH:mm:ss DD/MM/YYYY")
+                                b  #{date}
+                        tr 
+                            td Trạng thái đơn hàng
+                            td 
+                                b #{order.statusTranscripted}
+        .row 
+            .col-12 
+                h4(class="mb-2") Thông tin người nhận hàng
+                table(class="table table-bordered")
+                    tbody
+                        tr
+                            td Họ và tên 
+                            td 
+                                b #{order.userInfor.fullName} 
+                        tr
+                            td Số điện thoại 
+                            td 
+                                b  #{order.userInfor.telephone}
+                        tr
+                            td Email
+                            td 
+                                b  #{order.userInfor.email}
+                        tr
+                            td Địa chỉ
+                            td 
+                                b #{order.userInfor.address}
+        .row 
+            .col-12
+                h4(class="mb-2") Thông tin đơn hàng
+                table(class="table table-bordered")
+                    thead 
+                        tr 
+                            th STT 
+                            th Ảnh 
+                            th Tên 
+                            th Giá
+                            th Số lượng 
+                            th Tổng tiền 
+                    tbody 
+                        if(order.products.length > 0)
+                            each item, index in order.products
+                                tr 
+                                    td #{index + 1}
+                                    td 
+                                        img(src=item.productDetail.thumbnail, alt="Anh san pham" width="100px" height="100px")
+                                    td #{item.productDetail.title}
+                                    if item.priceString
+                                        td #{item.priceString} vnđ
+                                    else    
+                                        td Lỗi
+                                    td #{item.quantity}
+                                    if item.totalPriceString
+                                        td  #{item.totalPriceString}vnđ
+                                    else 
+                                        td Lỗi
+                h3(class="text-right") Tổng đơn hàng: 
+                    b  #{order.totalOrderString} vnđ
+        .row 
+            .col-12
+                if roleLogin.permission.includes("order_edit")
+                    a(href=`${frefixAdmin}/order/edit/${order.id}` style="display: inline-block; padding: 15px 30px; background-color: #28a745; color: #fff; text-decoration: none; font-size: 18px; font-weight: 600; border-radius: 6px; transition: background-color 0.3s ease;margin-right: 20px;") Chỉnh sửa
+                if roleLogin.permission.includes("order_view-log-updated")
+                    a(href=`${frefixAdmin}/order/logUpdate/${order.id}` style="display: inline-block; padding: 15px 30px; background-color:rgb(136, 179, 20); color: #fff; text-decoration: none; font-size: 18px; font-weight: 600; border-radius: 6px; transition: background-color 0.3s ease;") Lịch sử cập nhập đơn hàng    
