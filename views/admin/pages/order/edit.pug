@@ -81,33 +81,32 @@ block main
                                             th Tổng tiền 
                                             th Hành động
                                     tbody 
-                                        //- each item , index in product
-                                        tr 
-                                            td #{ + 1}
-                                            td 
-                                                //- img(src="", alt="Anh san pham" width="100px" height="100px")
-                                            td 
-                                                a(href=`products/detel/`) 
-                                            if true
-                                                td  vnđ
-                                            else    
-                                                td Lỗi
-                                            td 
-                                                input(
-                                                    type="number"
-                                                    name="quantity"
-                                                    value=1
-                                                    min="1"
-                                                    max=1
-                                                    item-id=1
-                                                    style ="width : 60px;"
-                                                    )
-                                            if true
-                                                td 1 vnđ
-                                            else 
-                                                td Lỗi
-                                            td 
-                                                button(class="btn btn-danger" id=1 button-delete) Xóa
+                                        each item , index in order.products
+                                            tr 
+                                                td #{ index+ 1}
+                                                td 
+                                                    img(src=item.productDetail.thumbnail, alt="Anh san pham" width="100px" height="100px")
+                                                td #{item.productDetail.title}
+                                                if true
+                                                    td  #{item.priceString} vnđ
+                                                else    
+                                                    td Lỗi
+                                                td 
+                                                    input(
+                                                        type="number"
+                                                        name="quantity"
+                                                        value=item.quantity
+                                                        min="1"
+                                                        max=item.productDetail.stock
+                                                        item-id=item.productDetail.id
+                                                        style ="width : 60px;"
+                                                        )
+                                                if true
+                                                    td #{item.totalPriceString} vnđ
+                                                else 
+                                                    td Lỗi
+                                                td 
+                                                    button(class="btn btn-danger" id=1 button-delete) Xóa
                                 h3(class="text-right") Tổng đơn hàng: 1
                                 div(class="text-right mt-3")
                                 form(action="", method="post" delete-form) 

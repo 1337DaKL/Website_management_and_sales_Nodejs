@@ -498,7 +498,7 @@ module.exports.viewEditOrder = async (req, res) => {
                     _id: product.product_id,
                     deleted: false
                 }
-            ).select("thumbnail title");
+            ).select("thumbnail title stock id");
             if (productDetail) {
                 product.productDetail = productDetail;
             }
