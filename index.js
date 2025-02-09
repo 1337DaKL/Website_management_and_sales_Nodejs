@@ -5,9 +5,14 @@ const app = express();
 var path = require('path');
 const moment = require('moment');
 app.locals.moment = moment;
-//Nhung filr env vao
+//Nhung file env vao
 
-
+//socket
+const http = require('http');
+const server = http.createServer(app);
+const {Server} = require("socket.io");
+const io = new Server(server);
+//end socket
 
 require("dotenv").config();
 const port = process.env.PORT;
@@ -71,9 +76,10 @@ app.set("view engine", "pug");
 
 //App locals Variables
 app.locals.frefixAdmin = systemConfig.prefixAdmin;
-
-
+//global socket
+global._io = io;
+//end global socket
 //kiem tra web co chay khong
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Running in port ${port}`);
 });

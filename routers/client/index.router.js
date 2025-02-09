@@ -11,6 +11,7 @@ const checkoutRouter = require("./checkout.router.js");
 const userRouter = require("./user.router.js");
 const userMiddleware = require("../../middlewares/client/user.middleware.js");
 const settingMiddleware = require("../../middlewares/client/setting.middleware.js");
+const chatRouter = require("./chat.router.js");
 module.exports = (app) => {
     // trang chu
     app.use(categoryMiddleware.requireCategory);
@@ -23,6 +24,7 @@ module.exports = (app) => {
     app.use("/cart", cartRouter);
     app.use("/checkout", checkoutRouter);
     app.use("/user", userRouter);
+    app.use("/chat" , chatRouter);
 }
 
 

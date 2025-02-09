@@ -6,4 +6,5 @@ router.patch("/change-multi", controller.changeMulti);
 router.patch("/delete/:id", controller.deleteOrder);
 router.get("/detel/:id" , controller.detelOrder);
 router.get("/edit/:id", controller.viewEditOrder);
+router.patch("/edit/:id" ,controller.updateInforUser);
 module.exports = router;

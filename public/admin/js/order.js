@@ -75,3 +75,17 @@ if (buttonsDelete.length > 0) {
     })
 }
 //end delete order
+//update Infor user
+const buttonUpdateInforUser = document.querySelector("[button-update-infor-user]");
+if(buttonUpdateInforUser) {
+    buttonUpdateInforUser.addEventListener("click" , () => {
+        const confirmUpdateInfor = confirm("Bạn có muốn thay đổi thông tin người nhận không?");
+        if(confirmUpdateInfor) {
+            const formInforUser = document.querySelector("[form-infor-user]");
+            if(formInforUser) {
+                formInforUser.submit();
+            }
+        }
+    })
+}
+//end update infor user

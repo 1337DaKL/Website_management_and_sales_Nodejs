@@ -1,0 +1,28 @@
+extends ../../layouts/defaut.pug
+include ../../mixins/box-head.pug
+block main
+    .container.my-3
+        .row
+            .col-12
+                +box-head("Nhắn tin trực tuyến")
+        
+        .row    
+            .col-12 
+                .chat 
+                    .inner-body 
+                        .inner-comming 
+                            .inner-name A 
+                            .inner-content 
+                                | hello 
+                        .inner-outgoing 
+                            .inner-content 
+                                | hi 
+
+                    .inner-foot 
+                        form(action="", method="post" class="inner-form")
+                            input(
+                                type="text"
+                                placeholder="Nhập tin nhắn..."
+                                name="content"
+                            ) 
+                        button.bi.bi-cursor-fill

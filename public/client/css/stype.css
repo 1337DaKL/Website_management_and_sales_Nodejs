@@ -645,3 +645,83 @@ body {
   font-weight: bold;
 }
 
+/* chat */
+.chat {
+  width: 100%;
+  max-width: 100%; /* Tăng chiều rộng khung chat */
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.inner-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.inner-comming, .inner-outgoing {
+  display: flex;
+  flex-direction: column;
+  max-width: 75%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.inner-comming {
+  background: #e3f2fd;
+  align-self: flex-start;
+}
+
+.inner-outgoing {
+  background: #d1f7c4;
+  align-self: flex-end;
+}
+
+.inner-name {
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 3px;
+  color: #555;
+}
+
+.inner-foot {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  background: #fff;
+}
+
+.inner-form {
+  display: flex;
+  width: 100%;
+  gap: 5px;
+}
+
+.inner-form input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.inner-form button {
+  background: #0d6efd;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.inner-form button:hover {
+  background: #0b5ed7;
+}
+
+/* end chat */

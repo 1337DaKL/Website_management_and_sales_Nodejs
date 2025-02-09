@@ -513,3 +513,60 @@ module.exports.viewEditOrder = async (req, res) => {
         order: order
     })
 }
+module.exports.updateInforUser = async (req , res) => {
+    if(res.locals.roleLogin.permission.includes("order_edit")) {
+        try {
+            const updatedBy = {
+                idAccountUpdated : res.locals.userLogin.id,
+                nameAccountUpdated : res.locals.userLogin.fullName,
+                dateUpdated : new Date()
+            }
+            console.log(req.body);
+            res.send("ok");
+            // const oldOrder = await Order.findOne(
+            //     {
+            //         _id : req.params.id,
+            //         deleted : false
+            //     }
+            // ).select("userInfor products status");
+            // await Order.updateOne(
+            //     {
+            //         _id : req.params.id,
+            //         deleted : false
+            //     },
+            //     {
+            //         userInfor : req.body
+            //     }
+            // )
+            // const newOrder = await Order.findOne(
+            //     {
+            //         _id : req.params.id,
+            //         deleted : false
+            //     }
+            // ).select("userInfor products status");
+            // await Order.updateOne(
+            //     {
+            //         _id : req.param.id,
+            //         deleted : false
+            //     },
+            //     {
+            //         $push: {
+            //             updatedBy : {
+            //                 ...updatedBy ,
+            //                 oldOrder : oldOrder,
+            //                 newOrder : newOrder
+            //             }
+            //         }
+            //     }
+            // )
+            // req.flash("success" , "Bạn đã cập nhật thông tin người nhận hàng thành công!!");
+            // res.redirect("back");
+        } catch (error) {
+            req.flash("error" , "Bạn cập nhật thông tin người nhận hàng không thành công!!");
+            res.redirect("back");
+        }
+    }
+    else {
+        res.send("Hack faild");
+    }
+}
